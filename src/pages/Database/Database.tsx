@@ -1,9 +1,23 @@
-import { Button, Card, Divider, Input, Link, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@heroui/react"
+import { Button, Card, Divider, Input, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, useDisclosure } from "@heroui/react"
 import { Icon } from "@iconify/react"
+import GrantPermissionModal from "./GrantPermissionModal"
+import EditDatabaseModal from "./editDatabaseModal";
+
 
 
 
 const Database = () => {
+    const {
+        isOpen: isGrantUserModalOpen,
+        onOpen: onGrantUserModalOpen,
+        onOpenChange: onGrantUserModalOpenChange,
+    } = useDisclosure();
+    const {
+        isOpen:isDatabaseEditModalOpen,
+        onOpen:onDatabaseEditModalOpen,
+        onOpenChange:onDatabaseEditModalOpenChange
+    } = useDisclosure();
+   
     return (
         <div>
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
@@ -107,14 +121,11 @@ const Database = () => {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex justify-center">
-                                                <Link
-                                                    isExternal
-                                                    href="#"
-                                                    className="text-blue-500 hover:text-blue-700 flex items-center gap-1.5 text-sm font-semibold transition-opacity active:opacity-50"
-                                                >
+                                                <span className="flex items-center gap-1 cursor-pointer text-blue-800" onClick={onGrantUserModalOpen}>
                                                     Grant User
                                                     <Icon icon="mdi:user-plus-outline" fontSize={20} className="mb-0.5" />
-                                                </Link>
+                                                </span>
+
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -256,11 +267,10 @@ const Database = () => {
                                 </TableHeader>
 
                                 <TableBody>
-                                    <TableRow key="1">
+                                    <TableRow >
                                         <TableCell className="text-slate-800 font-medium">
                                             vandanatest_new_database
                                         </TableCell>
-
                                         <TableCell>
                                             <div className="flex justify-end">
                                                 <Tooltip content="Delete database">
@@ -268,8 +278,14 @@ const Database = () => {
                                                         <Icon icon="mdi:trash-can-outline" fontSize={20} />
                                                     </Button>
                                                 </Tooltip>
+                                                <Tooltip content="Edit database">
+                                                    <Button onPress={onDatabaseEditModalOpen} className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
+                                                        <Icon icon="ri:edit-line" fontSize={20} />
+                                                    </Button>
+                                                </Tooltip>
                                             </div>
                                         </TableCell>
+                                       
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -282,6 +298,8 @@ const Database = () => {
                 </div>
 
             </div >
+            <GrantPermissionModal isOpen={isGrantUserModalOpen} onOpenChange={onGrantUserModalOpenChange} />
+            <EditDatabaseModal isOpen={isDatabaseEditModalOpen} onOpenChange={onDatabaseEditModalOpenChange}/>
         </div >
     )
 }

@@ -1,8 +1,29 @@
 
-import { Button, Card, Checkbox, Divider, Input, Radio, RadioGroup, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
+import { Button, Card, Checkbox, Divider, Input, Radio, RadioGroup, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@heroui/react"
 import { Icon } from "@iconify/react"
+import { useState } from "react"
+import EmailForwardingModal from "./EmailForwardingModal";
+import ChangePasswordModal from "./ChangePasswordModal";
+import UpdateQuotaModal from "./UpdateQuotaModal";
 
 const Email = () => {
+    const [storage, setStorage] = useState("unlimited");
+    const {
+        isOpen: isEmailForwardModalOpen,
+        onOpen: onEmailForwardModalOpen,
+        onOpenChange: onEmailForwardModalOpenChange,
+    } = useDisclosure();
+    const {
+        isOpen: isChangePasswordModalOpen,
+        onOpen: onChangePasswordModalOpen,
+        onOpenChange: onChangePasswordModalOpenChange,
+    } = useDisclosure();
+    const {
+        isOpen: isUpdateQuotaModalOpen,
+        onOpen: onUpdateQuotaModalOpen,
+        onOpenChange: onUpdateQuotaModalOpenChange,
+    } = useDisclosure();
+
     return (
         <div>
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
@@ -12,9 +33,8 @@ const Email = () => {
             <p className="mt-4 text-gray-500">
                 This feature lets you create and manage email accounts.
             </p>
-
             <div className="mt-6  w-full  ">
-                <div className=" w-full space-y-6 max-h-[73vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <span className="font-bold text-white text-lg">Create an Email Account</span>
@@ -50,26 +70,31 @@ const Email = () => {
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <RadioGroup orientation="horizontal" defaultValue="limited" label="Storage Space">
-                                    <Radio value="limited" classNames={{ label: "text-slate-600 text-sm" }}>Limited</Radio>
-                                    <Radio value="unlimited-1" classNames={{ label: "text-slate-600 text-sm" }}>Unlimited</Radio>
+                                <RadioGroup orientation="horizontal" value={storage} onValueChange={(value) => setStorage(value)} label="Storage Space">
+                                    <Radio value="limited" classNames={{ label: "text-slate-600 text-sm" }} >Limited</Radio>
+                                    <Radio value="unlimited" classNames={{ label: "text-slate-600 text-sm" }}>Unlimited</Radio>
                                 </RadioGroup>
                             </div>
-                            <div className="">
-                                <Input
-                                    label="Quota"
-                                    labelPlacement="outside"
-                                    type="text"
-                                    variant="bordered"
-                                    placeholder="Enter Quota Limit"
-                                    className="flex-1  outline-none text-sm"
-                                    endContent={
-                                        <span className="text-gray-500">
-                                            MB
-                                        </span>
-                                    }
-                                />
-                            </div>
+                            {storage === "limited" && (
+
+                                <div className="">
+                                    <Input
+                                        label="Quota"
+                                        labelPlacement="outside"
+                                        type="text"
+                                        variant="bordered"
+                                        placeholder="Enter Quota Limit"
+                                        className="flex-1  outline-none text-sm"
+                                        endContent={
+                                            <span className="text-gray-500">
+                                                MB
+                                            </span>
+                                        }
+                                    />
+                                </div>
+                            )
+                            }
+
                             <Checkbox defaultSelected radius="sm" classNames={{ label: "text-slate-600 text-sm" }}>
                                 Send a welcome email with instructions to set up an email client
                             </Checkbox>
@@ -83,7 +108,6 @@ const Email = () => {
                             </div>
                         </div>
                     </Card>
-
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]  ">
                             <span className="font-bold text-white text-lg">Existing Databases</span>
@@ -123,54 +147,57 @@ const Email = () => {
                                             vandanatest_new_database
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex gap-2 items-center">
+                                            <div className="flex gap-2 justify-between items-center">
                                                 <p>
                                                     Unlimited
                                                 </p>
                                                 <div className="flex gap-2">
                                                     <Button
-                                                    size="sm"
-                                                    variant="bordered"
-                                                    startContent={
-                                                        <div>
-                                                            <Icon icon={"fluent:mail-16-regular"} width={24}/>
-                                                        </div>
-                                                    }
-                                                    className="p-6 text-sm">
-                                                        Email <br/> Forwarding
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        onPress={onEmailForwardModalOpen}
+                                                        startContent={
+                                                            <div>
+                                                                <Icon icon={"fluent:mail-16-regular"} width={24} />
+                                                            </div>
+                                                        }
+                                                        className="p-6 text-sm">
+                                                        Email  Forwarding
                                                     </Button>
-                                                     <Button
-                                                    size="sm"
-                                                    variant="bordered"
-                                                    startContent={
-                                                        <div>
-                                                            <Icon icon={"fluent:mail-16-regular"} width={24}/>
-                                                        </div>
-                                                    }
-                                                    className="p-6 text-sm">
-                                                        Change <br/> Password
+                                                    <Button
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        onPress={onChangePasswordModalOpen}
+                                                        startContent={
+                                                            <div>
+                                                                <Icon icon={"fluent:mail-16-regular"} width={24} />
+                                                            </div>
+                                                        }
+                                                        className="p-6 text-sm">
+                                                        Change Password
                                                     </Button>
-                                                     <Button
-                                                    size="sm"
-                                                    variant="bordered"
-                                                    startContent={
-                                                        <div>
-                                                            <Icon icon={"fluent:mail-16-regular"} width={24}/>
-                                                        </div>
-                                                    }
-                                                    className="p-6 text-sm">
-                                                       Quota
+                                                    <Button
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        onPress={onUpdateQuotaModalOpen}
+                                                        startContent={
+                                                            <div>
+                                                                <Icon icon={"fluent:mail-16-regular"} width={24} />
+                                                            </div>
+                                                        }
+                                                        className="p-6 text-sm">
+                                                        Quota
                                                     </Button>
-                                                     <Button
-                                                    size="sm"
-                                                    variant="bordered"
-                                                    startContent={
-                                                        <div>
-                                                            <Icon icon={"fluent:mail-16-regular"} width={24}/>
-                                                        </div>
-                                                    }
-                                                    className="p-6 text-sm">
-                                                       Delete
+                                                    <Button
+                                                        size="sm"
+                                                        variant="bordered"
+                                                        startContent={
+                                                            <div>
+                                                                <Icon icon={"fluent:mail-16-regular"} width={24} />
+                                                            </div>
+                                                        }
+                                                        className="p-6 text-sm">
+                                                        Delete
                                                     </Button>
                                                 </div>
 
@@ -184,15 +211,12 @@ const Email = () => {
                         </div>
 
                     </Card>
-
-
-
-
-
-
                 </div>
 
             </div >
+            <EmailForwardingModal isOpen={isEmailForwardModalOpen} onOpenChange={onEmailForwardModalOpenChange} />
+            <ChangePasswordModal isOpen={isChangePasswordModalOpen} onOpenChange={onChangePasswordModalOpenChange} />
+            <UpdateQuotaModal isOpen={isUpdateQuotaModalOpen} onOpenChange={onUpdateQuotaModalOpenChange} />
         </div >
     )
 }

@@ -10,10 +10,10 @@ const Sidebar = () => {
         { name: "Database", icon: "solar:database-outline", path: "/database" },
         { name: "Email Accounts", icon: "fluent:mail-16-regular", path: "/email" },
         { name: "File Manager", icon: "fluent:folder-add-20-regular", path: "/backup" },
-        {name: "Sub domains",icon: "fluent:globe-20-regular",path: "/integrations",},
+        {name: "Sub domains",icon: "fluent:globe-20-regular",path: "/subdomain",},
         { name: "Web Server Log", icon: "fluent:clipboard-bullet-list-ltr-20-regular", path: "/services" },
         { name: "Git", icon: "iconoir:git", path: "/sshVault" },
-        { name: "Password Management", icon: "solar:password-outline", path: "/hostname" },
+        { name: "Password Management", icon: "solar:password-outline", path: "/password" },
         { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/system-users" },
         { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/supervisors" },
         { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/supervisors" },
@@ -44,7 +44,7 @@ const Sidebar = () => {
                 )
                 }
             </div >
-            <div className="pb-5 flex justify-center border-t border-gray-400  pt-2">
+            <div className="pb-3 flex justify-center border-t border-gray-400  pt-2">
                 <button className="text-teal-700/60 hover:text-teal-700 transition-colors">
                     <Icon icon="fluent:arrow-exit-12-filled" width={35} />
                 </button>

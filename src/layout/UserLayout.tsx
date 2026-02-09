@@ -6,17 +6,14 @@ const UserLayout = () => {
   return (
     <div className="flex-1 flex justify-center min-h-screen bg-background text-foreground transition-colors">
       <div className="flex flex-1 overflow-hidden">
-
-
         <div className="hidden lg:flex w-25 border-r border-divider  h-full">
           <Sidebar />
         </div>
-        <div className="flex-1 flex-col justify-center overflow-y-auto h-svh z-10 scrollbar-hide">
-          <div className="h-auto w-full px-12 py-8 overflow-y-auto scrollbar-hide bg-gray-50">
+        <div className="flex flex-col min-h-svh z-10 w-full">
+          <div className="flex-1 w-full px-12 py-8 overflow-y-auto scrollbar-hide bg-gray-50">
             <Outlet />
-
           </div>
-          <footer className="w-full bg-white border-t  border-gray-100 px-6 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <footer className="mt-auto w-full  bg-white border-t border-gray-100 px-6 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
             <div className="mb-4 mt-1 md:mb-0">
               © {2025} -
               <span className="font-medium text-gray-700 mx-1">CloudStick LLC</span>
@@ -40,11 +37,8 @@ const UserLayout = () => {
               </a>
             </nav>
           </footer>
-
         </div>
       </div>
-
-
     </div>
   )
 }

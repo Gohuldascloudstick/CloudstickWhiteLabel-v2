@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react"
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="w-full">
       <p className="text-3xl">Welcome <span className=" font-bold text-teal-600">
         vandanatest
       </span></p>
