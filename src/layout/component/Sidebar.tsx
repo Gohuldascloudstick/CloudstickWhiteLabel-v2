@@ -3,18 +3,18 @@ import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 
 
-const Sidebar = () => {
+const Sidebar = () => { 
     const navigate = useNavigate()
     const navItems = [
         { name: "Dashboard", icon: "lucide:layout-dashboard", path: "/" },
         { name: "Database", icon: "solar:database-outline", path: "/database" },
         { name: "Email Accounts", icon: "fluent:mail-16-regular", path: "/email" },
         { name: "File Manager", icon: "fluent:folder-add-20-regular", path: "/backup" },
-        {name: "Sub domains",icon: "fluent:globe-20-regular",path: "/subdomain",},
+        { name: "Sub domains", icon: "fluent:globe-20-regular", path: "/subdomain", },
         { name: "Web Server Log", icon: "fluent:clipboard-bullet-list-ltr-20-regular", path: "/services" },
         { name: "Git", icon: "iconoir:git", path: "/sshVault" },
         { name: "Password Management", icon: "solar:password-outline", path: "/password" },
-        { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/system-users" },
+        { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/websettings" },
         { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/supervisors" },
         { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/supervisors" },
         { name: "WordPress Manager", icon: "uil:wordpress-simple", path: "/wordpress_templates" },
@@ -33,7 +33,7 @@ const Sidebar = () => {
                         delay={1000}
                         size="sm"
                     >
-                        <div key={item.path} onClick={()=>navigate(item.path)} className="w-full  hover:bg-gray-400/30 flex justify-center items-center">
+                        <div key={item.path} onClick={() => navigate(item.path)} className="w-full  hover:bg-gray-400/30 flex justify-center items-center">
                             <div className="p-3 text-gray-700/50">
                                 <Icon icon={item.icon} width={26} />
                             </div>

@@ -5,6 +5,7 @@ import Database from "../pages/Database/Database"
 import Email from "../pages/Email/Email"
 import Subdomain from "../pages/subdomain/Subdomain"
 import Password from "../pages/Password/Password"
+import WebSettings from "../pages/WebappSettings/WebSettings"
 
 
 const AppRouter = () => {
@@ -15,7 +16,8 @@ const AppRouter = () => {
                 <Route path="database" element={< Database />} />
                 <Route path="email" element={<Email />} />
                 <Route path="subdomain" element={<Subdomain />} />
-                <Route path="password" element={<Password/>} />
+                <Route path="password" element={<Password />} />
+                <Route path="websettings" element={<WebSettings />} />
             </Route>
         </Routes>
     )
