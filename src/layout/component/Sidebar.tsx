@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 
 
-const Sidebar = () => { 
+const Sidebar = () => {
     const navigate = useNavigate()
     const navItems = [
         { name: "Dashboard", icon: "lucide:layout-dashboard", path: "/" },
@@ -15,8 +15,8 @@ const Sidebar = () => {
         { name: "Git", icon: "iconoir:git", path: "/sshVault" },
         { name: "Password Management", icon: "solar:password-outline", path: "/password" },
         { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/websettings" },
-        { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/supervisors" },
-        { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/supervisors" },
+        { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/cronjobs" },
+        { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/ssl" },
         { name: "WordPress Manager", icon: "uil:wordpress-simple", path: "/wordpress_templates" },
 
     ];

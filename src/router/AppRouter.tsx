@@ -6,6 +6,9 @@ import Email from "../pages/Email/Email"
 import Subdomain from "../pages/subdomain/Subdomain"
 import Password from "../pages/Password/Password"
 import WebSettings from "../pages/WebappSettings/WebSettings"
+import CronJob from "../pages/Cron jobs/CronJob"
+import AddCronJob from "../pages/Cron jobs/AddCronJob"
+import Ssl from "../pages/Ssl/Ssl"
 
 
 const AppRouter = () => {
@@ -18,6 +21,9 @@ const AppRouter = () => {
                 <Route path="subdomain" element={<Subdomain />} />
                 <Route path="password" element={<Password />} />
                 <Route path="websettings" element={<WebSettings />} />
+                <Route path="cronjobs" element={<CronJob />} />
+                <Route path="cronjobs/addcronjobs" element={<AddCronJob />} />
+                <Route path="ssl" element={<Ssl />} />
             </Route>
         </Routes>
     )
