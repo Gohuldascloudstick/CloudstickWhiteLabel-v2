@@ -1,20 +1,47 @@
 import { Outlet } from "react-router-dom"
 import Sidebar from "./component/Sidebar"
+import { useState } from "react"
+import { Icon } from "@iconify/react";
+import { Button } from "@heroui/react";
 
 
 const UserLayout = () => {
+  const [menuOpen, setMenuopen] = useState(false);
   return (
-    <div className="flex-1 flex justify-center min-h-screen bg-background text-foreground transition-colors">
-      <div className="flex flex-1 overflow-hidden">
-        <div className="hidden lg:flex w-25 border-r border-divider  h-full">
-          <Sidebar />
+    <div className="flex min-h-screen   justify-center w-full">
+      {menuOpen && (
+        <div className="fixed  inset-0 z-50 lg:hidden">
+
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-brightness-50 transition-opacity"
+            onClick={() => setMenuopen(false)}
+          />
+          <aside className="relative w-25   h-full  shadow-2xl border-r border-divider">
+            <Sidebar />
+
+          </aside>
         </div>
-        <div className="flex flex-col min-h-svh z-10 w-full">
-          <div className="flex-1 w-full px-12 py-8 overflow-y-auto scrollbar-hide bg-gray-50">
-            <Outlet />
-          </div>
-          <footer className="mt-auto w-full  bg-white border-t border-gray-100 px-6 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <div className="mb-4 mt-1 md:mb-0">
+      )}
+
+      <div className=" hidden lg:block w-25">
+        <Sidebar />
+      </div>
+      <div className="relative bg-gray-50 flex flex-col w-full h-screen px-12 pt-12 pb-4">
+        <Button
+          isIconOnly
+          className="bg-gray-50 absolute top-0 left-2 lg:hidden"
+          onPress={() => setMenuopen(true)}>
+          <Icon
+            icon={"heroicons:bars-3"}
+            className="text-gray-700 w-6 h-6"
+          />
+        </Button>
+        <div className="flex flex-col justify-between flex-1 p-2 overflow-y-auto  scrollbar-hide">
+
+          <Outlet />
+
+          <footer className=" mt-12 w-full    flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <div className=" mt-1 md:mb-0">
               © {2025} -
               <span className="font-medium text-gray-700 mx-1">CloudStick LLC</span>
               - created by
@@ -38,7 +65,10 @@ const UserLayout = () => {
             </nav>
           </footer>
         </div>
+
+
       </div>
+
     </div>
   )
 }

@@ -1,16 +1,31 @@
 import { Card, CardBody, Divider } from "@heroui/react"
 import { Icon } from "@iconify/react"
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const serverId = "88";
+    const webId = "457";
+    const userId = "22"
+    const webappType = "customphp"
+    localStorage.setItem("serverId", serverId);
+    localStorage.setItem("webId", webId);
+    localStorage.setItem("userId", userId)
+    localStorage.setItem("webappType", webappType)
+  }, []);
+
+
+  
   return (
-    <div className="w-full">
-      <p className="text-3xl">Welcome <span className=" font-bold text-teal-600">
+    <div className="w-full max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
+      <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-teal-600">
         vandanatest
       </span></p>
 
-      <div className="mt-6 flex w-full justify-between gap-4">
-        <div className=" w-full space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
+      <div className="  mt-3 md:mt-6 flex w-full justify-between gap-4">
+        <div className=" w-full space-y-6 ">
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4 ">
               <span className="font-bold text-indigo-900 text-lg">Email</span>
@@ -19,13 +34,13 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="hugeicons:mail-account-01" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate("/email")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Email Accounts
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
                 <Icon icon="cib:roundcube" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={() => navigate("/email/enablewebmail")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Enable Webmail
                 </span>
               </div>
@@ -75,7 +90,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-3  ">
                 <Icon icon="simple-icons:mysql" className="text-blue-900" width={36} />
                 <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
-                 MySQL Databses
+                  MySQL Databses
                 </span>
               </div>
               <div className="flex items-center gap-3 ">
@@ -97,7 +112,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-3  ">
                 <Icon icon="la:globe-americas" className="text-blue-900" width={32} />
                 <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
-                 Sub Domains
+                  Sub Domains
                 </span>
               </div>
             </div>
@@ -115,7 +130,7 @@ const Dashboard = () => {
                   SSL/TSL
                 </span>
               </div>
-             
+
 
             </div>
           </Card>
@@ -140,7 +155,7 @@ const Dashboard = () => {
                   Web Server Log
                 </span>
               </div>
-              
+
 
             </div>
           </Card>
@@ -158,7 +173,7 @@ const Dashboard = () => {
                   Change Password
                 </span>
               </div>
-             
+
 
             </div>
           </Card>
@@ -166,7 +181,7 @@ const Dashboard = () => {
 
         </div>
         <div>
-          <Card className="max-w-68">
+          <Card className="">
             <CardBody className="p-4">
               <div>
                 <p className="font-bold">
@@ -194,8 +209,8 @@ const Dashboard = () => {
           </Card>
 
         </div>
-
       </div>
+
     </div>
 
   )

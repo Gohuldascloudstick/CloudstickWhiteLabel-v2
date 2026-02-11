@@ -1,10 +1,12 @@
 import { Tooltip } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
+
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const Sidebar = () => {
     const navigate = useNavigate()
+    const location = useLocation();
     const navItems = [
         { name: "Dashboard", icon: "lucide:layout-dashboard", path: "/" },
         { name: "Database", icon: "solar:database-outline", path: "/database" },
@@ -21,28 +23,36 @@ const Sidebar = () => {
 
     ];
     return (
-        <div className="w-full flex flex-col justify-between bg-gray-300">
+        <div className="w-full h-full flex flex-col justify-between bg-gray-300">
 
             <div className=" flex flex-col pt-22 gap-2" >
-                {navItems.map((item) =>
+                {navItems.map((item) => {
+                    const isActive =
+                        item.path === "/"
+                            ? location.pathname === "/"
+                            : location.pathname.startsWith(item.path);
 
-                    <Tooltip
-                        content={item.name}
-                        placement="right"
-                        offset={15}
-                        delay={1000}
-                        size="sm"
-                    >
-                        <div key={item.path} onClick={() => navigate(item.path)} className="w-full  hover:bg-gray-400/30 flex justify-center items-center">
-                            <div className="p-3 text-gray-700/50">
-                                <Icon icon={item.icon} width={26} />
+                    return (
+                        <Tooltip
+                            key={item.path}
+                            content={item.name}
+                            placement="right"
+                            offset={15}
+                            delay={1000}
+                            size="sm"
+                        >
+                            <div
+                                onClick={() => navigate(item.path)}
+                                className={`w-full ${isActive ? "bg-gray-400/30" : ""
+                                    } hover:bg-gray-400/30 flex justify-center items-center`}
+                            >
+                                <div className="p-3 text-gray-700/50">
+                                    <Icon icon={item.icon} width={26} />
+                                </div>
                             </div>
-                        </div>
-                    </Tooltip>
-
-
-                )
-                }
+                        </Tooltip>
+                    );
+                })}
             </div >
             <div className="pb-3 flex justify-center border-t border-gray-400  pt-2">
                 <button className="text-teal-700/60 hover:text-teal-700 transition-colors">

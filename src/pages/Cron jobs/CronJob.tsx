@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 const CronJob = () => {
     const navigate = useNavigate();
     return (
-        <div>
+        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 Cron Jobs
             </span>
@@ -22,7 +22,7 @@ const CronJob = () => {
             </div>
 
             <div className="mt-6  w-full  ">
-                <div className=" w-full space-y-6 max-h-[73vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 ">
 
 
                     <Card className="w-full shadow-sm border border-gray-200">

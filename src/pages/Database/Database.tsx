@@ -19,7 +19,7 @@ const Database = () => {
     } = useDisclosure();
    
     return (
-        <div>
+        <div className="">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 MySQL® Databases
             </span>
@@ -29,7 +29,7 @@ const Database = () => {
             </p>
 
             <div className="mt-6  w-full  ">
-                <div className=" w-full space-y-6 max-h-[73vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <span className="font-bold text-white text-lg">Create Database</span>
@@ -298,6 +298,7 @@ const Database = () => {
                 </div>
 
             </div >
+            
             <GrantPermissionModal isOpen={isGrantUserModalOpen} onOpenChange={onGrantUserModalOpenChange} />
             <EditDatabaseModal isOpen={isDatabaseEditModalOpen} onOpenChange={onDatabaseEditModalOpenChange}/>
         </div >

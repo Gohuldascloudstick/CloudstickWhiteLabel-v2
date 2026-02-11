@@ -1,8 +1,8 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosRequestConfig,AxiosResponse } from "axios";
 
-const apiUrl = import.meta.env.VITE_DEVURL; 
-// 'http://172.105.252.127:8080'
+const apiUrl ='https://staged-api.cloudstick.io'
+
 const ApiClient: AxiosInstance = axios.create({
   baseURL: apiUrl,
   headers: {

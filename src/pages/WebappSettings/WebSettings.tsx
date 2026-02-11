@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react"
 
 const WebSettings = () => {
     return (
-        <div>
+        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 Web Application Settings
             </span>
@@ -12,7 +12,7 @@ const WebSettings = () => {
 
 
             <div className="mt-12  w-full  ">
-                <div className=" w-full space-y-6 max-h-[73vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <Icon icon={"bi:globe"} className="" width={22} />

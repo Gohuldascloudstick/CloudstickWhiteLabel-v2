@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react"
 
 const Subdomain = () => {
     return (
-        <div>
+        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 Sub domains
             </span>
@@ -13,7 +13,7 @@ const Subdomain = () => {
                 Here you can manage the domains connected to this webapp. Make sure to create the necessary DNS records that point the domain to this server IP address.            </p>
 
             <div className="mt-6  w-full  ">
-                <div className=" w-full space-y-6 max-h-[73vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 flex items-center gap-2 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e] text-white">
                             <Icon icon={"bi:globe"} width={24}/>

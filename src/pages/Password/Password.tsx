@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react"
 
 const Password = () => {
     return (
-        <div>
+        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 Password Management
             </span>
@@ -13,7 +13,7 @@ const Password = () => {
                 We recommend a password with upper cases , lower cases and numericals.
             </p>
             <div className="mt-6  w-full  ">
-                <div className=" w-full space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
+                <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <span className="font-bold text-white text-lg">Change Password</span>
