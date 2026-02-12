@@ -23,9 +23,10 @@ const Sidebar = () => {
 
     ];
     return (
-        <div className="w-full h-full flex flex-col justify-between bg-gray-300">
+        <div className="w-full h-full flex flex-col bg-gray-300">
 
-            <div className=" flex flex-col pt-22 gap-2" >
+            
+            <div className="flex-1 overflow-y-auto pt-22 flex flex-col gap-2">
                 {navItems.map((item) => {
                     const isActive =
                         item.path === "/"
@@ -53,13 +54,16 @@ const Sidebar = () => {
                         </Tooltip>
                     );
                 })}
-            </div >
-            <div className="pb-3 flex justify-center border-t border-gray-400  pt-2">
+            </div>
+
+          
+            <div className="pb-3 flex justify-center border-t border-gray-400 pt-2">
                 <button className="text-teal-700/60 hover:text-teal-700 transition-colors">
                     <Icon icon="fluent:arrow-exit-12-filled" width={35} />
                 </button>
             </div>
         </div>
+
     )
 }
 

@@ -8,67 +8,63 @@ import { Button } from "@heroui/react";
 const UserLayout = () => {
   const [menuOpen, setMenuopen] = useState(false);
   return (
-    <div className="flex min-h-screen   justify-center w-full">
+   <div className="flex h-screen w-full overflow-hidden bg-gray-50">
+      
+      
       {menuOpen && (
-        <div className="fixed  inset-0 z-50 lg:hidden">
-
+        <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/30 backdrop-brightness-50 transition-opacity"
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
             onClick={() => setMenuopen(false)}
           />
-          <aside className="relative w-25   h-full  shadow-2xl border-r border-divider">
+          <aside className="relative w-25 h-full bg-white shadow-2xl border-r border-divider overflow-y-auto">
             <Sidebar />
-
           </aside>
         </div>
       )}
-
-      <div className=" hidden lg:block w-25">
+      <div className="hidden lg:block w-25 h-screen border-r border-divider bg-white overflow-y-auto scrollbar-hide">
         <Sidebar />
       </div>
-      <div className="relative bg-gray-50 flex flex-col w-full h-screen px-12 pt-12 pb-4">
+
+ 
+      
+      <div className="relative  flex flex-col flex-1 h-screen overflow-hidden">
+        
+       <div className="bg-gray-50 absolute z-10 py-2  w-full flex items-start lg:hidden">
+
         <Button
           isIconOnly
-          className="bg-gray-50 absolute top-0 left-2 lg:hidden"
-          onPress={() => setMenuopen(true)}>
-          <Icon
-            icon={"heroicons:bars-3"}
-            className="text-gray-700 w-6 h-6"
-          />
+          variant="light"
+          className=" "
+          onPress={() => setMenuopen(true)}
+        >
+          <Icon icon="heroicons:bars-3" className="text-gray-700 w-6 h-6" />
         </Button>
-        <div className="flex flex-col justify-between flex-1 p-2 overflow-y-auto  scrollbar-hide">
+       </div>
 
-          <Outlet />
+       
+        <div className="flex flex-col flex-1 px-6 md:px-12 pt-16 pb-4 overflow-y-auto scrollbar-hide">
+          <main className="flex-1">
+            <Outlet />
+          </main>
 
-          <footer className=" mt-12 w-full    flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <div className=" mt-1 md:mb-0">
-              © {2025} -
+          <footer className="mt-12 w-full flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 border-t border-gray-100 pt-4">
+            <div className="mt-1 md:mb-0">
+              © 2025 -
               <span className="font-medium text-gray-700 mx-1">CloudStick LLC</span>
               - created by
-              <a
-                href="https://cloudstick.io"
-                className="text-blue-600 hover:text-blue-800 ml-1 transition-colors"
-              >
+              <a href="https://cloudstick.io" className="text-blue-600 hover:text-blue-800 ml-1 transition-colors">
                 CloudStick.io
               </a>
             </div>
             <nav className="flex mt-1 space-x-6">
-              <a href="#dashboard" className="text-blue-600 hover:underline">
-                Dashboard
-              </a>
-              <a href="#license" className="text-blue-600 hover:underline">
-                License
-              </a>
-              <a href="#changelog" className="text-gray-400 cursor-default">
-                Changelog
-              </a>
+              <a href="#dashboard" className="text-blue-600 hover:underline">Dashboard</a>
+              <a href="#license" className="text-blue-600 hover:underline">License</a>
+              <a href="#changelog" className="text-gray-400 cursor-default">Changelog</a>
             </nav>
           </footer>
         </div>
-
-
       </div>
-
     </div>
   )
 }
