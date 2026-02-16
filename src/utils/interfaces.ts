@@ -1,4 +1,4 @@
-export interface Email {
+export interface email {
   email: string;
   quota_mb: number;
   used_mb: number;
@@ -37,6 +37,42 @@ export interface Database {
   is_backup_enabled: boolean;
   is_app_database: boolean;
   website_id: number;
+}
+export interface Appdatabse {
+  id: number;
+  created_at: string;
+  db_name: string;
+  server_id: number;
+  db_collation: string;
+  is_backup_enabled: boolean;
+  is_app_database: boolean;
+  website_id: number;
+  backup_period: string;
+  backup_retention_period: string;
+  success_backup_email: boolean;
+  failed_backup_email: boolean;
+  server: null;
+  user_id: number;
+}
+
+export interface AppDbUser {
+  id: number;
+  created_at: number;
+  db_user_name: string;
+  is_app_dbuser: boolean;
+  website_id: number;
+  server_id: number;
+  privileges: string[];
+}
+export interface UserInDb {
+  db_user_id: number;
+  db_user_name: string;
+  privileges: string[];
+}
+export interface dbAssingedUser {
+  database_id: number;
+  database_name: string;
+  users: UserInDb[];
 }
 export interface Dbuser {
   id: number;
@@ -142,4 +178,20 @@ export interface WebisteDetails {
   db_user:Dbuser;
   
   template_id?: 2;
+}
+export interface Subdomain {
+  id: number;
+  server_id: number;
+  website_id: number;
+  website_type: string;
+  name: string;
+  domains: string[];
+  public_path: string;
+  source_path: string;
+  status: string;
+  php_version: number;
+  stack_type: string;
+  port: number;
+  system_user: SystemUser;
+  is_backup_enabled: boolean;
 }

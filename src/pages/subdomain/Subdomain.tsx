@@ -1,8 +1,23 @@
 import { Button, Card, Divider, Input, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@heroui/react"
 import { Icon } from "@iconify/react"
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { useEffect } from "react";
+import { getSubdomain } from "../../redux/slice/SudomainSlice";
 
 
 const Subdomain = () => {
+    const subdomains = useAppSelector((state) => state.Subdomain.websites);
+    const dispatch = useAppDispatch();
+    const getSubdomainList = async () => {
+        try {
+            await dispatch(getSubdomain()).unwrap();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        getSubdomainList();
+    }, [])
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
@@ -16,7 +31,7 @@ const Subdomain = () => {
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 flex items-center gap-2 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e] text-white">
-                            <Icon icon={"bi:globe"} width={24}/>
+                            <Icon icon={"bi:globe"} width={24} />
                             <span className="font-bold  text-lg">Sub Domains </span>
                         </div>
                         <Divider />
@@ -107,7 +122,7 @@ const Subdomain = () => {
                                                 isClearable
                                                 className="max-w-35"
                                                 placeholder="Search..."
-                                                size="sm" 
+                                                size="sm"
                                                 startContent={<Icon icon="ic:baseline-search" className="text-default-400" width={24} />}
                                                 variant="bordered"
                                             />
@@ -115,36 +130,63 @@ const Subdomain = () => {
                                     </TableColumn>
                                     <TableColumn>SUB DOMAIN NAME </TableColumn>
                                     <TableColumn>DOCUMENT ROOT</TableColumn>
-                                    <TableColumn>PHP VERSION</TableColumn>
-                                    <TableColumn>Actions</TableColumn>
+
+                                    <TableColumn align="end">Actions</TableColumn>
                                 </TableHeader>
 
                                 <TableBody>
-                                    <TableRow >
-                                        <TableCell className="text-slate-800 font-medium">
-                                            vandanatest_new_database
-                                        </TableCell>
-                                        <TableCell>hii</TableCell>
-                                        <TableCell>hii</TableCell>
-<TableCell>
-    hiii
-</TableCell>
-                                        <TableCell>
-                                            <div className="flex justify-end">
-                                                <Tooltip content="Delete database">
-                                                    <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
-                                                        <Icon icon="mdi:trash-can-outline" fontSize={20} />
-                                                    </Button>
-                                                </Tooltip>
-                                                <Tooltip content="Edit database">
-                                                    <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
-                                                        <Icon icon="ri:edit-line" fontSize={20} />
-                                                    </Button>
-                                                </Tooltip>
-                                            </div>
-                                        </TableCell>
+                                    {subdomains.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={4} className="text-center text-gray-500">
+                                                No Subdomian found
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
 
-                                    </TableRow>
+                                        subdomains?.map((sub) => (
+                                            <TableRow >
+                                                <TableCell className="text-slate-800 font-medium">
+                                                    {sub?.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <a
+                                                        href={`https://${sub.domains[0]}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-1 w-full"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        title={sub.domains[0]}
+                                                    >
+                                                        <span className=" text-primary-500  ">
+                                                            {sub.domains[0]}
+                                                        </span>
+
+
+                                                    </a>
+
+
+
+                                                </TableCell>
+                                                <TableCell>{sub?.public_path}</TableCell>
+
+                                                <TableCell>
+                                                    <div className="flex justify-end">
+                                                        <Tooltip content="Delete database">
+                                                            <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
+                                                                <Icon icon="mdi:trash-can-outline" fontSize={20} />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip content="Edit database">
+                                                            <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
+                                                                <Icon icon="ri:edit-line" fontSize={20} />
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </div>
+                                                </TableCell>
+
+                                            </TableRow>
+                                        ))
+                                    )}
                                 </TableBody>
                             </Table>
                         </div>

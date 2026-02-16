@@ -1,10 +1,14 @@
-import { Card, CardBody, Divider } from "@heroui/react"
+import { addToast, Card, CardBody, Divider } from "@heroui/react"
 import { Icon } from "@iconify/react"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../redux/hook";
+import { getPhpMyAdminLogin } from "../redux/slice/dataBaseSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
   useEffect(() => {
     const serverId = "88";
     const webId = "457";
@@ -15,9 +19,19 @@ const Dashboard = () => {
     localStorage.setItem("userId", userId)
     localStorage.setItem("webappType", webappType)
   }, []);
+  const getPhpAdminLoginLink = async () => {
+    setPhpMyAdminLoader(true);
+    try {
+      const result = await dispatch(getPhpMyAdminLogin()).unwrap();
+      if (result) window.open(result.message, "_blank");
+    } catch (error) {
+      addToast({ description: error as string, color: "danger" });
+    } finally {
+      setPhpMyAdminLoader(false);
+    }
+  };
 
 
-  
   return (
     <div className="w-full max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
       <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-teal-600">
@@ -83,19 +97,20 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="fa7-brands:php" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={()=>navigate("/websettings")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   PHP Settings
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
                 <Icon icon="simple-icons:mysql" className="text-blue-900" width={36} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={() => navigate("/database")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   MySQL Databses
                 </span>
               </div>
               <div className="flex items-center gap-3 ">
-                <Icon icon="simple-icons:phpmyadmin" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                {phpMyAdminLoader ? <Icon icon="codex:loader" className="text-blue-600" width={32}/> : <Icon icon="simple-icons:phpmyadmin" className="text-blue-900" width={32} />}
+
+                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors" onClick={getPhpAdminLoginLink}>
                   phpMyAdmin
                 </span>
               </div>

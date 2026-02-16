@@ -9,7 +9,7 @@ import UpdateQuotaModal from "./UpdateQuotaModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { createEmailAccount, deleteEmail, getEmailList, getForwardEmail } from "../../redux/slice/EmailSlice";
 import { getWebDetails } from "../../redux/slice/websiteSlice";
-import type { Email } from "../../utils/interfaces";
+import type { email } from "../../utils/interfaces";
 
 
 const Email = () => {
@@ -22,7 +22,7 @@ const Email = () => {
     const [limit, setLimit] = useState("");
     const [limitError, setLimitError] = useState("")
     const [unit, setUnit] = useState("MB");
-    const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+    const [selectedEmail, setSelectedEmail] = useState<email | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [emailLoader, setEmailLoader] = useState(false);
     const emails = useAppSelector(state => state.Email.email)
@@ -201,21 +201,21 @@ const Email = () => {
             console.log(error)
         }
     }
-    const handleForwardEmail = (email: Email) => {
+    const handleForwardEmail = (email: email) => {
         setSelectedEmail(email)
         onEmailForwardModalOpen();
         getForwaredEmailList(email.email);
     }
-    const handleChangePassword = (email: Email) => {
+    const handleChangePassword = (email: email) => {
         setSelectedEmail(email)
         onChangePasswordModalOpen();
     }
-    const handleChangeQuota = (email: Email) => {
+    const handleChangeQuota = (email: email) => {
         setSelectedEmail(email)
         onUpdateQuotaModalOpen()
     }
-    const handleDeleteEmail = (email: Email) => {
-        console.log("111111111111111")
+    const handleDeleteEmail = (email: email) => {
+        
         setSelectedEmail(email)
 
     }
@@ -448,14 +448,15 @@ const Email = () => {
                                             </div>
                                         </TableColumn>
                                         <TableColumn>
-                                            <Input
+                                            {/* <Input
                                                 isClearable
                                                 className="max-w-50"
                                                 placeholder="Search..."
                                                 size="sm"
                                                 startContent={<Icon icon="ic:baseline-search" width={24} className="text-default-400" />}
                                                 variant="bordered"
-                                            />
+                                            /> */}<>
+                                            </>
                                         </TableColumn>
                                     </TableHeader>
 
