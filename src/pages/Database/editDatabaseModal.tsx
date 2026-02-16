@@ -4,7 +4,7 @@ import type React from "react";
 import type { AppDbUser } from "../../utils/interfaces";
 import { useRef, useState } from "react";
 import { useAppDispatch } from "../../redux/hook";
-import { ChnageDbUserPAssword } from "../../redux/slice/dataBaseSlice";
+import { ChnageDbUserPAssword } from "../../redux/slice/databaseSlice";
 
 interface EditDatabaseProps {
     isOpen: boolean;
