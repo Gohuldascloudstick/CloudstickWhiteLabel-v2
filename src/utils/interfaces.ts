@@ -195,3 +195,17 @@ export interface Subdomain {
   system_user: SystemUser;
   is_backup_enabled: boolean;
 }
+export interface FileManagerItem {
+  path: string;
+  name: string;
+  is_dir: boolean;
+  last_modified: string;
+  permission: string;
+  size: number; // files have size, some folders too
+
+  // If it's a folder, it may contain children
+  children?: FileManagerItem[];
+
+  // If it's a file, it may have content
+  content?: string;
+}

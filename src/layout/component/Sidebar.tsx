@@ -11,7 +11,7 @@ const Sidebar = () => {
         { name: "Dashboard", icon: "lucide:layout-dashboard", path: "/" },
         { name: "Database", icon: "solar:database-outline", path: "/database" },
         { name: "Email Accounts", icon: "fluent:mail-16-regular", path: "/email" },
-        { name: "File Manager", icon: "fluent:folder-add-20-regular", path: "/backup" },
+        { name: "File Manager", icon: "fluent:folder-add-20-regular", path: "/file" },
         { name: "Sub domains", icon: "fluent:globe-20-regular", path: "/subdomain", },
         { name: "Web Server Log", icon: "fluent:clipboard-bullet-list-ltr-20-regular", path: "/services" },
         { name: "Git", icon: "iconoir:git", path: "/sshVault" },

@@ -10,6 +10,7 @@ import CronJob from "../pages/Cron jobs/CronJob"
 import AddCronJob from "../pages/Cron jobs/AddCronJob"
 import Ssl from "../pages/Ssl/Ssl"
 import EnableWebmail from "../pages/Email/EnableWebmail"
+import FileManager from "../pages/FileManager/Filemanager"
 
 
 const AppRouter = () => {
@@ -26,6 +27,7 @@ const AppRouter = () => {
                 <Route path="cronjobs" element={<CronJob />} />
                 <Route path="cronjobs/addcronjobs" element={<AddCronJob />} />
                 <Route path="ssl" element={<Ssl />} />
+                <Route path="file" element={<FileManager/>} />
             </Route>
         </Routes>
     )

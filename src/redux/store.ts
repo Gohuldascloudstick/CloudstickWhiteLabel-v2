@@ -3,12 +3,14 @@ import EmailSlice from './slice/EmailSlice'
 import website from './slice/websiteSlice'
 import datbaseSlice from './slice/databaseSlice'
 import SubdomainSlice from './slice/SudomainSlice'
+import FileManagerSlice from './slice/FIlemanagerSlice'
 export const store = configureStore({
   reducer: {
     Email: EmailSlice,
     website: website,
     Database: datbaseSlice,
     Subdomain:SubdomainSlice,
+    FileManger :FileManagerSlice,
   },
 });
 
