@@ -10,8 +10,8 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
   useEffect(() => {
-    const serverId = "88";
-    const webId = "457";
+    const serverId = "150";
+    const webId = "688";
     const userId = "22"
     const webappType = "customphp"
     localStorage.setItem("serverId", serverId);
@@ -60,7 +60,7 @@ const Dashboard = () => {
               </div>
               <div className="flex items-center gap-3 ">
                 <Icon icon="hugeicons:mail-secure-01" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={()=>navigate("email/emailauthentication")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Email Authentication
                 </span>
               </div>
@@ -160,7 +160,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="eos-icons:cronjob" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={()=>navigate("/cronjobs")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Cron Jobs
                 </span>
               </div>

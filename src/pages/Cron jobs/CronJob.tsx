@@ -1,10 +1,55 @@
-import { Button, Card, Divider, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@heroui/react"
+import { addToast, Button, Card, Divider, Input, Popover, PopoverContent, PopoverTrigger, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
 import { Icon } from "@iconify/react"
+import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { clearedit, editJob, getAppCron, removeServerCron } from "../../redux/slice/CronjobSlice";
+import type { CronJob } from "../../utils/interfaces";
+import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
 
 
-const CronJob = () => {
+const Cronjob = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const reducerDispatch = useDispatch();
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [deletingId, setDeleteingId] = useState(0)
+    const appcronjobs = useAppSelector((state) => state.CronJob.AppCrons)
+    const jobs = appcronjobs.filter(
+        (item) =>
+            item.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.path.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.binary.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const [openPopoverId, setOpenPopoverId] = useState<number | null>(null);
+    const deleteJob = async (CronID: number) => {
+        try {
+            setDeleteingId(CronID)
+            await dispatch(removeServerCron({ CronID })).unwrap();
+            await dispatch(getAppCron()).unwrap();
+            addToast({
+                description: "Cron Job Removed Successfully",
+                color: "success",
+            });
+        } catch (error) {
+            addToast({
+                description: String(error),
+                color: "danger",
+            });
+        } finally {
+            setDeleteingId(0)
+        }
+    };
+    const setEditJob = async (job: CronJob) => {
+        await reducerDispatch(editJob(job));
+        setOpenPopoverId(null);
+        console.log("111111111")
+        navigate("/cronjobs/addcronjobs")
+    };
+
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
@@ -16,7 +61,9 @@ const CronJob = () => {
             </p>
             <div className="flex justify-end mt-2">
 
-                <Button onPress={() => navigate("addcronjobs")} className="bg-orange-600 text-white rounded-md">
+                <Button onPress={() => {
+                     reducerDispatch(clearedit())
+                     navigate("addcronjobs")}} className="bg-orange-600 text-white rounded-md">
                     Create Cron Job
                 </Button>
             </div>
@@ -44,12 +91,11 @@ const CronJob = () => {
                                         <div className="flex items-center gap-4">
                                             <span>JOB NAME</span>
                                             <Input
-                                                isClearable
-                                                className="max-w-50"
-                                                placeholder="Search Cron jobs..."
+                                                placeholder="Search variables..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className=" md:w-1/3 border border-default-200 rounded-md"
                                                 size="sm"
-                                                startContent={<Icon icon="ic:baseline-search" width={24} className="text-default-400" />}
-                                                variant="bordered"
                                             />
                                         </div>
                                     </TableColumn>
@@ -60,52 +106,79 @@ const CronJob = () => {
                                 </TableHeader>
 
                                 <TableBody>
-                                    <TableRow key="1">
-                                        <TableCell className="text-slate-800 font-medium">
-                                            vandanatest_new_database
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex justify-center">
-                                                <span className="flex items-center gap-1 cursor-pointer text-blue-800">
-                                                    Grant User
-                                                    <Icon icon="mdi:user-plus-outline" fontSize={20} className="mb-0.5" />
-                                                </span>
+                                    {jobs.map((job) => (
+                                        <TableRow key={job.id}>
+                                            <TableCell className="text-slate-800 font-medium">
+                                                <span className="text-sm font-medium">{job.label}</span>
+                                            </TableCell>
+                                            <TableCell>
+                                                <span className="text-sm">{job.user_name}</span>
+                                            </TableCell>
+                                            <TableCell>
 
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
+                                                <code className="bg-default-200 dark:bg-default-50 text-default-600 px-2 py-1 rounded text-xs max-w-62.5 overflow-hidden text-ellipsis whitespace-nowrap inline-block">
+                                                    {job.path}
+                                                </code>
+                                            </TableCell>
+                                            <TableCell>
+                                                <code className="bg-primary-50 dark:bg-primary-900/50 text-primary-600 px-2 py-1 rounded text-xs font-mono">
+                                                    {job.schedule}
+                                                </code>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Popover
+                                                    placement="bottom-end"
+                                                    isOpen={openPopoverId == job.id}
+                                                    onOpenChange={(isOpen) => setOpenPopoverId(isOpen ? job.id : null)}
+                                                    classNames={{ content: "w-[140px] dark:bg-slate-900 py-2 rounded-lg" }}
+                                                >
+                                                    <PopoverTrigger>
+                                                        <Button
+                                                            isIconOnly
+                                                            size="sm"
+                                                            variant="light"
+                                                            aria-label="More actions"
 
-                                            <span className="text-gray-400 text-xs italic">None assigned</span>
-                                        </TableCell>
-                                        <TableCell>
-                                            test
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex justify-end">
-                                                <Tooltip content="Delete database">
-                                                    <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
-                                                        <Icon icon="mdi:trash-can-outline" fontSize={20} />
-                                                    </Button>
-                                                </Tooltip>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
+                                                        >
+                                                            <Icon icon="lucide:more-vertical" width={18} />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent aria-label="Cron Job Actions">
+                                                        <Button
+                                                            key="edit"
+                                                            fullWidth
+                                                            size="sm"
+                                                            variant="light"
+                                                            startContent={<Icon icon="lucide:pencil" width={14} />}
+                                                            onPress={() => setEditJob(job)}
+                                                        >
+                                                            Update Job
+                                                        </Button>
+                                                        <Button
+                                                            key="remove"
+                                                            fullWidth
+                                                            color="danger"
+                                                            variant="light"
+                                                            size="sm"
+                                                            startContent={deletingId != job.id && <Icon icon="lucide:trash-2" width={14} />}
+                                                            onPress={() => deleteJob(job.id)}
+                                                            isLoading={deletingId == job.id}
+                                                        >
+                                                            Remove Job
+                                                        </Button>
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </div>
-
                     </Card>
-
-
-
-
-
                 </div>
-
             </div >
-
         </div >
     )
 }
 
-export default CronJob
+export default Cronjob

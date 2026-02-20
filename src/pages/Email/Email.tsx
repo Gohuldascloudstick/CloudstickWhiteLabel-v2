@@ -430,7 +430,6 @@ const Email = () => {
                         {emails.length > 1 ? (
                             <div className="flex flex-col gap-4 w-full overflow-x-auto ">
                                 <Table className="min-w-225"
-
                                     classNames={{
                                         wrapper: "p-0  rounded-xs overflow-hidden",
                                         th: "text-xs bg-gray-50/50 text-slate-700 font-bold uppercase tracking-wider h-12",
@@ -459,10 +458,8 @@ const Email = () => {
                                             </>
                                         </TableColumn>
                                     </TableHeader>
-
                                     <TableBody className="">
                                         {emails?.slice(1).map((email) => (
-
                                             <TableRow key="1">
                                                 <TableCell className="text-slate-800 font-medium">
                                                     {email.email}
@@ -472,9 +469,6 @@ const Email = () => {
                                                         <p>
                                                             {email.quota_mb === 0 ? "Unlimited" : email.quota_mb}
                                                         </p>
-
-
-
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>

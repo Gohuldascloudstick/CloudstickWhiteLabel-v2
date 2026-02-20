@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
-import type { Email, Emailconfig, } from "../../utils/interfaces";
+import type { email, Emailconfig, } from "../../utils/interfaces";
 import { api } from "../eventServices";
 
 interface initialStatetype {
     loading: boolean;
     error: string | null;
-    email: Email[];
+    email: email[];
     forward_email: string[];
     records: {
         a: Emailconfig | null;
@@ -68,7 +68,7 @@ export const getEmailList = createAsyncThunk(
 )
 export const deleteEmail = createAsyncThunk(
     "email/deleteemail",
-    async ({ name }: {name: string }, { rejectWithValue }) => {
+    async ({ name }: { name: string }, { rejectWithValue }) => {
         try {
             const user = JSON.parse(localStorage.getItem("userId") || "null");
             const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
@@ -177,10 +177,12 @@ export const DeleteForwardEmail = createAsyncThunk(
 )
 export const getConfig = createAsyncThunk(
     "email,getconfigforemail",
-    async ({ webId, serverId }: { webId: number, serverId: number }, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("user") || "null");
-            const url = `/api/v2/email/configure/websites/${webId}/servers/${serverId}/users/${user.id}`;
+            const user = JSON.parse(localStorage.getItem("userId") || "null");
+            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+            const webId = JSON.parse(localStorage.getItem("webId") || "null")
+            const url = `/api/v2/email/configure/websites/${webId}/servers/${serverId}/users/${user}`;
             const response = await api.getEvents(url);
             return response.data;
         } catch (error: any) {

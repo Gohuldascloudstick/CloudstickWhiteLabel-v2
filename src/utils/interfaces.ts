@@ -131,20 +131,20 @@ export interface Website {
   ssl_acme_account_key?: string;
   ssl_acme_registration?: string;
 
- 
+
   is_database_used: boolean;
   port: number;
   php_version: number;
 
- 
+
   cj_protection: boolean;
   xss_protection: boolean;
   ms_protection: boolean;
   permissions_policy: boolean;
   content_security_policy: boolean;
-  referrer_policy:boolean;
-  cross_origin_opener_policy:boolean;
-  
+  referrer_policy: boolean;
+  cross_origin_opener_policy: boolean;
+
   system_user: SystemUser | null;
 }
 export interface WebisteDetails {
@@ -174,9 +174,9 @@ export interface WebisteDetails {
   php_display_error?: string;
   port?: number;
   website: Website;
-  database:Database;
-  db_user:Dbuser;
-  
+  database: Database;
+  db_user: Dbuser;
+
   template_id?: 2;
 }
 export interface Subdomain {
@@ -208,4 +208,24 @@ export interface FileManagerItem {
 
   // If it's a file, it may have content
   content?: string;
+}
+export interface SystemUser {
+  id: number;
+  created_at: string;
+  name: string;
+  sudo_permission: boolean;
+  server_id: number;
+  server_uuid: string;
+  password?: string;
+}
+export interface CronJob {
+  id: number;
+  server_id: number;
+  user_name: string;
+  label: string;
+  binary: string;
+  path: string;
+  schedule: string;
+  is_app_cron: boolean;
+  website_id?: number;
 }
