@@ -62,8 +62,9 @@ const Cronjob = () => {
             <div className="flex justify-end mt-2">
 
                 <Button onPress={() => {
-                     reducerDispatch(clearedit())
-                     navigate("addcronjobs")}} className="bg-orange-600 text-white rounded-md">
+                    reducerDispatch(clearedit())
+                    navigate("addcronjobs")
+                }} className="bg-orange-600 text-white rounded-md">
                     Create Cron Job
                 </Button>
             </div>
@@ -91,10 +92,11 @@ const Cronjob = () => {
                                         <div className="flex items-center gap-4">
                                             <span>JOB NAME</span>
                                             <Input
-                                                placeholder="Search variables..."
+                                                variant="bordered"
+                                                placeholder="Search ..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                className=" md:w-1/3 border border-default-200 rounded-md"
+                                                className=" md:w-1/2 text-sm select-text! rounded-md"
                                                 size="sm"
                                             />
                                         </div>
