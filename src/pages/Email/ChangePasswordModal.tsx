@@ -69,7 +69,7 @@ const ChangePasswordModal: React.FC<ChangePasswordProps> = (
             "password": newPassword
         }
         try {
-            console.log(name, "2234")
+           
             setResetPasswordLoader(true);
             await dispatch(changeEmailPassword({ data: data })).unwrap();
             addToast({

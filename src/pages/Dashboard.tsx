@@ -13,10 +13,12 @@ const Dashboard = () => {
     const serverId = "150";
     const webId = "688";
     const userId = "22"
+    const systemuserId = "1060"
     const webappType = "customphp"
     localStorage.setItem("serverId", serverId);
     localStorage.setItem("webId", webId);
     localStorage.setItem("userId", userId)
+    localStorage.setItem("systemuserId", systemuserId);
     localStorage.setItem("webappType", webappType)
   }, []);
   const getPhpAdminLoginLink = async () => {
@@ -184,7 +186,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="material-symbols-light:settings-account-box-outline-rounded" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={()=>navigate("/password")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Change Password
                 </span>
               </div>

@@ -190,6 +190,7 @@ const AddCronJob = () => {
                 description: ` Job Updated successfully`,
                 color: "success",
             });
+            navigate("/cronjobs")
             handelClose()
         } catch (error: any) {
             addToast({
@@ -239,7 +240,7 @@ const AddCronJob = () => {
             ).unwrap();
             await dispatch(getAppCron()).unwrap();
 
-
+            navigate("/cronjobs")
             addToast({
                 description: `New Job ${finalLabel} Created successfully`,
                 color: "success",
@@ -300,7 +301,7 @@ const AddCronJob = () => {
     }, [editvalue]);
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
-            <p className="text-3xl">{editvalue? "Update": "Add New"} <span className=" font-bold text-teal-600">
+            <p className="text-3xl">{editvalue ? "Update" : "Add New"} <span className=" font-bold text-teal-600">
                 Cron Job
             </span>
             </p>
@@ -311,7 +312,7 @@ const AddCronJob = () => {
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
 
-                            <span className="font-bold  text-lg">{editvalue ?"Update Cron Job":"Add New Cron Job"}</span>
+                            <span className="font-bold  text-lg">{editvalue ? "Update Cron Job" : "Add New Cron Job"}</span>
                         </div>
                         <Divider />
 
@@ -532,7 +533,7 @@ const AddCronJob = () => {
                                             className="bg-orange-600 text-white text-sm px-8 rounded-sm"
                                             size="sm"
                                         >
-                                            {editvalue? "Update Cron Job":"Add Cron Job"}
+                                            {editvalue ? "Update Cron Job" : "Add Cron Job"}
                                         </Button>
                                     </div>
                                 </div>

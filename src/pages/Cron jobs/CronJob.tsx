@@ -46,7 +46,6 @@ const Cronjob = () => {
     const setEditJob = async (job: CronJob) => {
         await reducerDispatch(editJob(job));
         setOpenPopoverId(null);
-        console.log("111111111")
         navigate("/cronjobs/addcronjobs")
     };
 
@@ -96,7 +95,7 @@ const Cronjob = () => {
                                                 placeholder="Search ..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                className=" md:w-1/2 text-sm select-text! rounded-md"
+                                                className=" md:w-1/2 text-sm select-text!  rounded-md"
                                                 size="sm"
                                             />
                                         </div>
@@ -107,7 +106,8 @@ const Cronjob = () => {
                                     <TableColumn align="end">ACtion</TableColumn>
                                 </TableHeader>
 
-                                <TableBody>
+                                <TableBody
+                                    emptyContent="No jobs found">
                                     {jobs.map((job) => (
                                         <TableRow key={job.id}>
                                             <TableCell className="text-slate-800 font-medium">
@@ -173,6 +173,7 @@ const Cronjob = () => {
                                             </TableCell>
                                         </TableRow>
                                     ))}
+
                                 </TableBody>
                             </Table>
                         </div>

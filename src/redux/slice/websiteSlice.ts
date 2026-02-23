@@ -25,7 +25,7 @@ export const getWebDetails = createAsyncThunk(
       const user = JSON.parse(localStorage.getItem("userId") || "null");
       const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
       const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const webappType =localStorage.getItem("webappType") || "null"
+      const webappType = localStorage.getItem("webappType") || "null"
       const url = `/api/v2/${webappType}/details/${webId}/servers/${serverId}/users/${user}`;
       const response = await api.getEvents(url);
       return response.data;
@@ -34,6 +34,23 @@ export const getWebDetails = createAsyncThunk(
     }
   }
 );
+
+export const Updatepasword = createAsyncThunk(
+  "systemuser/Updatepasword",
+  async ({data }: {  data: { password: string, confirm_password: string } }, { rejectWithValue }) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+      const systemuserId = localStorage.getItem("systemuserId");
+      const url = `/api/v2/systemuser/${systemuserId}/servers/${serverId}/users/${user}`;
+      const response =await api.patchEvent(url, data);
+      return response.data
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || "failed");
+    }
+
+  }
+)
 
 
 
