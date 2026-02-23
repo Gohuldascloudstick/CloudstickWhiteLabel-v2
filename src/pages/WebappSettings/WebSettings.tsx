@@ -1,107 +1,182 @@
 import { Button, Card, Checkbox, Divider, Input, Select, SelectItem, Textarea } from "@heroui/react"
 import { Icon } from "@iconify/react"
+import { useState } from "react"
+import { useAppSelector } from "../../redux/hook"
 
 
 const WebSettings = () => {
+    const [cardOpen, setCardopen] = useState("")
+    const phpversions = useAppSelector(state => state.website.phpversion)
+    const currentWebsite = useAppSelector((state) => state.website.selectedWebsite);
+    const [phpVersion, setPhpVersion] = useState<string>(currentWebsite?.php_version?.slice(0, 1) + "." + currentWebsite?.php_version?.slice(1));
+    const [webstack, setWebstack] = useState<string>(currentWebsite?.website?.stack_type || "null");
+    const [phpversionloader, setPhpversionLoader] = useState(false);
+    const [publicpathError, setPublicPathError] = useState("")
+    const [publicpathloadear, setPublicPathLoader] = useState(false);
+    const [webstackloader, setWebstackLoader] = useState(false);
+    const [publicpath, setPublicpath] = useState("");
+    const stacktype = [
+        { id: "nginx", label: "Native Nginx" },
+        { id: "nginx+apache", label: "Nginx + Apache" },
+    ];
+
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
-                Web Application Settings
-            </span>
+            <p className="text-3xl">Welcome to
+                <span className=" font-bold text-teal-600">
+                    Web Application Settings
+                </span>
             </p>
-
-
             <div className="mt-12  w-full  ">
                 <div className=" w-full space-y-6 ">
+                    <Card className="w-full shadow-sm border border-gray-200">
+                        <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                            <Icon
+                                icon="ri:php-fill"
+                                className="text-white transition-transform group-hover:scale-110"
+                                width={22}
+                            />
+                            <span className="font-bold  text-lg"> PHP Version Management</span>
+                        </div>
+                        <Divider />
+                        <div className=" pt-6 py-2  px-12" >
+                            <Select
+                                label="PHP Version"
+                                placeholder="Select version"
+                                variant="bordered"
+                                disallowEmptySelection
+                                selectedKeys={phpVersion ? new Set([phpVersion]) : new Set()}
+                                onSelectionChange={(keys) =>
+                                    setPhpVersion([...keys][0] as string)
+                                }
+                                labelPlacement="outside"
+                                classNames={{
+                                    trigger: "bg-default-100 dark:bg-default-300",
+                                    popoverContent: "dark:bg-default-300 dark:text-white",
+                                }}
+                            >
+                                {phpversions
+                                    ?.slice()
+                                    .sort((a, b) => Number(a) - Number(b))
+                                    .map((v) => (
+                                        <SelectItem key={v}>
+                                            {`PHP ${v}`}
+                                        </SelectItem>
+                                    ))}
+                            </Select>
+                            <div className="p-4 flex justify-end">
+                                <Button
+                                    size='sm'
+                                    className="bg-orange-600 text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                                    isDisabled={phpversionloader}
+                                    isLoading={phpversionloader}
+                                // onPress={Changephpversion}
+                                >
+                                    Change
+                                </Button>
+                            </div>
+                        </div>
+
+                    </Card>
+                    <Card className="w-full shadow-sm border border-gray-200">
+                        <div className="px-6 py-4 flex items-center gap-2 ">
+                            <Icon icon={"mynaui:path"}
+                                className=" transition-transform group-hover:scale-110"
+                                width={22} />
+                            <span className="font-bold  text-lg"> Change Public Path</span>
+                        </div>
+                        <Divider />
+                        <div className=" pt-6 py-2  px-12" >
+                            <Input
+                                type="text"
+                                label="Public Path"
+                                placeholder="Enter a path"
+                                value={publicpath}
+                                onValueChange={(value) => {
+                                    setPublicpath(value);
+                                    setPublicPathError("")
+                                }}
+                                errorMessage={publicpathError}
+                                isInvalid={!!publicpathError}
+                                variant="bordered"
+                                labelPlacement="outside"
+                                classNames={{ inputWrapper: "bg-default-100 dark:bg-default-300" }}
+                                startContent={
+                                    <div className=" hidden md:block  items-center pr-2 border-r border-slate-200 text-slate-400 text-sm">
+                                        {currentWebsite?.website?.public_path && currentWebsite?.website?.public_path.length > 28 ? currentWebsite?.website?.public_path.slice(0, 25) + "..." : currentWebsite?.website?.public_path}
+                                    </div>
+                                }
+                            />
+                            <div className="p-4 flex justify-end">
+                                <Button
+                                    className="bg-orange-600 text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                                    size='sm'
+                                    color='primary'
+                                    isDisabled={publicpathloadear}
+                                    isLoading={publicpathloadear}
+                                // onPress={changePublicpath}
+                                >
+                                    Change
+                                </Button>
+                            </div>
+                        </div>
+                    </Card>
+                    <Card className="w-full shadow-sm border border-gray-200">
+                        <div className="px-6 py-4 flex items-center gap-2 ">
+                            <Icon icon={"lucide:database"}
+                                className=" transition-transform group-hover:scale-110"
+                                width={22} />
+                            <span className="font-bold  text-lg"> Change Web Stack</span>
+                        </div>
+                        <Divider />
+                        <div className=" pt-6 py-2  px-12" >
+                            <Select
+                                label="Web Stack"
+                                labelPlacement="outside"
+                                selectedKeys={webstack ? new Set([webstack]) : new Set()}
+                                onSelectionChange={(keys) =>
+                                    setWebstack([...keys][0] as string)
+                                }
+                                classNames={{
+                                    trigger: "bg-default-100 dark:bg-default-300",
+                                    popoverContent: "dark:bg-default-300 dark:text-white",
+                                }}
+                                placeholder="Select stack"
+                                variant="flat"
+                                disallowEmptySelection
+                            >
+                                {stacktype.map((s) => <SelectItem key={s.id}>{s.label}</SelectItem>)}
+                            </Select>
+                            <div className="p-4 flex justify-end">
+
+                                <Button
+                                    className="bg-orange-600 text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                                    size='sm'
+                                    color='primary'
+                                    isDisabled={webstackloader}
+                                    isLoading={webstackloader}
+                                // onPress={changeWebstackType}
+                                >
+                                    Change
+                                </Button>
+                            </div>
+                        </div>
+                    </Card>
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <Icon icon={"bi:globe"} className="" width={22} />
                             <span className="font-bold  text-lg">Add Web Application to Server CloudStick</span>
                         </div>
                         <Divider />
+                        <div className=" pt-6 py-2 flex flex-col gap-4 px-12" >
 
-                        <div className=" pt-6 py-2 px-12" >
+
+
+
                             <div className="flex-1 flex flex-col gap-6">
-                                <Input
-                                    variant="bordered"
-                                    label="File System Quota Size (in MB,GB,TB)"
-                                    labelPlacement="outside"
-                                    disabled
-                                    placeholder="You can't use this feature since File System Quota is disabled"
-                                    classNames={{
-                                        inputWrapper: "bg-slate-300",
-                                        input:"placeholder:text-gray-400"
-                                        
-                                    }}
-                                />
 
 
-                                <Input
-                                    type="password"
-                                    label="Password"
-                                    labelPlacement="outside"
-                                    placeholder="Enter Password"
-                                    variant="bordered"
-                                    endContent={
-                                        <div className="flex items-center gap-2">
-
-
-                                            <Button
-                                                size="sm"
-                                                variant="light"
-                                                isIconOnly
-                                                // onPress={() => setShowNewPassword(!showNewPassword)}
-                                                className="p-1 min-w-0 h-auto"
-                                            >
-                                                <Icon
-                                                    icon={"lucide:eye"}
-                                                    className="text-xl text-default-400"
-                                                />
-                                            </Button>
-                                            <span className="text-xs text-blue-500">Generate</span>
-                                        </div>
-                                    }
-                                />
-                                <div className="flex justify-end">
-                                    <Button variant="solid" size="sm" className="bg-orange-600 text-white rounded-md">
-                                        Update
-                                    </Button>
-                                </div>
-
-                                <Input
-                                    type="text"
-                                    placeholder="/home/vandanatest/apps/"
-                                    label="Public Path"
-                                    labelPlacement="outside"
-                                    variant="bordered"
-
-                                />
-                                <Select
-                                    label="PHP Version"
-                                    labelPlacement="outside"
-                                    placeholder="Please select one"
-                                    variant="bordered"
-                                >
-                                    <SelectItem >
-                                        PHP 8.2
-                                    </SelectItem>
-                                    <SelectItem>
-                                        PHP 8.3
-                                    </SelectItem>
-                                </Select>
-                                <Select
-                                    label="Web Application Stack"
-                                    labelPlacement="outside"
-                                    placeholder="Please select one"
-                                    variant="bordered"
-                                >
-                                    <SelectItem >
-                                        Native Nginx
-                                    </SelectItem>
-                                    <SelectItem>
-                                        Nginx + Appache
-                                    </SelectItem>
-                                </Select>
+                               
                                 <span className="font-bold">NGINX Settings</span>
                                 <Checkbox >
                                     Clickjacking Protection

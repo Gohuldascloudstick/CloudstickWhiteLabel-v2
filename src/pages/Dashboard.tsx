@@ -190,24 +190,18 @@ const Dashboard = () => {
                   Change Password
                 </span>
               </div>
-
-
             </div>
           </Card>
-
-
         </div>
         <div>
           <Card className="">
             <CardBody className="p-4">
               <div>
                 <p className="font-bold">
-
                   General Information
                 </p>
               </div>
               <div className="my-4">
-
                 <p className="text-sm">
                   Primary Domain
                 </p>
@@ -215,21 +209,16 @@ const Dashboard = () => {
               </div>
               <Divider />
               <div className="my-4">
-
                 <p className="text-sm">
                   IP Address
                 </p>
                 <p className="text-sm text-blue-600">172.105.34.154</p>
               </div>
-
             </CardBody>
           </Card>
-
         </div>
       </div>
-
     </div>
-
   )
 }
 

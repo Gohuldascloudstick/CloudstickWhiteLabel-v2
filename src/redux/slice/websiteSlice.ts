@@ -7,6 +7,7 @@ import type { WebisteDetails } from "../../utils/interfaces";
 interface initialStatetype {
   loading: boolean;
   error: string | null;
+  phpversion: [];
   selectedWebsite: WebisteDetails | null;
 
 }
@@ -14,6 +15,7 @@ interface initialStatetype {
 const initialState: initialStatetype = {
   loading: false,
   error: null,
+  phpversion: [],
   selectedWebsite: null,
 
 };
@@ -37,18 +39,34 @@ export const getWebDetails = createAsyncThunk(
 
 export const Updatepasword = createAsyncThunk(
   "systemuser/Updatepasword",
-  async ({data }: {  data: { password: string, confirm_password: string } }, { rejectWithValue }) => {
+  async ({ data }: { data: { password: string, confirm_password: string } }, { rejectWithValue }) => {
     try {
       const user = JSON.parse(localStorage.getItem("userId") || "null");
       const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
       const systemuserId = localStorage.getItem("systemuserId");
       const url = `/api/v2/systemuser/${systemuserId}/servers/${serverId}/users/${user}`;
-      const response =await api.patchEvent(url, data);
+      const response = await api.patchEvent(url, data);
       return response.data
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.error || "failed");
     }
 
+  }
+)
+export const getPhpVersions = createAsyncThunk(
+  "easyphp/getphpversions",
+  async ({ serverId }: { serverId: number }, { rejectWithValue }) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const url = `/api/v2/php-versions/servers/${serverId}/users/${user.id}`;
+      const response = await api.getEvents(url);
+      return response.data
+    }
+    catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.error || "unexpected error occured"
+      );
+    }
   }
 )
 
@@ -91,6 +109,19 @@ const WebsiteSLice = createSlice({
       .addCase(getWebDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string || "unexpected error occured"
+      })
+      .addCase(getPhpVersions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getPhpVersions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.phpversion = action.payload.message;
+        state.error = null;
+      })
+      .addCase(getPhpVersions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string || "unexpected error occured";
       })
 
 

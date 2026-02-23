@@ -410,7 +410,7 @@ const Email = () => {
                                 <Button onPress={handleSubmit}
                                     isLoading={emailLoader}
                                     isDisabled={emailLoader}
-                                    className="bg-[#f07c33] text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                                    className="bg-orange-600 text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
                                     size="md"
                                 >
                                     <span className="hidden md:block">
