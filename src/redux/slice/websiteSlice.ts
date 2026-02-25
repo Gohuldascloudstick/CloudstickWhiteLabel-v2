@@ -70,6 +70,22 @@ export const getPhpVersions = createAsyncThunk(
     }
   }
 )
+export const magicLink = createAsyncThunk(
+  "website/magiclink",
+  async (_, { rejectWithValue }) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const serverid = JSON.parse(localStorage.getItem("serverId") || "null");
+      const webId = JSON.parse(localStorage.getItem("webId") || "null")
+      const url = `/api/v2/wordpress/magiclink/servers/${serverid}/users/${user}?wid=${webId}`
+      const response = await api.postEvents(url, {})
+      return response.data.message
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || "Magic link Creation Failed");
+    }
+
+  }
+)
 
 
 
