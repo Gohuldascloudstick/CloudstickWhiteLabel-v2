@@ -10,10 +10,10 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
   useEffect(() => {
-    const serverId = "150";
-    const webId = "688";
+    const serverId = "137";
+    const webId = "699";
     const userId = "22"
-    const systemuserId = "1060"
+    const systemuserId = "1077"
     const webappType = "customphp"
     localStorage.setItem("serverId", serverId);
     localStorage.setItem("webId", webId);

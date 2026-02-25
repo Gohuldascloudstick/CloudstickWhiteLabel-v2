@@ -1,11 +1,31 @@
-import { Button, Card, Divider, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from "@heroui/react"
-import { Icon } from "@iconify/react"
-import { useNavigate } from "react-router-dom"
-
+import { Button, Card, Divider } from "@heroui/react"
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion'
+import CustomRenew from "./CustomRenew";
+import UpdateSSlCOmfig from "./UpdateSSlCOmfig";
+import AddNewSLL from "./AddNewSLL";
+import SSlDetails from "./SSlDetails";
+import { Icon } from "@iconify/react";
+import { getServer } from "../../redux/slice/serverslice";
+import { useDispatch } from "react-redux";
+import { clearEditMode, setCustomREnew } from "../../redux/slice/SLLMangerSLice";
+import { getWebDetails } from "../../redux/slice/websiteSlice";
 const Ssl = () => {
-    const navigate = useNavigate();
+    const Editmode = useAppSelector((state) => state.SSL.IsEditing)
+    const [isNewMode, setIsNewMode] = useState(false)
+    const ReducerDispathc = useDispatch()
+    const dispatch = useAppDispatch()
+    const CustomeRenewMode = useAppSelector((state) => state.SSL.isCustomRenew)
+    const websiteDetial = useAppSelector((state) => state.website.selectedWebsite)
+    useEffect(() => {
+        dispatch(getServer())
+        ReducerDispathc(setCustomREnew(false))
+        ReducerDispathc(clearEditMode())
+        dispatch(getWebDetails());
+    }, [])
     return (
-        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
+        <div className="p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 SSL Management
             </span>
@@ -15,87 +35,75 @@ const Ssl = () => {
             </p>
             <div className="flex justify-end mt-2">
 
-                <Button onPress={() => navigate("addcronjobs")} className="bg-orange-600 text-white rounded-md">
+                <Button onPress={() => setIsNewMode(true)} className="bg-orange-600 text-white rounded-md">
                     Deploy New SSL
                 </Button>
             </div>
             <div className="mt-6  w-full  ">
-
-
                 <div className=" w-full space-y-6 ">
-
-
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
                             <span className="font-bold text-white text-lg">SSL Management</span>
                         </div>
                         <Divider />
-                        <div className="flex flex-col gap-4">
-                            <Table
 
-                                classNames={{
-                                    wrapper: "p-0  rounded-xs overflow-hidden",
-                                    th: "bg-gray-50/50 text-slate-700 font-bold uppercase tracking-wider h-12",
-                                    td: "py-4 px-4 border-b border-gray-100",
-                                }}
-                            >
-                                <TableHeader>
-                                    <TableColumn width={400}>
-                                        <div className="flex items-center gap-4">
-                                            <span>DOMAINS</span>
-                                            <Input
-                                                isClearable
-                                                className="max-w-50"
-                                                placeholder="Search..."
-                                                size="sm"
-                                                startContent={<Icon icon="ic:baseline-search" width={24} className="text-default-400" />}
-                                                variant="bordered"
-                                            />
-                                        </div>
-                                    </TableColumn>
-                                    <TableColumn align="center">SSL PROVIDER</TableColumn>
-                                  
-                                    <TableColumn align="end">ACtion</TableColumn>
-                                </TableHeader>
-
-                                <TableBody>
-                                    <TableRow key="1">
-                                        <TableCell className="text-slate-800 font-medium">
-                                            vandanatest_new_database
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex justify-center">
-                                                <span className="flex items-center gap-1 cursor-pointer text-blue-800">
-                                                    Grant User
-                                                    <Icon icon="mdi:user-plus-outline" fontSize={20} className="mb-0.5" />
-                                                </span>
-
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex justify-end">
-                                                <Tooltip content="Delete database">
-                                                    <Button className="text-gray-500 hover:text-red-500" isIconOnly variant="light" color="default" size="sm">
-                                                        <Icon icon="mdi:trash-can-outline" fontSize={20} />
-                                                    </Button>
-                                                </Tooltip>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </div>
-
+                        {!websiteDetial?.website?.is_ssl_installed && !isNewMode && !Editmode ?
+                            <div className="flex flex-col items-center gap-2 py-18 h-full justify-center">
+                                <Icon icon="lucide:database-x" className="text-default-400 mb-3" width={36} />
+                                <p className="text-lg">No SSL found</p>
+                            </div>
+                            :
+                            <div className=' pt-2'>
+                                <AnimatePresence mode="wait">
+                                    {
+                                        CustomeRenewMode ? (
+                                            <motion.div
+                                                key="customRenew"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <CustomRenew type="website" />
+                                            </motion.div>
+                                        ) : Editmode ? (
+                                            <motion.div
+                                                key="update"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <UpdateSSlCOmfig type="website" />
+                                            </motion.div>
+                                        ) : isNewMode ? (
+                                            <motion.div
+                                                key="new"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <AddNewSLL setIseditMode={setIsNewMode} ssltype='website' />
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="details"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <SSlDetails ssltype='website' />
+                                            </motion.div>
+                                        )
+                                    }
+                                </AnimatePresence>
+                            </div>
+                        }
                     </Card>
-
-
-
-
-
                 </div>
-
             </div >
-
         </div >
     )
 }

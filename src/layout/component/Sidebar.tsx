@@ -13,13 +13,13 @@ const Sidebar = () => {
         { name: "Email Accounts", icon: "fluent:mail-16-regular", path: "/email" },
         { name: "File Manager", icon: "fluent:folder-add-20-regular", path: "/file" },
         { name: "Sub domains", icon: "fluent:globe-20-regular", path: "/subdomain", },
-        { name: "Web Server Log", icon: "fluent:clipboard-bullet-list-ltr-20-regular", path: "/services" },
-        { name: "Git", icon: "iconoir:git", path: "/sshVault" },
+        { name: "Web Server Log", icon: "fluent:clipboard-bullet-list-ltr-20-regular", path: "/logs" },
+        { name: "Git", icon: "iconoir:git", path: "/git" },
         { name: "Password Management", icon: "solar:password-outline", path: "/password" },
         { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/websettings" },
         { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/cronjobs" },
         { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/ssl" },
-        { name: "WordPress Manager", icon: "uil:wordpress-simple", path: "/wordpress_templates" },
+        { name: "WordPress Manager", icon: "uil:wordpress-simple", path: "/wordpress" },
 
     ];
     return (

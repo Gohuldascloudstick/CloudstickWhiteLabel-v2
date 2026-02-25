@@ -55,10 +55,11 @@ export const Updatepasword = createAsyncThunk(
 )
 export const getPhpVersions = createAsyncThunk(
   "easyphp/getphpversions",
-  async ({ serverId }: { serverId: number }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const url = `/api/v2/php-versions/servers/${serverId}/users/${user.id}`;
+      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+      const url = `/api/v2/php-versions/servers/${serverId}/users/${user}`;
       const response = await api.getEvents(url);
       return response.data
     }
