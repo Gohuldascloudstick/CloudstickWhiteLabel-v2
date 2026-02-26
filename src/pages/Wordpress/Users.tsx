@@ -5,6 +5,7 @@ import { dleteWordpressUser, getWorpressUser, UpdateWordpressUser } from "../../
 import { Icon } from "@iconify/react";
 
 
+
 const Users = () => {
     const dispatch = useAppDispatch();
     const WordPressUSers = useAppSelector((state) => state.wordPressManger.wordpressUSer
@@ -101,91 +102,98 @@ const Users = () => {
 
                 </TableHeader>
                 <TableBody>
-                    {WordPressUSers && WordPressUSers.map((users) => (
+                    {WordPressUSers.length === 0 ? (
                         <TableRow>
-                            <TableCell>
-                                {users?.user_name}
-                            </TableCell>
-                            <TableCell>
-                                {users?.email}
-                            </TableCell>
-                            <TableCell>
-                                {users?.role}
-                            </TableCell>
-                            <TableCell>
-                                {users.created_at}
-                            </TableCell>
-                            <TableCell>
-                                <Popover
-                                    isOpen={popOverId == users.id}
-                                    onOpenChange={(open) => setPopOverId(open ? users.id : '')}
-                                    placement="bottom-end"
-                                    className=" shadow-none rounded-md"
-                                    classNames={{
-                                        base: "rounded-sm shadow-none dark:bg-slate-900",
-                                    }}
-                                >
-                                    <PopoverTrigger>
-                                        <Button
-                                            startContent={
-                                                <Icon
-                                                    icon="lucide:ellipsis-vertical"
-                                                    className="text-default-700"
-                                                    width={20}
-                                                />
-                                            }
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                        />
-                                    </PopoverTrigger>
-                                    <PopoverContent className=" rounded-sm shadow-xl py-3">
-                                        <div className=" w-40!  ">
-                                            <Button
-                                                onPress={() => {
-
-                                                    setUpdateid(users.id);
-                                                    setNewUsername(users.user_name);
-                                                    setIsChangePasswordModalOpen(true);
-                                                    setPopOverId('')
-                                                }}
-                                                size="sm"
-                                                color="default"
-                                                variant="light"
-                                                className=" w-full group"
-                                                startContent={
-                                                    <Icon
-                                                        icon="lucide:lock"
-                                                        className=" group-hover:scale-110 transition-all duration-75 ease-soft-spring "
-                                                    />
-                                                }
-                                            >
-                                                Change Password
-                                            </Button>
-                                            <Button
-                                                onPress={() => handleDleteUSer(users.id)}
-                                                isLoading={userDeleteloader}
-                                                size="sm"
-                                                color="danger"
-                                                variant="light"
-                                                className=" w-full group"
-                                                startContent={
-                                                    !userDeleteloader && (
-                                                        <Icon
-                                                            icon="lucide:trash-2"
-                                                            className=" group-hover:scale-110 transition-all duration-75 ease-soft-spring "
-                                                        />
-                                                    )
-                                                }
-                                            >
-                                                Delete User
-                                            </Button>
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
+                            <TableCell colSpan={5} className="text-center">
+                                No users found
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        WordPressUSers.map((users) => (
+                            <TableRow>
+                                <TableCell>
+                                    {users?.user_name}
+                                </TableCell>
+                                <TableCell>
+                                    {users?.email}
+                                </TableCell>
+                                <TableCell>
+                                    {users?.role}
+                                </TableCell>
+                                <TableCell>
+                                    {users.created_at}
+                                </TableCell>
+                                <TableCell>
+                                    <Popover
+                                        isOpen={popOverId == users.id}
+                                        onOpenChange={(open) => setPopOverId(open ? users.id : '')}
+                                        placement="bottom-end"
+                                        className=" shadow-none rounded-md"
+                                        classNames={{
+                                            base: "rounded-sm shadow-none dark:bg-slate-900",
+                                        }}
+                                    >
+                                        <PopoverTrigger>
+                                            <Button
+                                                startContent={
+                                                    <Icon
+                                                        icon="lucide:ellipsis-vertical"
+                                                        className="text-default-700"
+                                                        width={20}
+                                                    />
+                                                }
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                            />
+                                        </PopoverTrigger>
+                                        <PopoverContent className=" rounded-sm shadow-xl py-3">
+                                            <div className=" w-40!  ">
+                                                <Button
+                                                    onPress={() => {
+
+                                                        setUpdateid(users.id);
+                                                        setNewUsername(users.user_name);
+                                                        setIsChangePasswordModalOpen(true);
+                                                        setPopOverId('')
+                                                    }}
+                                                    size="sm"
+                                                    color="default"
+                                                    variant="light"
+                                                    className=" w-full group"
+                                                    startContent={
+                                                        <Icon
+                                                            icon="lucide:lock"
+                                                            className=" group-hover:scale-110 transition-all duration-75 ease-soft-spring "
+                                                        />
+                                                    }
+                                                >
+                                                    Change Password
+                                                </Button>
+                                                <Button
+                                                    onPress={() => handleDleteUSer(users.id)}
+                                                    isLoading={userDeleteloader}
+                                                    size="sm"
+                                                    color="danger"
+                                                    variant="light"
+                                                    className=" w-full group"
+                                                    startContent={
+                                                        !userDeleteloader && (
+                                                            <Icon
+                                                                icon="lucide:trash-2"
+                                                                className=" group-hover:scale-110 transition-all duration-75 ease-soft-spring "
+                                                            />
+                                                        )
+                                                    }
+                                                >
+                                                    Delete User
+                                                </Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </TableCell>
+                            </TableRow>
+                        )))}
 
                 </TableBody>
 

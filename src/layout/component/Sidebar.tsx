@@ -1,10 +1,16 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, useDisclosure } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import LogoutModal from "./LogoutModal";
 
 
 const Sidebar = () => {
+    const {
+        isOpen: isLogoutModalOpen,
+        onOpen: onLogoutModalOpen,
+        onOpenChange: onLogoutModalOpenChange,
+    } = useDisclosure();
     const websitetype = localStorage.getItem("webappType")
     const navigate = useNavigate()
     const location = useLocation();
@@ -66,10 +72,11 @@ const Sidebar = () => {
 
 
             <div className="pb-3 flex justify-center border-t border-gray-400 pt-2">
-                <button className="text-teal-700/60 hover:text-teal-700 transition-colors">
+                <button onClick={onLogoutModalOpen} className="text-teal-700/60 hover:text-teal-700 transition-colors">
                     <Icon icon="fluent:arrow-exit-12-filled" width={35} />
                 </button>
             </div>
+            <LogoutModal isOpen={isLogoutModalOpen} onOpenChange={onLogoutModalOpenChange} />
         </div>
 
     )
