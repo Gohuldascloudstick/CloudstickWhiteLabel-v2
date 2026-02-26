@@ -32,10 +32,11 @@ export const getSubdomain = createAsyncThunk(
 )
 export const createSubdomainFreeSslHttp = createAsyncThunk(
     "sslManager/createFreeSslHttp",
-    async ({ websiteId, serverId, data }: { websiteId: string, serverId: string, data: { authorisation: string, access: string, brotli_enabled: boolean } }, { rejectWithValue }) => {
+    async ({ websiteId, data }: { websiteId: string,  data: { authorisation: string, access: string, brotli_enabled: boolean } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("user") || "null");
-            const url = `/api/v2/ssl/free-certificate/website-subdomian/${websiteId}/servers/${serverId}/users/${user.id}`;
+             const user = JSON.parse(localStorage.getItem("userId") || "null");
+            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+            const url = `/api/v2/ssl/free-certificate/website-subdomian/${websiteId}/servers/${serverId}/users/${user}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {

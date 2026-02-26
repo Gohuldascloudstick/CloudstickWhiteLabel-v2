@@ -472,3 +472,54 @@ export interface Server {
   ssl_acme_account_key: string;
   ssl_acme_registration: string;
 }
+export interface WordPressUSer {
+  id: string;
+  user_name: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+  created_at: string;
+  password: string;
+  public_path: string;
+}
+export interface Plugin {
+  name: string;
+  version: string;
+  update: string;
+  status: "active" | "inactive";
+  "update-version": string;
+  "auto-update": "on" | "off";
+}
+export interface WordPressManagerVersion {
+  current_version: string;
+  update_available: boolean;
+  auto_update_major: boolean;
+  auto_update_minor: boolean;
+}
+export interface WpURLS {
+  home_url: string;
+  public_path: string;
+  site_url: string;
+}
+
+export interface wpPlugincount {
+  active_plugins: number;
+  total_plugins: number;
+}
+export interface wpUsercount {
+  total_users: number;
+  active_users: number;
+}
+
+export interface wpDebug {
+  debug_enabled: boolean;
+  debug_log: boolean;
+  debug_display: boolean;
+  debug_log_path: string;
+  config_file_path: string;
+  log_exists: boolean;
+  log_size: number;
+  recent_logs: string[];
+  public_path: string;
+}

@@ -9,8 +9,11 @@ import SSLManagementSLice from './slice/SLLMangerSLice'
 import serverSlice from './slice/serverslice'
 import thirdPartyIntegrationSlice from './slice/thirdpartyintergration'
 import dns from './slice/dnsSlice'
+import WSslice from './slice/WSslice'
+import worpressManager from './slice/WordPressManager'
 export const store = configureStore({
   reducer: {
+     ws: WSslice,
     Email: EmailSlice,
     website: website,
     Database: datbaseSlice,
@@ -21,6 +24,7 @@ export const store = configureStore({
     server: serverSlice,
     thirdparty: thirdPartyIntegrationSlice,
     dns: dns,
+    wordPressManger: worpressManager,
   },
 });
 

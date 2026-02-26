@@ -10,11 +10,11 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
   useEffect(() => {
-    const serverId = "137";
-    const webId = "699";
+    const serverId = "150";
+    const webId = "700";
     const userId = "22"
-    const systemuserId = "1077"
-    const webappType = "customphp"
+    const systemuserId = "1078"
+    const webappType = "wordpress"
     localStorage.setItem("serverId", serverId);
     localStorage.setItem("webId", webId);
     localStorage.setItem("userId", userId)
@@ -32,6 +32,7 @@ const Dashboard = () => {
       setPhpMyAdminLoader(false);
     }
   };
+  const websitetype = localStorage.getItem("webappType")
 
 
   return (
@@ -62,7 +63,7 @@ const Dashboard = () => {
               </div>
               <div className="flex items-center gap-3 ">
                 <Icon icon="hugeicons:mail-secure-01" className="text-blue-900" width={32} />
-                <span onClick={()=>navigate("email/emailauthentication")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={() => navigate("email/emailauthentication")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Email Authentication
                 </span>
               </div>
@@ -78,13 +79,22 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="ph:folder-user" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate('/file')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   File Manager
                 </span>
               </div>
+              {websitetype === "wordpress" &&
+
+                <div className="flex items-center gap-3  ">
+                  <Icon icon="jam:wordpress" className="text-blue-900" width={32} />
+                  <span onClick={() => navigate('/wordpress')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                    WordPress Manager
+                  </span>
+                </div>
+              }
               <div className="flex items-center gap-3  ">
                 <Icon icon="iconoir:git" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={() => navigate('/git')} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Git
                 </span>
               </div>
@@ -99,7 +109,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="fa7-brands:php" className="text-blue-900" width={32} />
-                <span onClick={()=>navigate("/websettings")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate("/websettings")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   PHP Settings
                 </span>
               </div>
@@ -110,7 +120,7 @@ const Dashboard = () => {
                 </span>
               </div>
               <div className="flex items-center gap-3 ">
-                {phpMyAdminLoader ? <Icon icon="codex:loader" className="text-blue-600" width={32}/> : <Icon icon="simple-icons:phpmyadmin" className="text-blue-900" width={32} />}
+                {phpMyAdminLoader ? <Icon icon="codex:loader" className="text-blue-600" width={32} /> : <Icon icon="simple-icons:phpmyadmin" className="text-blue-900" width={32} />}
 
                 <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors" onClick={getPhpAdminLoginLink}>
                   phpMyAdmin
@@ -128,7 +138,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="la:globe-americas" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate('/subdomain')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Sub Domains
                 </span>
               </div>
@@ -143,7 +153,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="iconamoon:shield-yes-light" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate('/ssl')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   SSL/TSL
                 </span>
               </div>
@@ -162,13 +172,13 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="eos-icons:cronjob" className="text-blue-900" width={32} />
-                <span onClick={()=>navigate("/cronjobs")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate("/cronjobs")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Cron Jobs
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
                 <Icon icon="fluent:clipboard-bullet-list-ltr-20-regular" className="text-blue-900" width={32} />
-                <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
+                <span onClick={() => navigate('/logs')} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Web Server Log
                 </span>
               </div>
@@ -186,7 +196,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
                 <Icon icon="material-symbols-light:settings-account-box-outline-rounded" className="text-blue-900" width={32} />
-                <span onClick={()=>navigate("/password")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+                <span onClick={() => navigate("/password")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Change Password
                 </span>
               </div>

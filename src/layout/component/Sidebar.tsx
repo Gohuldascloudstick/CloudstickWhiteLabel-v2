@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 const Sidebar = () => {
+    const websitetype = localStorage.getItem("webappType")
     const navigate = useNavigate()
     const location = useLocation();
     const navItems = [
@@ -19,13 +20,20 @@ const Sidebar = () => {
         { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/websettings" },
         { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/cronjobs" },
         { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/ssl" },
-        { name: "WordPress Manager", icon: "uil:wordpress-simple", path: "/wordpress" },
+        ...(websitetype === "wordpress"
+            ? [{
+                name: "WordPress Manager",
+                icon: "uil:wordpress-simple",
+                path: "/wordpress"
+            }]
+            : [])
+
 
     ];
     return (
         <div className="w-full h-full flex flex-col bg-gray-300">
 
-            
+
             <div className="flex-1 overflow-y-auto pt-22 flex flex-col gap-2">
                 {navItems.map((item) => {
                     const isActive =
@@ -56,7 +64,7 @@ const Sidebar = () => {
                 })}
             </div>
 
-          
+
             <div className="pb-3 flex justify-center border-t border-gray-400 pt-2">
                 <button className="text-teal-700/60 hover:text-teal-700 transition-colors">
                     <Icon icon="fluent:arrow-exit-12-filled" width={35} />

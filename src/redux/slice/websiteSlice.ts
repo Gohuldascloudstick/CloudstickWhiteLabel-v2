@@ -23,7 +23,6 @@ export const getWebDetails = createAsyncThunk(
   "website/getDetails",
   async (_, { rejectWithValue }) => {
     try {
-
       const user = JSON.parse(localStorage.getItem("userId") || "null");
       const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
       const webId = JSON.parse(localStorage.getItem("webId") || "null")

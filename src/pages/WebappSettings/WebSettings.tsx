@@ -90,10 +90,7 @@ const WebSettings = () => {
 
         { value: "Pacific/Auckland", text: "Pacific / Auckland" },
     ];
-    useEffect(() => {
-        dispatch(getPhpVersions());
-        dispatch(getWebDetails());
-    }, [])
+
     const stacktype = [
         { id: "nginx", label: "Native Nginx" },
         { id: "nginx+apache", label: "Nginx + Apache" },
@@ -367,6 +364,32 @@ const WebSettings = () => {
         setMinSpareServers(currentWebsite?.php_min_spare_servers ?? 0)
         setMaxSpareServers(currentWebsite?.php_max_spare_servers ?? 0)
     }
+    useEffect(() => {
+        setWebstack(currentWebsite?.website?.stack_type ?? "" )
+        setPhpVersion(currentWebsite?.php_version?.slice(0, 1) + "." + currentWebsite?.php_version?.slice(1))
+        setProcessManager(currentWebsite?.php_process_manager ?? "")
+        setMaxchildren(currentWebsite?.php_max_children ?? 0)
+        setMaxRequest(currentWebsite?.php_max_requests ?? 0)
+        setStartServers(currentWebsite?.php_start_servers ?? 0)
+        setMinSpareServers(currentWebsite?.php_min_spare_servers ?? 0)
+        setMaxSpareServers(currentWebsite?.php_max_spare_servers ?? 0)
+        setOpenbasedir(currentWebsite?.php_open_base_dir ?? "")
+        setTimezone(currentWebsite?.php_timezone?? "")
+        setMaxExecutionTime(currentWebsite?.php_max_execution_time ?? 0)
+        setMaxInputTime(currentWebsite?.php_max_input_time ?? 0)
+        setMaxinputVars(currentWebsite?.php_max_input_vars ?? 0)
+        setMemoryLimit(currentWebsite?.php_memory_limit ?? 0)
+        setpostMaxSize(currentWebsite?.php_post_max_size ?? 0)
+        setUploadMaxFileSize(currentWebsite?.php_upload_max_filesize ?? 0)
+        setMaxLifeTime(currentWebsite?.php_session_max_lifetime ?? 0)
+        setDisableFunction(currentWebsite?.php_disable_functions ?? "")
+        setAllowUrlfOpen(currentWebsite?.php_allow_url_fopen)
+        setShortOpenTag(currentWebsite?.php_short_open_tag)
+    }, [])
+    useEffect(() => {
+        dispatch(getPhpVersions());
+        dispatch(getWebDetails());
+    }, [])
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to
