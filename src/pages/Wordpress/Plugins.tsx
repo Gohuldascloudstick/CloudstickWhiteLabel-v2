@@ -155,9 +155,9 @@ const Plugins = () => {
                                         Up to date
                                     </span>
                                 ) : (
-                                    <span onClick={() => handleupdate(plugs.name)} className="text-blue-500 px-3 border-1 cursor-pointer border-blue-500 p-1">
+                                    <Button variant="light" isLoading={updateLoader} isDisabled={updateLoader} onPress={() => handleupdate(plugs.name)} className="text-blue-500 px-3 border-1 rounded-xs cursor-pointer border-blue-500 p-1">
                                         Activate
-                                    </span>
+                                    </Button>
                                 )}
                             </TableCell>
                             <TableCell>
