@@ -37,10 +37,20 @@ const Sidebar = () => {
 
     ];
     return (
-        <div className="w-full h-full flex flex-col bg-gray-300">
+        <div className="w-full h-full flex flex-col bg-gray-300 ">
+            <div className="flex justify-center items-center  mt-8">
+
+                <div className="h-12 w-12 overflow-hidden rounded-full   shadow-lg">
+                    <img
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80"
+                        alt="User Profile"
+                        className="h-full w-full object-cover"
+                    />
+                </div>
+            </div>
 
 
-            <div className="flex-1 overflow-y-auto pt-22 flex flex-col gap-2">
+            <div className="flex-1 overflow-y-auto pt-8 flex flex-col gap-2">
                 {navItems.map((item) => {
                     const isActive =
                         item.path === "/"
