@@ -16,13 +16,14 @@ import Serverlogs from "../pages/ServerLogs/Serverlogs"
 import Git from "../pages/Git/Git"
 import Wordpress from "../pages/Wordpress/Wordpress"
 import Login from "../pages/Login"
-
+import FileEditor from "../pages/FileEditor"
 
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path="login" element={<Login/>} />
+            <Route path="FileEditor" element={<FileEditor />} />
             <Route path="/" element={<UserLayout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="database" element={< Database />} />

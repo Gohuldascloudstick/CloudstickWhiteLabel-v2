@@ -1,4 +1,4 @@
-import { FileManagerItem } from "../utils/interfaces";
+import type { FileManagerItem } from "../utils/interfaces";
 
 
 
