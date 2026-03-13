@@ -18,24 +18,45 @@ import {
     PopoverTrigger, 
     useDisclosure 
 } from '@heroui/react';
-import { getfileFOlder } from '../redux/slice/FileManagerSlice';
+import { getfileFOlder, CreateItem } from '../redux/slice/FileManagerSlice';
 import type { FileManagerItem } from '../utils/interfaces';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { getFileIcon } from '../helpperFunctions/ConvertionFunction';
 import FileEditorComponent from '../components/FileManager/FileEditorComponent';
 
 // --- Recursive Sidebar Item Component ---
-const FileTreeItem = ({ item, onSelect, onExpand, expandedPaths, depth = 0 }: { 
+const FileTreeItem = ({ 
+    item, 
+    onSelect, 
+    onExpand, 
+    expandedPaths, 
+    selectedPath,
+    onSetSelected,
+    newItemState,
+    onCancelNewItem,
+    onCreateNewItem,
+    depth = 0 
+}: { 
     item: FileManagerItem; 
     onSelect: (item: FileManagerItem) => void; 
     onExpand: (path: string) => void; 
     expandedPaths: Set<string>; 
+    selectedPath: string | null;
+    onSetSelected: (path: string) => void;
+    newItemState: { parentPath: string; type: "file" | "folder" } | null;
+    onCancelNewItem: () => void;
+    onCreateNewItem: (name: string) => Promise<void>;
     depth?: number 
 }) => {
     const isExpanded = expandedPaths.has(item.path);
+    const isSelected = selectedPath === item.path;
+    const isCreatingHere = newItemState?.parentPath === item.path;
+    const [newName, setNewName] = useState("");
+    const [isCreating, setIsCreating] = useState(false);
 
     const handleToggle = (e: React.MouseEvent) => {
         e.stopPropagation();
+        onSetSelected(item.path);
         if (item.is_dir) {
             onExpand(item.path);
         } else {
@@ -43,11 +64,27 @@ const FileTreeItem = ({ item, onSelect, onExpand, expandedPaths, depth = 0 }: {
         }
     };
 
+    const handleCommit = async () => {
+        if (!newName.trim()) {
+            onCancelNewItem();
+            return;
+        }
+        if (isCreating) return;
+
+        setIsCreating(true);
+        try {
+            await onCreateNewItem(newName.trim());
+            // Successful creation will unmount this block via parent state change
+        } catch (error) {
+            setIsCreating(false);
+        }
+    };
+
     return (
         <div className="select-none">
             <div
                 onClick={handleToggle}
-                className="flex items-center py-1 px-2 hover:bg-slate-800 cursor-pointer text-sm gap-2 transition-colors group"
+                className={`flex items-center py-1 px-2 hover:bg-slate-800 cursor-pointer text-sm gap-2 transition-colors group ${isSelected ? 'bg-blue-600/30 font-medium' : ''}`}
                 style={{ paddingLeft: `${depth * 12 + 8}px` }}
             >
                 <Icon 
@@ -58,6 +95,33 @@ const FileTreeItem = ({ item, onSelect, onExpand, expandedPaths, depth = 0 }: {
                 <span className="truncate flex-1">{item.name}</span>
             </div>
 
+            {/* Inline Input for New Item */}
+            {isCreatingHere && isExpanded && (
+                <div className="flex items-center py-1 px-2 gap-2" style={{ paddingLeft: `${(depth + 1) * 12 + 8}px` }}>
+                    <Icon 
+                        icon={isCreating ? "svg-spinners:ring-resize" : (newItemState.type === "folder" ? "mdi:folder-outline" : "mdi:file-outline")} 
+                        className={newItemState.type === "folder" ? "text-slate-500" : "text-teal-400"}
+                        width={16}
+                    />
+                    <input 
+                        autoFocus
+                        value={newName}
+                        disabled={isCreating}
+                        onChange={(e) => setNewName(e.target.value)}
+                        onBlur={handleCommit}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") handleCommit();
+                            if (e.key === "Escape") {
+                                onCancelNewItem();
+                                setNewName("");
+                            }
+                        }}
+                        className="bg-transparent border border-blue-500 outline-none text-xs w-full px-1 disabled:opacity-50"
+                        placeholder={newItemState.type === "folder" ? "Folder name..." : "File name..."}
+                    />
+                </div>
+            )}
+
             {isExpanded && item.children?.map((child: any) => (
                 <FileTreeItem
                     key={child.path}
@@ -65,6 +129,11 @@ const FileTreeItem = ({ item, onSelect, onExpand, expandedPaths, depth = 0 }: {
                     onSelect={onSelect}
                     onExpand={onExpand}
                     expandedPaths={expandedPaths}
+                    selectedPath={selectedPath}
+                    onSetSelected={onSetSelected}
+                    newItemState={newItemState}
+                    onCancelNewItem={onCancelNewItem}
+                    onCreateNewItem={onCreateNewItem}
                     depth={depth + 1}
                 />
             ))}
@@ -89,8 +158,11 @@ const FileEditorPage = () => {
     const [dirtyFiles, setDirtyFiles] = useState<Set<string>>(new Set());
     const [autosave, setAutosave] = useState<boolean>(false);
     const [theme, setTheme] = useState(localStorage.getItem('FileEditorTheme') || 'vs-dark');
+    const [pendingClosePath, setPendingClosePath] = useState<string | null>(null);
 
     const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set([initialPath]));
+    const [selectedPath, setSelectedPath] = useState<string | null>(initialPath);
+    const [newItemState, setNewItemState] = useState<{ parentPath: string; type: "file" | "folder" } | null>(null);
     const [sidebarWidth, setSidebarWidth] = useState(250);
     const isResizing = useRef(false);
 
@@ -200,6 +272,92 @@ const FileEditorPage = () => {
         }
     };
 
+    const handleCloseTab = (path: string, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        
+        if (dirtyFiles.has(path)) {
+            setPendingClosePath(path);
+            openDiscardModal();
+        } else {
+            finalizeCloseTab(path);
+        }
+    };
+
+    const finalizeCloseTab = (path: string) => {
+        setOpenTabs(prev => {
+            const index = prev.findIndex(t => t.path === path);
+            const newList = prev.filter(t => t.path !== path);
+            
+            if (activePath === path) {
+                if (newList.length > 0) {
+                    const nextIndex = Math.min(index, newList.length - 1);
+                    setActivePath(newList[nextIndex].path);
+                } else {
+                    setActivePath(null);
+                }
+            }
+            return newList;
+        });
+
+        setDirtyFiles(prev => {
+            const next = new Set(prev);
+            next.delete(path);
+            return next;
+        });
+        
+        setPendingClosePath(null);
+    };
+
+    const handleNewItem = (type: "file" | "folder") => {
+        let parentPath = initialPath;
+        if (selectedPath) {
+            const node = findNode(fileTree, selectedPath);
+            if (node) {
+                parentPath = node.is_dir ? node.path : node.path.substring(0, node.path.lastIndexOf("/"));
+            }
+        }
+        
+        // Ensure parent is expanded
+        if (!expandedPaths.has(parentPath)) {
+            loadFolder(parentPath);
+        }
+        
+        setNewItemState({ parentPath, type });
+    };
+
+    const handleCreate = async (name: string) => {
+        if (!newItemState) return;
+        
+        const payload = {
+            path: newItemState.parentPath,
+            name,
+            is_dir: newItemState.type === "folder"
+        };
+
+        try {
+            await dispatch(CreateItem(payload)).unwrap();
+            addToast({ description: `${newItemState.type === "folder" ? "Folder" : "File"} created successfully`, color: "success" });
+            
+            // Refresh parent
+            const data = await dispatch(getfileFOlder({ path: newItemState.parentPath })).unwrap();
+            updateTreeState(newItemState.parentPath, data.children || []);
+            
+            // If it's a file, open it
+            if (newItemState.type === "file") {
+                const newFilePath = `${newItemState.parentPath}/${name}`.replace(/\/+/g, "/");
+                const fullFile = await dispatch(getfileFOlder({ path: newFilePath })).unwrap();
+                setOpenTabs(prev => [...prev, fullFile]);
+                setActivePath(newFilePath);
+            }
+        } catch (error: any) {
+            addToast({ description: "Creation failed: " + error, color: "danger" });
+            throw error;
+        } finally {
+            if (!newItemState) return; // Already handled
+            setNewItemState(null);
+        }
+    };
+
     const handleDirtyChange = (isDirty: boolean) => {
         if (!activePath) return;
         setDirtyFiles(prev => {
@@ -250,10 +408,31 @@ const FileEditorPage = () => {
                     className={`hidden md:flex flex-col shrink-0 border-r overflow-hidden ${theme === 'light' ? 'bg-slate-50 border-slate-200' : 'bg-slate-900 border-slate-800'}`}
                     style={{ width: `${sidebarWidth}px` }}
                 >
-                    <div className="p-3 border-b flex items-center justify-between sticky top-0 z-10">
+                    <div className="p-3 border-b flex items-center justify-between sticky top-0 z-10 bg-inherit">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Explorer</span>
-                        <div className=' flex  items-center '>
-                                         <Popover
+                        <div className='flex items-center gap-1.5'>
+                            <button 
+                                onClick={() => handleNewItem("file")}
+                                className="p-0.5 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                                title="New File"
+                            >
+                                <Icon icon="lucide:file-plus" width={14} />
+                            </button>
+                            <button 
+                                onClick={() => handleNewItem("folder")}
+                                className="p-0.5 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                                title="New Folder"
+                            >
+                                <Icon icon="lucide:folder-plus" width={14} />
+                            </button>
+                            <button 
+                                onClick={() => loadFolder(initialPath)}
+                                className="p-0.5 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                                title="Refresh"
+                            >
+                                <Icon icon="mdi:refresh" width={14} />
+                            </button>
+                            <Popover
             classNames={{
               base: `${theme == 'light' ? 'bg-white' : 'bg-[#1e1e1e]'} shadow-none`,
               content: ` rounded-md ${theme == 'light' ? 'bg-white border-lightgrey text-black' : 'bg-slate-900 text-white border-[#333]'} shadow-none border `,
@@ -335,6 +514,11 @@ const FileEditorPage = () => {
                                 onSelect={handleFileOpen} 
                                 onExpand={loadFolder} 
                                 expandedPaths={expandedPaths} 
+                                selectedPath={selectedPath}
+                                onSetSelected={setSelectedPath}
+                                newItemState={newItemState}
+                                onCancelNewItem={() => setNewItemState(null)}
+                                onCreateNewItem={handleCreate}
                             />
                         ) : (
                             <div className="p-4 flex justify-center"><Icon icon="svg-spinners:ring-resize" /></div>
@@ -373,7 +557,7 @@ const FileEditorPage = () => {
                                 <Icon 
                                     icon="mdi:close" 
                                     className={`opacity-0 group-hover:opacity-100 hover:bg-slate-200 dark:hover:bg-slate-800 p-0.5 rounded ${dirtyFiles.has(tab.path) ? 'hidden group-hover:block' : ''}`} 
-                                    // onClick={(e) => closeTab(tab.path, e)}
+                                    onClick={(e) => handleCloseTab(tab.path, e)}
                                 />
                             </div>
                         ))}
@@ -417,6 +601,11 @@ const FileEditorPage = () => {
                                         onSelect={(it) => { handleFileOpen(it); onClose(); }} 
                                         onExpand={loadFolder} 
                                         expandedPaths={expandedPaths} 
+                                        selectedPath={selectedPath}
+                                        onSetSelected={setSelectedPath}
+                                        newItemState={newItemState}
+                                        onCancelNewItem={() => setNewItemState(null)}
+                                        onCreateNewItem={handleCreate}
                                     />
                                 )}
                             </div>
@@ -434,19 +623,19 @@ const FileEditorPage = () => {
                                 <Icon icon="mdi:alert-circle-outline" className="text-warning" width={22} />
                                 <span>Unsaved Changes</span>
                             </ModalHeader>
-                            <ModalBody className="py-4 text-sm">
-                                You have unsaved changes in <span className="font-semibold">{openTabs.find(t => t.path === activePath)?.name}</span>. Discarding will permanently lose these changes.
+                             <ModalBody className="py-4 text-sm">
+                                You have unsaved changes in <span className="font-semibold">{openTabs.find(t => t.path === (pendingClosePath || activePath))?.name}</span>. Discarding will permanently lose these changes.
                             </ModalBody>
                             <ModalFooter>
-                                <Button variant="flat" size="sm" onPress={onClose}>Cancel</Button>
-                                <Button color="danger" size="sm" onPress={() => {
-                                    setDirtyFiles(prev => {
-                                        const next = new Set(prev);
-                                        next.delete(activePath!);
-                                        return next;
-                                    });
+                                <Button variant="flat" size="sm" onPress={() => {
+                                    setPendingClosePath(null);
                                     onClose();
-                                    // closeTab(activePath!);
+                                }}>Cancel</Button>
+                                <Button color="danger" size="sm" onPress={() => {
+                                    if (pendingClosePath) {
+                                        finalizeCloseTab(pendingClosePath);
+                                    }
+                                    onClose();
                                 }}>Discard</Button>
                             </ModalFooter>
                         </>
