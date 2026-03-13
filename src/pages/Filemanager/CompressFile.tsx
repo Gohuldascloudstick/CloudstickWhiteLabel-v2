@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, } from 'react';
 import { Button, Input, addToast, RadioGroup, Radio } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import type { FileManagerItem } from '../../utils/interfaces';
@@ -33,15 +33,7 @@ const CompressFile: React.FC<CompressFileProps> = ({ item, onClose ,parentPath }
         return parts.join('.');
     }, [item.name, item.is_dir]);
 
-    const defaultParentPath = useMemo(() => {
-        const path = item.path;
-        if (item.is_dir) {
-            return path.substring(0, path.lastIndexOf('/')) || '/';
-        }
-        const parentPath = path.substring(0, path.lastIndexOf('/')) || '/';
-        return parentPath.substring(0, parentPath.lastIndexOf('/')) || '/';
-    }, [item.path, item.is_dir]);
-    // ---------------------------------
+
 
     // --- State Management ---
     const [archiveName, setArchiveName] = useState(defaultArchiveName);
@@ -54,8 +46,7 @@ const CompressFile: React.FC<CompressFileProps> = ({ item, onClose ,parentPath }
     }, [format]);
 
     const fullArchiveFilename = `${archiveName}${selectedFormat?.extension || '.zip'}`;
-    // -------------------------
-
+ 
     const handleCompress =async () => {
         if (!archiveName.trim() || !destinationPath.trim() || !selectedFormat) {
             addToast({ description: 'Please fill in all required fields.', color: 'danger' });
@@ -92,7 +83,7 @@ const CompressFile: React.FC<CompressFileProps> = ({ item, onClose ,parentPath }
 
     return (
         // Consistent component size
-        <div className="flex flex-col gap-4 w-full min-w-[300px] p-1">
+        <div className="flex flex-col gap-4 w-full min-w-75 p-1">
             {/* Header */}
             <h2 className="text-lg font-semibold flex items-center gap-2 text-default-900 border-b pb-2 border-default-100">
                 <Icon icon="lucide:package" width={20} className="text-primary-500" />
@@ -123,7 +114,7 @@ const CompressFile: React.FC<CompressFileProps> = ({ item, onClose ,parentPath }
 
             <div className="relative border border-default-300 rounded-lg p-4 pt-6">
                 {/* Floating label to mimic <legend> */}
-                <div className="absolute top-[-0.75rem] left-3 bg-white dark:bg-default-50 px-1 text-sm font-medium text-default-700">
+                <div className="absolute -top-3 left-3 bg-white dark:bg-default-50 px-1 text-sm font-medium text-default-700">
                     Archive format
                 </div>
                 <RadioGroup 

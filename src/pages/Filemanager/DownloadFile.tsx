@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button, addToast } from '@heroui/react';
+import {  addToast } from '@heroui/react';
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch } from '../../redux/hook';
@@ -61,7 +61,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ name, onClose, path }) => {
     }, [downloadFileAction]);
 
     return (
-        <div className="flex flex-col items-center justify-center p-6 min-h-[280px]">
+        <div className="flex flex-col items-center justify-center p-6 min-h-70">
             <AnimatePresence mode="wait">
                 {status === 'downloading' ? (
                     <motion.div
@@ -80,7 +80,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ name, onClose, path }) => {
                   
                         </div>
                         <h3 className="text-lg font-semibold">Downloading...</h3>
-                        <p className="text-xs text-default-500 mt-1 truncate max-w-[250px]">
+                        <p className="text-xs text-default-500 mt-1 truncate max-w-62.5">
                             {name}
                         </p>
                     </motion.div>

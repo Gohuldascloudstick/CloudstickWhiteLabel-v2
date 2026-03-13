@@ -3,7 +3,8 @@ import { Icon } from "@iconify/react"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch } from "../redux/hook";
-import { getPhpMyAdminLogin } from "../redux/slice/databaseSlice";
+import { getPhpMyAdminLogin } from "../redux/slice/dataBaseSlice";
+
 
 const Dashboard = () => {
   const navigate = useNavigate();

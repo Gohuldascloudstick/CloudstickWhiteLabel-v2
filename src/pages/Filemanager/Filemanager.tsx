@@ -1,9 +1,7 @@
 import {
     Button, Card, Divider, Popover, PopoverContent, PopoverTrigger, Modal,
     ModalContent,
-    ModalHeader,
     ModalBody,
-    ModalFooter,
     useDisclosure,
     addToast,
     Input,
@@ -12,8 +10,8 @@ import {
     Tooltip,
 } from '@heroui/react'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState,  useMemo, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { useAppDispatch, useAppSelector } from '../../redux/hook'
@@ -51,7 +49,6 @@ const FileManager = () => {
 
     // State to display the current path in the UI
     const [directoryPath, setDirectoryPath] = useState('');
-    const [selectedFileLocal, setSelectedFileLocalState] = useState<FileManagerItem | null>(null);
     const [selectedItemModal, setSelectedItemModal] = useState<FileManagerItem | null>(null);
     const [viewingFile, setViewingFile] = useState<FileManagerItem | null>(null);
     
@@ -135,11 +132,6 @@ const  fetchWebDetails = ()=>{
     const handeldelte = async (item: FileManagerItem) => {
         setDeleteLoader(true)
         try {
-            const data = {
-                path: directoryPath,
-                is_dir: item.is_dir,
-                name: item.name
-            }
             await dispatch(DeleteFile({ path: directoryPath, is_dir: item.is_dir, name: item.name })).unwrap()
             if (isOpen) onOpenChange()
 
@@ -162,11 +154,7 @@ const  fetchWebDetails = ()=>{
 
         setRenamingItemNameLoader(true);
         try {
-            const data = {
-                path: directoryPath,
-                name: renamingItemName,
-                new_name
-            }
+  
             await dispatch(Rename({ path: directoryPath, name: renamingItemName, new_name })).unwrap()
             addToast({ description: `File/Directory renamingItemNamed to ${new_name}`, color: "success" })
 
@@ -371,8 +359,7 @@ const  fetchWebDetails = ()=>{
     const modalMode = getModalMode();
 
     const currentFiles = TheFiles?.children || [];
-    const isRoot = directoryPath === rootPath || !directoryPath;
-    const showBackButton = (directoryPath && directoryPath !== rootPath) || viewingFile !== null;
+   
 
 
     // if (!websitedetail) {
@@ -486,7 +473,7 @@ const  fetchWebDetails = ()=>{
                     <div className="md:ml-4 bg-default-100 rounded-md flex items-center px-3 py-1 flex-1 min-w-0">
                         <Icon
                             icon="lucide:folder"
-                            className="text-default-500 dark:text-default-800 mr-2 flex-shrink-0"
+                            className="text-default-500 dark:text-default-800 mr-2 shrink-0"
                             width={14}
                         />
                         <span className="text-xs md:text-sm truncate" title={directoryPath}>
@@ -525,7 +512,7 @@ const  fetchWebDetails = ()=>{
 
                             {/* 2. Medium/Large Screen Table View (hidden on mobile, shown on md and up) */}
                             <div className="hidden md:block overflow-x-auto scrollbar-hide  bg-transparent pb-40">
-                                <table className="w-full min-w-[700px]  table-fixed scrollbar-hides">
+                                <table className="w-full min-w-175  table-fixed scrollbar-hides">
                                     <thead>
                                         <tr className="border-b border-default-200">
                                             <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-2/5">
@@ -540,7 +527,7 @@ const  fetchWebDetails = ()=>{
                                             <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5 hidden md:table-cell">
                                                 MODIFIED
                                             </th>
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-[100px] flex-shrink-0">
+                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-25 shrink-0">
                                                 ACTIONS
                                             </th>
                                         </tr>
@@ -556,7 +543,7 @@ const  fetchWebDetails = ()=>{
                                             currentFiles.map((item: FileManagerItem, index: number) => (
                                                 <tr
                                                     key={item.path}
-                                                    className={`border-b border-default-100 cursor-pointer  transition-colors ${selectedFileLocal == item ? 'bg-default-100 hover:bg-default-100' : 'hover:bg-default-50 dark:hover:bg-content1/20'}`}
+                                                    className={`border-b border-default-100 cursor-pointer  transition-colors hover:bg-default-50 dark:hover:bg-content1/20`}
                                                     onDoubleClick={(e) => {
                                                         e.preventDefault();
                                                         if (item.is_dir) {
@@ -572,11 +559,11 @@ const  fetchWebDetails = ()=>{
                                                     }
                                                     }
                                                     onClick={() => {
-                                                        if (!selectedFileLocal || selectedFileLocal !== item) {
+                                                      
                                                             dispatch(setSelectedFile(item))
                                                             setRenamingItemName('')
 
-                                                        }
+                                                        
                                                     }}
                                                     onContextMenu={(e) => {
                                                         if (e.button === 2) {
@@ -611,11 +598,11 @@ const  fetchWebDetails = ()=>{
                                                         onClick={(e) => {
                                                             e.preventDefault()
 
-                                                            if (!selectedFileLocal || selectedFileLocal !== item) {
+                                                          
                                                                 dispatch(setSelectedFile(item))
                                                                 setRenamingItemName('')
 
-                                                            }
+                                                            
                                                             //  else {
                                                             //     setRenamingItemName(item.name)
                                                             //     SetNew_name(item.name)
@@ -858,9 +845,9 @@ const  fetchWebDetails = ()=>{
                                                                                 Delete {item.is_dir ? 'Folder' : 'File'}
                                                                             </Button>
                                                                         </PopoverTrigger>
-                                                                        <PopoverContent className="p-4 min-w-[300px] space-y-4 pt-4 rounded-md">
+                                                                        <PopoverContent className="p-4 min-w-75 space-y-4 pt-4 rounded-md">
                                                                             <div className=' text-center flex flex-col items-center'>
-                                                                                <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 flex-shrink-0 mt-0.5" />
+                                                                                <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 shrink-0 mt-0.5" />
                                                                                 <p className="text-xs text-default-700 text-center text-wrap mt-1">
                                                                                     Are you sure you want to delete <br /> <span className='font-semibold'>{item.name}?</span>
                                                                                 </p>
@@ -913,7 +900,7 @@ const  fetchWebDetails = ()=>{
                     placement='center'
                     hideCloseButton
                     // isDismissable={!copyloader}
-                    className={`${modalMode !== 'action' ? '' : '!max-w-60'} transition-all ease-in-out duration-300`}
+                    className={`${modalMode !== 'action' ? '' : 'max-w-60!'} transition-all ease-in-out duration-300`}
                     classNames={{ base: 'p-0 border  dark:bg-slate-900 dark:border-default-400', wrapper: 'p-0 dark:bg-black/50', body: 'p-0 ' }}
                 >
                     <ModalContent>
@@ -1181,9 +1168,9 @@ const  fetchWebDetails = ()=>{
                                                                                 Delete
                                                                             </Button>
                                                                         </PopoverTrigger>
-                                                                        <PopoverContent className="p-4 min-w-[300px] space-y-4 pt-4 rounded-md">
+                                                                        <PopoverContent className="p-4 min-w-75 space-y-4 pt-4 rounded-md">
                                                                             <div className=' text-center flex flex-col items-center'>
-                                                                                <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 flex-shrink-0 mt-0.5" />
+                                                                                <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 shrink-0 mt-0.5" />
                                                                                 <p className="text-xs text-default-700 text-center text-wrap mt-1">
                                                                                     Are you sure you want to delete <br /> <span className='font-semibold'>{selectedItemModal.name}?</span>
                                                                                 </p>

@@ -149,7 +149,7 @@ cancel()
         </div>
         
         {/* 3. Horizontal Zero Line */}
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black opacity-80 z-10"></div>
+        <div className="absolute bottom-0 left-0 w-full h-px bg-black opacity-80 z-10"></div>
       </div>
     
       {/* FOOTER DETAILS */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, addToast, useDisclosure } from '@heroui/react';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, addToast, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 
 import { useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ const NewF: React.FC<props> = ({ onClose, parentPath, is_dir }) => {
     const { isOpen, onOpen, onOpenChange, onClose: closeModal } = useDisclosure();
 
     const [name, setName] = useState('');
-    const [content, setContent] = useState('');
+
     const [isLoading, setIsLoading] = useState(false);
     
     // State to handle Input validation errors (specifically for existing folders)
@@ -60,10 +60,7 @@ const NewF: React.FC<props> = ({ onClose, parentPath, is_dir }) => {
                 is_dir: is_dir
             };
 
-            // Encode content if it's a file and has content
-            if (!is_dir && content.length > 0) {
-                payload.content = content;
-            }
+          
 
             await dispatch(CreateItem({ 
               
@@ -134,7 +131,7 @@ console.log(result , 'the result of teh grt in new file');
     };
 
     return (
-        <div className="flex flex-col gap-4 w-full min-w-[300px] p-1">
+        <div className="flex flex-col gap-4 w-full min-w-75 p-1">
             {/* Header */}
             <h2 className="text-lg font-semibold flex items-center gap-2 text-default-900 border-b pb-2 border-default-100">
                 <Icon 

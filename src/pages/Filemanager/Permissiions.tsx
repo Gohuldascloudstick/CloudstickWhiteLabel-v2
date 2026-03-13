@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { addToast, Button, Checkbox } from '@heroui/react'; // Import Hero UI Button
 import { Icon } from '@iconify/react/dist/iconify.js'; // Import Icon
-// import { FileManagerItem } from '../../../utils/interfaces';
-// import { useAppDispatch } from '../../../redux/hook';
-// import { ChangePermissions } from '../../../redux/slice/FIlemanagerSlice';
-import { useParams } from 'react-router-dom';
 import type { FileManagerItem } from '../../utils/interfaces';
-import { ChangePermissions, getFileOrDirectory } from '../../redux/slice/FileManagerSlice';
+import { ChangePermissions } from '../../redux/slice/FileManagerSlice';
 import { useAppDispatch } from '../../redux/hook';
 
 

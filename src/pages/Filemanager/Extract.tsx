@@ -156,7 +156,7 @@ const Extract: React.FC<ExtractProps> = ({ item, onClose, parentPath }) => {
     // --- RENDER: BROWSER MODE ---
     if (isBrowsing) {
         return (
-            <div className="flex flex-col h-[450px] w-full">
+            <div className="flex flex-col h-112.5 w-full">
                 {/* Browser Header */}
                 <div className="p-3 border-b border-default-200 flex items-center justify-between bg-default-50">
                     <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -271,7 +271,7 @@ const Extract: React.FC<ExtractProps> = ({ item, onClose, parentPath }) => {
                 <div className="flex w-full items-center gap-2">
                     <Input
                         id="destination-path"
-                        className='flex-grow'
+                        className='grow'
                         value={destinationPath}
                         onChange={(e) => setDestinationPath(e.target.value)}
                         isRequired
@@ -287,7 +287,7 @@ const Extract: React.FC<ExtractProps> = ({ item, onClose, parentPath }) => {
                         }}
                         isDisabled={isExtracting}
                         startContent={<Icon icon="lucide:folder-open" width={16} />}
-                        className='flex-shrink-0'
+                        className='shrink-0'
                     >
                         Browse
                     </Button>
