@@ -643,26 +643,7 @@ const FileEditorPage = () => {
                 </ModalContent>
             </Modal>
 
-            {/* Status Bar */}
-            <div className="h-6 bg-blue-600 text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1">
-                        <Icon icon="mdi:remote" width={12} />
-                        <span>Cloudstick Remote</span>
-                    </div>
-                    {activePath && (
-                        <div className="flex items-center gap-1">
-                            <span>Line: 1, Col: 1</span>
-                        </div>
-                    )}
-                </div>
-                <div className="flex items-center gap-4">
-                    {activePath && <span>UTF-8</span>}
-                    <div className="flex items-center gap-1 cursor-pointer">
-                        <Icon icon="mdi:bell-outline" width={12} />
-                    </div>
-                </div>
-            </div>
+        
         </div>
     );
 };

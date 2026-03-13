@@ -4,12 +4,20 @@ import type { WebisteDetails } from "../../utils/interfaces";
 
 
 
+interface LogState {
+  logs: string[];
+  total_count: number;
+}
+
 interface initialStatetype {
   loading: boolean;
   error: string | null;
   phpversion: [];
   selectedWebsite: WebisteDetails | null;
-
+  nginxLog: LogState;
+  nginxErrolog: LogState;
+  apchelog: LogState;
+  apcheErrolog: LogState;
 }
 
 const initialState: initialStatetype = {
@@ -17,21 +25,58 @@ const initialState: initialStatetype = {
   error: null,
   phpversion: [],
   selectedWebsite: null,
+  nginxLog: { logs: [], total_count: 0 },
+  nginxErrolog: { logs: [], total_count: 0 },
+  apchelog: { logs: [], total_count: 0 },
+  apcheErrolog: { logs: [], total_count: 0 },
+};
 
+// Helper to get common URL parameters
+const getCommonParams = () => {
+  const userId = import.meta.env.VITE_userId;
+  const serverId = import.meta.env.VITE_serverId;
+  const webId = import.meta.env.VITE_webId;
+  return { userId, serverId, webId };
 };
 export const getWebDetails = createAsyncThunk(
   "website/getDetails",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
+      const { userId, serverId, webId } = getCommonParams();
       const webappType = localStorage.getItem("webappType") || "null"
-      const url = `/api/v2/${webappType}/details/${webId}/servers/${serverId}/users/${user}`;
+      const url = `/api/v2/${webappType}/details/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.error || "Integration update failed");
+    }
+  }
+);
+
+export const getNginxLog = createAsyncThunk(
+  'website/getNginxLog',
+  async ({ scroll_count, log }: { scroll_count: number, log: 'access' | 'error' }, { rejectWithValue }) => {
+    try {
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/nginx-logs/websites/${webId}/servers/${serverId}/users/${userId}?scroll_count=${scroll_count}&log=${log}`
+      const response = await api.getEvents(url)
+      return { data: response.data, logType: log };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || "Failed to fetch NGINX logs");
+    }
+  }
+);
+
+export const getApacheLog = createAsyncThunk(
+  'website/getApacheLog',
+  async ({ scroll_count, log }: { scroll_count: number, log: 'access' | 'error' }, { rejectWithValue }) => {
+    try {
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/apache-logs/websites/${webId}/servers/${serverId}/users/${userId}?scroll_count=${scroll_count}&log=${log}`
+      const response = await api.getEvents(url)
+      return { data: response.data, logType: log };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || "Failed to fetch Apache logs");
     }
   }
 );
@@ -138,6 +183,36 @@ const WebsiteSLice = createSlice({
       .addCase(getPhpVersions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string || "unexpected error occured";
+      })
+
+      // NGINX Logs
+      .addCase(getNginxLog.fulfilled, (state, action) => {
+        const { data, logType } = action.payload;
+        const target = logType === 'access' ? 'nginxLog' : 'nginxErrolog';
+        if (data.scroll_count === 1) {
+          state[target] = {
+            logs: data.message.logs,
+            total_count: data.message.total_count
+          };
+        } else {
+          state[target].logs = [...state[target].logs, ...data.message.logs];
+          state[target].total_count = data.message.total_count;
+        }
+      })
+
+      // Apache Logs
+      .addCase(getApacheLog.fulfilled, (state, action) => {
+        const { data, logType } = action.payload;
+        const target = logType === 'access' ? 'apchelog' : 'apcheErrolog';
+        if (data.scroll_count === 1) {
+          state[target] = {
+            logs: data.message.logs,
+            total_count: data.message.total_count
+          };
+        } else {
+          state[target].logs = [...state[target].logs, ...data.message.logs];
+          state[target].total_count = data.message.total_count;
+        }
       })
 
 
