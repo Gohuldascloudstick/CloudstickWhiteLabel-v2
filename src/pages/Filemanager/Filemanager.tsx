@@ -292,7 +292,7 @@ const  fetchWebDetails = ()=>{
     useEffect(() => {
 
         
-            fetchfiles('/home/cpuserclbf/apps/gittestin-dev');
+            fetchfiles('/home/cpusera0ju/apps/newcustomephp');
 
         
     }, [ websitedetail]);

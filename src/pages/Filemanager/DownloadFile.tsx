@@ -1,67 +1,124 @@
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { Button, addToast } from '@heroui/react';
 import { Icon } from "@iconify/react";
-import { Button, ModalHeader, ModalBody, ModalFooter, Progress } from "@heroui/react";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAppDispatch } from '../../redux/hook';
+import type { FileManagerItem } from '../../utils/interfaces';
+import { getfileFOlder } from '../../redux/slice/FileManagerSlice';
 
 interface DownloadFileProps {
-  path: string;
-  name: string;
-  onClose: () => void;
+    name: string;
+    onClose: () => void;
+    path: string;
 }
 
-const DownloadFile = ({ path, name, onClose }: DownloadFileProps) => {
-  const [progress, setProgress] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
+const DownloadFile: React.FC<DownloadFileProps> = ({ name, onClose, path }) => {
+    const { webid, id: serverId } = useParams();
+    const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    // Simulated download progress
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsComplete(true);
-          return 100;
+    const [status, setStatus] = useState<'idle' | 'downloading' | 'success'>('idle');
+
+    const downloadFileAction = useCallback(async () => {
+        setStatus('downloading');
+        try {
+            const result: FileManagerItem = await dispatch(
+                getfileFOlder({ path })
+            ).unwrap();
+
+            // Handle the file blob creation
+            const textContent = result?.content || "";
+            const blob = new Blob([textContent], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = name;
+            document.body.appendChild(link);
+            link.click();
+            
+            // Cleanup
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            // Show Success Animation
+            setStatus('success');
+
+            // Auto close after 2 seconds
+            setTimeout(() => {
+                onClose();
+            }, 2000);
+
+        } catch (error) {
+            addToast({ description: 'Failed to download file.', color: 'danger' });
+            onClose(); // Close on error so user isn't stuck
         }
-        return prev + 10;
-      });
-    }, 200);
+    }, [dispatch, serverId, webid, path, name, onClose]);
 
-    return () => clearInterval(interval);
-  }, []);
+    useEffect(() => {
+        downloadFileAction();
+    }, [downloadFileAction]);
 
-  const handleDownload = () => {
-    // In a real app, this would trigger the actual file download via window.location or an anchor tag
-    console.log(`Downloading ${name} from ${path}`);
-    onClose();
-  };
-
-  return (
-    <>
-      <ModalHeader className="gap-2 items-center">
-        <Icon icon="mdi:download-outline" className="text-primary" width={24} />
-        Download File
-      </ModalHeader>
-      <ModalBody>
-        <div className="flex flex-col gap-4 py-4 text-center">
-          <p className="text-sm text-slate-500">
-            Preparing <span className="font-bold text-slate-700">{name}</span> for download...
-          </p>
-          <Progress 
-            size="md" 
-            value={progress} 
-            color={isComplete ? "success" : "primary"}
-            showValueLabel={true}
-            className="max-w-md mx-auto"
-          />
+    return (
+        <div className="flex flex-col items-center justify-center p-6 min-h-[280px]">
+            <AnimatePresence mode="wait">
+                {status === 'downloading' ? (
+                    <motion.div
+                        key="downloading"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex flex-col items-center text-center"
+                    >
+                        <div className="relative mb-4">
+                            <Icon 
+                                icon="line-md:downloading-loop" 
+                                width={64} 
+                                className="text-primary animate-pulse" 
+                            />
+                  
+                        </div>
+                        <h3 className="text-lg font-semibold">Downloading...</h3>
+                        <p className="text-xs text-default-500 mt-1 truncate max-w-[250px]">
+                            {name}
+                        </p>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="success"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex flex-col items-center text-center"
+                    >
+                        <div className="bg-success/10 p-4 rounded-full mb-4">
+                            <Icon
+                                icon="material-symbols-light:sync-saved-locally-outline-rounded"
+                                width={64}
+                                className="text-success"
+                            />
+                        </div>
+                        <h3 className="text-lg font-semibold text-success">Download Complete</h3>
+                        <p className="text-xs text-default-500 mt-1">
+                            Your file is ready.
+                        </p>
+                        <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: "100%" }}
+                            className="h-1 bg-success/20 rounded-full mt-6 overflow-hidden"
+                        >
+                            <motion.div 
+                                initial={{ x: "-100%" }}
+                                animate={{ x: "0%" }}
+                                transition={{ duration: 1 }}
+                                className="h-full bg-success"
+                            />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
-      </ModalBody>
-      <ModalFooter>
-        <Button variant="light" onPress={onClose}>Cancel</Button>
-        <Button color="primary" isDisabled={!isComplete} onPress={handleDownload}>
-          Download Now
-        </Button>
-      </ModalFooter>
-    </>
-  );
+    );
 };
 
 export default DownloadFile;

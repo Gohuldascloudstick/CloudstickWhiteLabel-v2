@@ -32,9 +32,9 @@ const initialState: FileManagerState = {
 
 // Helper to get common URL parameters
 const getCommonParams = () => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "null");
-  const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-  const webId = JSON.parse(localStorage.getItem("webId") || "null");
+  const userId = import.meta.env.VITE_userId;
+  const serverId = import.meta.env.VITE_serverId;
+  const webId = import.meta.env.VITE_webId;
   return { userId, serverId, webId };
 };
 
@@ -111,23 +111,41 @@ export const ChangePermissions = createAsyncThunk(
   }
 );
 
+
+
 export const CompressFile = createAsyncThunk(
-  "fileManager/CompressFile",
-  async (data: any, { rejectWithValue }) => {
+  "FileManager/CompressFile",
+  async (
+    {
+      data,
+      action,
+    }: {
+
+      action: "gzip" | "zip" | "tar";
+      data: { path: string; name: string; new_path: string };
+    },
+    { rejectWithValue }
+  ) => {
     try {
-      const { userId, serverId, webId } = getCommonParams();
-      const url = `/api/v2/files/compress/websites/${webId}/servers/${serverId}/users/${userId}`;
-      const response = await api.patchEvent(url, data);
+    const { userId, serverId, webId } = getCommonParams();
+      const response = await api.patchEvent(
+        `/api/v2/files/compress/websites/${webId}/servers/${serverId}/users/${userId}?action=${action}`,
+        data
+      );
       return response.data;
-    } catch (error: any) {
+    } catch (error:any) {
       return rejectWithValue(error.response?.data?.error || "Failed to compress file");
     }
   }
 );
 
+
+
+
+
 export const ExtractFile = createAsyncThunk(
   "fileManager/ExtractFile",
-  async (data: any, { rejectWithValue }) => {
+  async (data: { path: string; name: string; new_path: string }, { rejectWithValue }) => {
     try {
       const { userId, serverId, webId } = getCommonParams();
       const url = `/api/v2/files/extract/websites/${webId}/servers/${serverId}/users/${userId}`;
@@ -138,6 +156,53 @@ export const ExtractFile = createAsyncThunk(
     }
   }
 );
+
+export const getfileforextart = createAsyncThunk(
+  "FileManager/getfileforextart",
+  async (
+    {
+   
+      path,
+    }: { path: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { userId ,serverId, webId } = getCommonParams();
+      const res = await api.postEvents(
+        `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`,
+        { path }
+      );
+      return res.data;
+    } catch (error:any) {
+      return rejectWithValue(error.response?.data?.error);
+    }
+  }
+);
+
+export const getfileFOlder = createAsyncThunk(
+  "FileManager/getfileFOlder",
+  async (
+    {
+   
+      path,
+    }: {  path: string },
+    { rejectWithValue }
+  ) => {
+    try {
+  const { userId, serverId, webId } = getCommonParams();
+      const res = await api.postEvents(
+        `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`,
+        { path }
+      );
+      return res.data.message[0];
+    } catch (error:any) {
+      return rejectWithValue(error.response?.data?.error);
+    }
+  }
+);
+
+
+
 
 export const CreateItem = createAsyncThunk(
   "fileManager/CreateItem",
