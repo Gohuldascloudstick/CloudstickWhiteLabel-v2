@@ -227,20 +227,20 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
             </div>
 
             <div 
-                className="w-full rounded-xl shadow-2xl overflow-hidden" 
-                style={{ border: `1px solid ${THEME.borderColor}`, backgroundColor: THEME.terminalBg }}
+                className="w-full rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-slate-800" 
+                style={{ backgroundColor: THEME.terminalBg }}
             >
+                {/* Modal Header (Terminal Bar) */}
                 <ModalHeader 
-                    className="flex items-center justify-between p-2 py-3 relative border-b text-white"
-                    style={{ backgroundColor: THEME.headerBg, borderColor: THEME.borderColor }}
+                    className="flex items-center justify-between p-2 py-3 relative text-white bg-linear-to-r from-[#2168a1] to-[#11999e]"
                 >
                     <div className='flex items-center gap-2'>
                          <div className="flex space-x-1 ml-4 items-center">
-                            <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                            <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
                         </div>
-                        <span className="text-sm font-semibold ml-2 text-zinc-300">
+                        <span className="text-sm font-semibold ml-2 text-white/90">
                             {currentTitle} Logs  
                         </span>
                     </div>
@@ -249,9 +249,9 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
                         <Button
                             size="sm" variant="light" isIconOnly
                             onPress={() => { setSelectedLogType(null); onOpenChange(false); }}
-                            className='w-5 h-5 min-w-5 p-0'
+                            className='w-6 h-6 min-w-6 p-0 text-white hover:bg-white/20'
                         >
-                            <Icon icon="lucide:x" width={16} className='text-zinc-400 hover:text-white'/>
+                            <Icon icon="lucide:x" width={18} />
                         </Button>
                     </div>
                 </ModalHeader>

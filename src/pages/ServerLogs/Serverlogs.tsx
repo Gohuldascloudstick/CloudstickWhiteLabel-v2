@@ -70,7 +70,7 @@ const Serverlogs = () => {
   const selectedwebsite = useAppSelector((state) => state.website.selectedWebsite);
 
   // Simplified website object for terminal display
-  const websiteName = selectedwebsite?.website?.domain || "Your Website";
+  const websiteName = selectedwebsite?.website?.name || "Your Website";
 
 type LogData = {
   logType: string;
@@ -157,30 +157,33 @@ const logCardData: LogData[] = [
   }, [selectedLogType, dispatch]);
 
   return (
-   <div className="rounded-lg p-3 md:p-6 h-full overflow-y-auto custom-scrollbar">
-      
-      {/* Header and Controls */}
-      <div className='flex flex-col sm:flex-row justify-between mb-8 sm:items-end '>
-        <div className="flex flex-col">
-           <h1 className="text-xl font-semibold mb-1">
-             Web Server Logs
-          </h1>
-          <p className="text-default-500 dark:text-default-800 text-xs md:text-sm ">
-            View real-time and historical logs for your server.
-          </p>
-        </div>
-      </div>
+    <div className='max-h-[90vh] lg:p-2 overflow-y-auto scrollbar-hide'>
+      <p className='text-xl md:text-2xl lg:text-3xl'>Welcome to
+        <span className='ml-1 font-bold text-teal-600'>
+          Web Server Log
+        </span>
+      </p>
+      <p className='mt-1 md:mt-2 lg:mt-2 text-xs md:text-sm lg:text-md text-gray-500'>
+        View real-time and historical logs for your server.
+      </p>
 
-      {/* Content Area */}
-      <Card className="shadow-none border border-default-200 p-0 divide-y divide-default-100">
-          {logCardData.map((data) => (
-            <LogTypeListItem
-              key={data.logType}
-              {...data}
-              onSelect={handleSelectLog} 
-            />
-          ))}
-      </Card>
+      <div className='mt-3 lg:mt-6 w-full'>
+        <Card className='w-full shadow-sm border border-gray-200 overflow-hidden'>
+          <div className='px-3 md:px-6 py-2 md:py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]'>
+            <span className='font-bold text-white text-sm md:text-md lg:text-lg'>Log Viewer</span>
+          </div>
+          
+          <div className='divide-y divide-default-100'>
+            {logCardData.map((data) => (
+              <LogTypeListItem
+                key={data.logType}
+                {...data}
+                onSelect={handleSelectLog} 
+              />
+            ))}
+          </div>
+        </Card>
+      </div>
 
       {/* Log Terminal Modal */}
       <LogTerminalModal
