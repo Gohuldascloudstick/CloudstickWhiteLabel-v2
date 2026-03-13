@@ -1,243 +1,481 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Button, addToast, Spinner, Card } from "@heroui/react";
-import { Icon } from "@iconify/react";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { getFileOrDirectory, saveFileChange, clearFileContent } from "../redux/slice/FileManagerSlice";
-import { getFileIcon, formatStorage } from "../helpperFunctions/ConvertionFunction";
-import type { FileManagerItem } from "../utils/interfaces";
+import React, { useEffect, useState, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useAppDispatch } from '../redux/hook';
+import { 
+    addToast, 
+    Button, 
+    Drawer, 
+    DrawerContent, 
+    Listbox, 
+    ListboxItem, 
+    Modal, 
+    ModalBody, 
+    ModalContent, 
+    ModalFooter, 
+    ModalHeader, 
+    Popover, 
+    PopoverContent, 
+    PopoverTrigger, 
+    useDisclosure 
+} from '@heroui/react';
+import { getfileFOlder } from '../redux/slice/FileManagerSlice';
+import type { FileManagerItem } from '../utils/interfaces';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { getFileIcon } from '../helpperFunctions/ConvertionFunction';
+import FileEditorComponent from '../components/FileManager/FileEditorComponent';
 
-const FileExplorerItem = ({ item, level, onFileClick }: { item: FileManagerItem; level: number; onFileClick: (item: FileManagerItem) => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
+// --- Recursive Sidebar Item Component ---
+const FileTreeItem = ({ item, onSelect, onExpand, expandedPaths, depth = 0 }: { 
+    item: FileManagerItem; 
+    onSelect: (item: FileManagerItem) => void; 
+    onExpand: (path: string) => void; 
+    expandedPaths: Set<string>; 
+    depth?: number 
+}) => {
+    const isExpanded = expandedPaths.has(item.path);
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (item.is_dir) {
-      setIsOpen(!isOpen);
-      if (!isOpen && (!item.children || item.children.length === 0)) {
-        dispatch(getFileOrDirectory(item.path));
-      }
-    } else {
-      onFileClick(item);
-    }
-  };
-
-  return (
-    <div>
-      <div 
-        className="flex items-center gap-2 px-2 py-1 hover:bg-slate-800 cursor-pointer rounded text-sm transition-colors"
-        style={{ paddingLeft: `${level * 12 + 8}px` }}
-        onClick={handleToggle}
-      >
-        <Icon 
-          icon={item.is_dir ? (isOpen ? "mdi:chevron-down" : "mdi:chevron-right") : getFileIcon(item)} 
-          className={item.is_dir ? "text-slate-500" : "text-teal-400"}
-          width={16}
-        />
-        <span className="truncate">{item.name}</span>
-      </div>
-      {isOpen && item.children && (
-        <div className="flex flex-col">
-          {item.children.map((child, idx) => (
-            <FileExplorerItem key={idx} item={child} level={level + 1} onFileClick={onFileClick} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const FileEditor = () => {
-  const [searchParams] = useSearchParams();
-  const dispatch = useAppDispatch();
-  const { TheFiles, loading } = useAppSelector(state => state.fileManager);
-  
-  const rootPath = searchParams.get("path") || "";
-  const initialName = searchParams.get("name") || "";
-  const isDirEntry = searchParams.get("isDir") === "true";
-  
-  const [activeFile, setActiveFile] = useState<FileManagerItem | null>(null);
-  const [content, setContent] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  useEffect(() => {
-    if (rootPath) {
-      dispatch(getFileOrDirectory(rootPath));
-    }
-    return () => {
-      dispatch(clearFileContent());
+    const handleToggle = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (item.is_dir) {
+            onExpand(item.path);
+        } else {
+            onSelect(item);
+        }
     };
-  }, [rootPath]);
 
-  useEffect(() => {
-    // If we entered as a file, set it as active
-    if (!isDirEntry && TheFiles && !activeFile) {
-      setActiveFile(TheFiles);
-      setContent(TheFiles.content || "");
-    }
-  }, [TheFiles, isDirEntry]);
-
-  const handleFileClick = (item: FileManagerItem) => {
-    if (!item.is_dir) {
-      dispatch(getFileOrDirectory(item.path))
-        .unwrap()
-        .then((res) => {
-          setActiveFile(res.data);
-          setContent(res.data.content || "");
-        });
-    }
-  };
-
-  const handleSave = () => {
-    if (!activeFile) return;
-    dispatch(saveFileChange({ path: activeFile.path, content }))
-      .unwrap()
-      .then(() => {
-        addToast({ title: "File saved successfully", color: "success" });
-      })
-      .catch(err => addToast({ title: "Save failed", description: err, color: "danger" }));
-  };
-
-  if (loading && !TheFiles) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-slate-900">
-        <Spinner size="lg" color="white" label="Initializing Workspace..." />
-      </div>
-    );
-  }
-
-  return (
-    <div className="h-screen flex flex-col bg-slate-950 text-slate-300 overflow-hidden font-sans">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800 shadow-sm z-10">
-        <div className="flex items-center gap-4">
-          <Button isIconOnly variant="light" size="sm" onPress={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <Icon icon={isSidebarOpen ? "mdi:menu-open" : "mdi:menu"} width={20} />
-          </Button>
-          <div className="flex items-center gap-2">
-            <Icon icon="mdi:folder-outline" className="text-teal-500" width={18} />
-            <span className="text-sm font-semibold tracking-wide uppercase text-slate-400">Workspace</span>
-            <span className="text-slate-600">/</span>
-            <span className="text-sm font-medium text-slate-200">{initialName}</span>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          {activeFile && (
-            <div className="hidden md:flex flex-col items-end mr-4">
-              <span className="text-xs font-bold text-slate-200">{activeFile.name}</span>
-              <span className="text-[10px] font-mono text-slate-500">{activeFile.path}</span>
-            </div>
-          )}
-          <Button 
-            size="sm" 
-            variant="flat" 
-            color="default" 
-            className="text-slate-300 hover:bg-slate-800"
-            onPress={() => window.close()}
-          >
-            Close
-          </Button>
-          <Button 
-            size="sm" 
-            color="primary" 
-            onPress={handleSave}
-            isDisabled={!activeFile}
-            startContent={<Icon icon="mdi:content-save-outline" />}
-            className="shadow-lg shadow-blue-900/20"
-          >
-            Save
-          </Button>
-        </div>
-      </div>
-      
-      {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar Explorer */}
-        {isSidebarOpen && (
-          <div className="w-64 md:w-72 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 overflow-y-auto scrollbar-hide">
-            <div className="p-3 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Explorer</span>
-              <Icon icon="mdi:refresh" className="text-slate-500 hover:text-white cursor-pointer" onClick={() => dispatch(getFileOrDirectory(rootPath))} />
-            </div>
-            <div className="p-2">
-              {TheFiles && (
-                isDirEntry ? (
-                  TheFiles.children?.map((child, idx) => (
-                    <FileExplorerItem key={idx} item={child} level={0} onFileClick={handleFileClick} />
-                  ))
-                ) : (
-                  <FileExplorerItem item={TheFiles} level={0} onFileClick={handleFileClick} />
-                )
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Editor Area */}
-        <div className="flex-1 flex flex-col bg-slate-950 relative">
-          {activeFile ? (
-            <>
-              {/* Tab Bar Sim */}
-              <div className="flex bg-slate-900 border-b border-slate-800 h-9">
-                <div className="flex items-center gap-2 px-4 bg-slate-950 border-r border-slate-800 text-xs text-slate-200 border-t-2 border-t-blue-500">
-                  <Icon icon={getFileIcon(activeFile)} className="text-teal-400" />
-                  {activeFile.name}
-                  <Icon icon="mdi:close" width={12} className="ml-2 cursor-pointer hover:bg-slate-800 p-0.5 rounded" onClick={() => setActiveFile(null)} />
-                </div>
-              </div>
-              
-              <div className="flex-1 relative group">
-                <textarea
-                  className="absolute inset-0 w-full h-full p-6 bg-slate-950 text-slate-200 font-mono text-[13px] border-none outline-none resize-none leading-relaxed selection:bg-blue-500/30"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  spellCheck={false}
-                  autoFocus
+        <div className="select-none">
+            <div
+                onClick={handleToggle}
+                className="flex items-center py-1 px-2 hover:bg-slate-800 cursor-pointer text-sm gap-2 transition-colors group"
+                style={{ paddingLeft: `${depth * 12 + 8}px` }}
+            >
+                <Icon 
+                    icon={item.is_dir ? (isExpanded ? "mdi:chevron-down" : "mdi:chevron-right") : getFileIcon(item)} 
+                    className={item.is_dir ? "text-slate-500" : "text-teal-400"}
+                    width={16}
                 />
-                {/* Stats Overlay */}
-                <div className="absolute bottom-4 right-4 text-[10px] text-slate-600 bg-slate-900/50 px-2 py-1 rounded-md backdrop-blur-sm pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                  {activeFile.permission} | {formatStorage(activeFile.size, "B")}
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-600 gap-4">
-              <Icon icon="mdi:file-code-outline" width={64} className="opacity-20" />
-              <div className="text-center">
-                <p className="text-sm font-medium">No file selected</p>
-                <p className="text-xs">Select a file from the explorer to start editing</p>
-              </div>
+                <span className="truncate flex-1">{item.name}</span>
             </div>
-          )}
+
+            {isExpanded && item.children?.map((child: any) => (
+                <FileTreeItem
+                    key={child.path}
+                    item={child}
+                    onSelect={onSelect}
+                    onExpand={onExpand}
+                    expandedPaths={expandedPaths}
+                    depth={depth + 1}
+                />
+            ))}
         </div>
-      </div>
-      
-      {/* Footer Status Bar */}
-      <div className="h-6 bg-blue-600 text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <Icon icon="mdi:remote" width={12} />
-            <span>Cloudstick Remote</span>
-          </div>
-          {activeFile && (
-            <div className="flex items-center gap-1">
-              <Icon icon="mdi:checkbox-marked-circle-outline" width={12} />
-              <span>{activeFile.permission}</span>
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-4">
-          <span>UTF-8</span>
-          <span>TypeScript JSX</span>
-          <div className="flex items-center gap-1">
-            <Icon icon="mdi:bell-outline" width={12} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default FileEditor;
+// --- Main Page Component ---
+const FileEditorPage = () => {
+    const [searchParams] = useSearchParams();
+    const dispatch = useAppDispatch();
+
+    const initialPath = searchParams.get('path') || "/";
+    const initialName = searchParams.get('name') || "Workspace";
+
+    const { isOpen: isSidebarDrawerOpen, onOpen: openSidebarDrawer, onOpenChange: onSidebarDrawerChange } = useDisclosure();
+    const { isOpen: isDiscardModalOpen, onOpen: openDiscardModal, onOpenChange: onDiscardModalChange } = useDisclosure();
+
+    const [fileTree, setFileTree] = useState<FileManagerItem | null>(null);
+    const [openTabs, setOpenTabs] = useState<FileManagerItem[]>([]);
+    const [activePath, setActivePath] = useState<string | null>(null);
+    const [dirtyFiles, setDirtyFiles] = useState<Set<string>>(new Set());
+    const [autosave, setAutosave] = useState<boolean>(false);
+    const [theme, setTheme] = useState(localStorage.getItem('FileEditorTheme') || 'vs-dark');
+
+    const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set([initialPath]));
+    const [sidebarWidth, setSidebarWidth] = useState(250);
+    const isResizing = useRef(false);
+
+    // Initial Load
+    useEffect(() => {
+        const loadInitial = async () => {
+            try {
+                const data = await dispatch(getfileFOlder({ path: initialPath })).unwrap();
+                setFileTree(data);
+                
+                // If it's a file, open it
+                if (!data.is_dir) {
+                    handleFileOpen(data);
+                }
+            } catch (error: any) {
+                addToast({ description: "Failed to load workspace", color: 'danger' });
+            }
+        };
+        loadInitial();
+    }, [initialPath]);
+
+    // Resizing Logic
+    const startResizing = (_e: React.MouseEvent) => {
+        isResizing.current = true;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', stopResizing);
+        document.body.style.cursor = 'col-resize';
+    };
+
+    const stopResizing = () => {
+        isResizing.current = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', stopResizing);
+        document.body.style.cursor = 'default';
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        if (!isResizing.current) return;
+        const newWidth = e.clientX;
+        if (newWidth > 150 && newWidth < 600) {
+            setSidebarWidth(newWidth);
+        }
+    };
+
+    const loadFolder = async (path: string) => {
+        setExpandedPaths((prev) => {
+            const next = new Set(prev);
+            if (next.has(path)) next.delete(path);
+            else next.add(path);
+            return next;
+        });
+
+        // Don't refetch if we already have children and it's expanded
+        const node = findNode(fileTree, path);
+        const alreadyHasChildren = (node?.children?.length ?? 0) > 0;
+        if (alreadyHasChildren) return;
+
+        try {
+            const data = await dispatch(getfileFOlder({ path })).unwrap();
+            updateTreeState(path, data.children || []);
+        } catch (error: any) {
+            addToast({ description: "Failed to load directory", color: 'danger' });
+        }
+    };
+
+    const findNode = (node: any, path: string): any => {
+        if (!node) return null;
+        if (node.path === path) return node;
+        if (node.children) {
+            for (let child of node.children) {
+                const found = findNode(child, path);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
+
+    const updateTreeState = (path: string, children: any[]) => {
+        setFileTree((prev) => {
+            if (!prev) return null;
+            const newTree = JSON.parse(JSON.stringify(prev));
+            const node = findNode(newTree, path);
+            if (node) {
+                node.children = children;
+            }
+            return newTree;
+        });
+    };
+
+    const handleFileOpen = async (file: FileManagerItem) => {
+        if (file.is_dir) return;
+
+        const alreadyOpened = openTabs.find(t => t.path === file.path);
+        if (alreadyOpened) {
+            setActivePath(file.path);
+            return;
+        }
+
+        try {
+            const data = await dispatch(getfileFOlder({ 
+                path: file.path, 
+            })).unwrap();
+            setOpenTabs(prev => [...prev, data]);
+            setActivePath(file.path);
+        } catch (error: any) {
+            addToast({ description: "Failed to open file", color: 'danger' });
+        }
+    };
+
+    const handleDirtyChange = (isDirty: boolean) => {
+        if (!activePath) return;
+        setDirtyFiles(prev => {
+            const next = new Set(prev);
+            if (isDirty) next.add(activePath);
+            else next.delete(activePath);
+            return next;
+        });
+    };
+
+    const handleThemeChange = (newTheme: string) => {
+        setTheme(newTheme);
+        localStorage.setItem('FileEditorTheme', newTheme);
+    };
+
+    const handleToggleAutosave = () => {
+        setAutosave(!autosave);
+        localStorage.setItem('FileEditorAutosave', (!autosave).toString());
+    };
+
+    return (
+        <div className={`flex flex-col h-screen w-full overflow-hidden font-sans ${theme === 'light' ? 'bg-white text-slate-800' : 'bg-slate-950 text-slate-300'}`}>
+            
+            {/* Header */}
+            <div className={`flex items-center justify-between px-4 py-2 border-b z-10 ${theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'}`}>
+                <div className="flex items-center gap-4">
+                    <Button isIconOnly variant="light" size="sm" className="md:hidden" onPress={openSidebarDrawer}>
+                        <Icon icon="mdi:menu" width={20} />
+                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Icon icon="mdi:folder-outline" className="text-teal-500" width={18} />
+                        <span className={`text-xs font-semibold tracking-wide uppercase ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}>Workspace</span>
+                        <span className="text-slate-600">/</span>
+                        <span className={`text-sm font-medium ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}>{initialName}</span>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+     
+                </div>
+            </div>
+
+            {/* Main Content Area */}
+            <div className="flex-1 flex overflow-hidden">
+                
+                {/* Desktop Sidebar */}
+                <div 
+                    className={`hidden md:flex flex-col shrink-0 border-r overflow-hidden ${theme === 'light' ? 'bg-slate-50 border-slate-200' : 'bg-slate-900 border-slate-800'}`}
+                    style={{ width: `${sidebarWidth}px` }}
+                >
+                    <div className="p-3 border-b flex items-center justify-between sticky top-0 z-10">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Explorer</span>
+                        <div className=' flex  items-center '>
+                                         <Popover
+            classNames={{
+              base: `${theme == 'light' ? 'bg-white' : 'bg-[#1e1e1e]'} shadow-none`,
+              content: ` rounded-md ${theme == 'light' ? 'bg-white border-lightgrey text-black' : 'bg-slate-900 text-white border-[#333]'} shadow-none border `,
+            }}
+          >
+            <PopoverTrigger>
+              <span className=' cursor-pointer p-0.5'>
+                <Icon icon={'lucide:settings-2'} width={16} />
+              </span>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Listbox
+                aria-label="File Actions"
+                className="p-0"
+                itemClasses={{
+                  base: "p-2 rounded-none h-9 text-sm data-[hover=true]:bg-default-100/70",
+                }}
+              >
+         
+                <ListboxItem
+                  key="theme-wrapper"
+                  className="p-0"
+                  textValue="Change Theme"
+                >
+                  <Popover placement="right-start" offset={10}>
+                    <PopoverTrigger>
+                      <div className="flex items-center gap-2 w-full h-full px-2 py-1">
+                        <Icon icon="lucide:palette" width={14} />
+                        <span className="flex-1 ">Change theme</span>
+                        <Icon icon="lucide:chevron-right" width={14} />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent className={`${theme === 'light' ? 'bg-white border-lightgrey text-black' : 'bg-slate-900 text-white border-[#333]'} p-1 border shadow-xl`}>
+                      <Listbox
+                        aria-label="Theme selection"
+                      onSelectionChange={(keys) => {
+    // Convert the Set to an array and get the first item
+    const selectedValue = Array.from(keys)[0] as 'light' | 'vs-dark';
+    
+    if (selectedValue) {
+      handleThemeChange(selectedValue);
+    }
+  }}
+                        selectedKeys={[theme]}
+                        selectionMode="single"
+                        itemClasses={{
+                          base: "p-2 rounded-none h-9 text-sm data-[hover=true]:bg-default-100/70",
+                        }}
+                      >
+                        <ListboxItem className='px-6' key="vs-dark" classNames={{base :'hover:bg-red-200'}}  >
+                          VS Dark
+                        </ListboxItem>
+                        <ListboxItem className='px-6' key="light" >
+                          Light
+                        </ListboxItem>
+                        {/* You can easily add more themes here in the future */}
+                      </Listbox>
+                    </PopoverContent>
+                  </Popover>
+                </ListboxItem>
+
+                <ListboxItem
+                  key="autosave"
+                  startContent={<Icon icon="lucide:save" width={14} />}
+                  onPress={handleToggleAutosave}
+                >
+                  {autosave ? 'Disable' : 'Enable'} Autosave
+                </ListboxItem>
+              </Listbox>
+            </PopoverContent>
+
+          </Popover>
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
+                        {fileTree ? (
+                            <FileTreeItem 
+                                item={fileTree} 
+                                onSelect={handleFileOpen} 
+                                onExpand={loadFolder} 
+                                expandedPaths={expandedPaths} 
+                            />
+                        ) : (
+                            <div className="p-4 flex justify-center"><Icon icon="svg-spinners:ring-resize" /></div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Resize Handle */}
+                <div 
+                    onMouseDown={startResizing}
+                    className={`hidden md:block w-1 cursor-col-resize transition-colors hover:bg-blue-500/50 z-20 ${theme === 'light' ? 'bg-slate-200' : 'bg-slate-800'}`}
+                />
+
+                {/* Editor Content */}
+                <div className="flex-1 flex flex-col min-w-0">
+                    
+                    {/* Tabs Bar */}
+                    <div className={`flex items-center overflow-x-auto h-10 shrink-0 select-none no-scrollbar border-b ${theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'}`}>
+                        {openTabs.map(tab => (
+                            <div 
+                                key={tab.path}
+                                onClick={() => {
+                                    setActivePath(tab.path);
+                                }}
+                                className={`flex items-center gap-2 px-3 h-full cursor-pointer text-xs border-r transition-all min-w-[120px] max-w-[200px] group ${
+                                    activePath === tab.path 
+                                        ? (theme === 'light' ? 'bg-white font-medium border-t-2 border-t-blue-500' : 'bg-slate-950 font-medium border-t-2 border-t-blue-600') 
+                                        : (theme === 'light' ? 'hover:bg-white/50 text-slate-500' : 'hover:bg-slate-800 text-slate-500')
+                                }`}
+                            >
+                                <Icon icon={getFileIcon(tab)} className={theme === 'light' ? "text-slate-400" : "text-teal-400"} />
+                                <span className="truncate flex-1">{tab.name}</span>
+                                {dirtyFiles.has(tab.path) ? (
+                                    <div className="w-2 h-2 rounded-full bg-blue-500 group-hover:hidden" />
+                                ) : null}
+                                <Icon 
+                                    icon="mdi:close" 
+                                    className={`opacity-0 group-hover:opacity-100 hover:bg-slate-200 dark:hover:bg-slate-800 p-0.5 rounded ${dirtyFiles.has(tab.path) ? 'hidden group-hover:block' : ''}`} 
+                                    // onClick={(e) => closeTab(tab.path, e)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Active Editor */}
+                    <div className="flex-1 relative overflow-hidden">
+                        {activePath ? (
+                            <FileEditorComponent
+                                key={activePath}
+                                file={openTabs.find(t => t.path === activePath)!}
+                                onDirtyChange={handleDirtyChange}
+                                theme={theme}
+                                autoSave={autosave}
+                            />
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center opacity-30 gap-4">
+                                <Icon icon="mdi:file-code-outline" width={64} />
+                                <div className="text-center">
+                                    <p className="text-sm font-medium">No file open</p>
+                                    <p className="text-xs">Select a file from the sidebar to edit</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Sidebar Drawer */}
+            <Drawer isOpen={isSidebarDrawerOpen} onOpenChange={onSidebarDrawerChange} placement="left" size="xs" className={`${theme === 'light' ? 'bg-white' : 'bg-slate-900 border-r border-slate-800'}`}>
+                <DrawerContent>
+                    {(onClose) => (
+                        <div className="flex flex-col h-full pt-6">
+                            <div className="px-4 py-3 border-b border-slate-800 text-xs font-bold uppercase tracking-widest text-slate-500">
+                                Project Explorer
+                            </div>
+                            <div className="flex-1 overflow-y-auto py-2">
+                                {fileTree && (
+                                    <FileTreeItem 
+                                        item={fileTree} 
+                                        onSelect={(it) => { handleFileOpen(it); onClose(); }} 
+                                        onExpand={loadFolder} 
+                                        expandedPaths={expandedPaths} 
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </DrawerContent>
+            </Drawer>
+
+            {/* Discard Changes Modal */}
+            <Modal isOpen={isDiscardModalOpen} onOpenChange={onDiscardModalChange} placement="center" size="sm">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex gap-2 items-center">
+                                <Icon icon="mdi:alert-circle-outline" className="text-warning" width={22} />
+                                <span>Unsaved Changes</span>
+                            </ModalHeader>
+                            <ModalBody className="py-4 text-sm">
+                                You have unsaved changes in <span className="font-semibold">{openTabs.find(t => t.path === activePath)?.name}</span>. Discarding will permanently lose these changes.
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button variant="flat" size="sm" onPress={onClose}>Cancel</Button>
+                                <Button color="danger" size="sm" onPress={() => {
+                                    setDirtyFiles(prev => {
+                                        const next = new Set(prev);
+                                        next.delete(activePath!);
+                                        return next;
+                                    });
+                                    onClose();
+                                    // closeTab(activePath!);
+                                }}>Discard</Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+
+            {/* Status Bar */}
+            <div className="h-6 bg-blue-600 text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                        <Icon icon="mdi:remote" width={12} />
+                        <span>Cloudstick Remote</span>
+                    </div>
+                    {activePath && (
+                        <div className="flex items-center gap-1">
+                            <span>Line: 1, Col: 1</span>
+                        </div>
+                    )}
+                </div>
+                <div className="flex items-center gap-4">
+                    {activePath && <span>UTF-8</span>}
+                    <div className="flex items-center gap-1 cursor-pointer">
+                        <Icon icon="mdi:bell-outline" width={12} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default FileEditorPage;

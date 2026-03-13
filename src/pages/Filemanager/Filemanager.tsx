@@ -280,7 +280,7 @@ const  fetchWebDetails = ()=>{
     useEffect(() => {
 
         
-            fetchfiles('/home/cpusera0ju/apps/newcustomephp');
+            fetchfiles('/home/cpuserdpjp/apps/fileeditortest');
 
         
     }, [ websitedetail]);

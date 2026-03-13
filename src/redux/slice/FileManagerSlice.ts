@@ -236,7 +236,7 @@ export const UploadFile = createAsyncThunk(
 
 export const saveFileChange = createAsyncThunk(
   "fileManager/saveFileChange",
-  async (data: any, { rejectWithValue }) => {
+  async (data: { path: string; name: string; content: string }, { rejectWithValue }) => {
     try {
       const { userId, serverId, webId } = getCommonParams();
       const url = `/api/v2/files/update/websites/${webId}/servers/${serverId}/users/${userId}`;
