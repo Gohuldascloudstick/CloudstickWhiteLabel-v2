@@ -1,12 +1,12 @@
 import { Button, Card, Divider } from "@heroui/react"
 import { Icon } from "@iconify/react"
 import { useAppSelector } from "../../redux/hook"
-import { useState } from "react"
+
 
 
 const Serverlogs = () => {
   const selectedwebsite = useAppSelector((state) => state.website.selectedWebsite)
-  const [selectedLogType, setSelectedLogType] = useState<string | null>(null);
+ 
   type LogData = {
     logType: string;
     title: string;
@@ -76,7 +76,7 @@ const Serverlogs = () => {
                 <Button
                   key={tab.logType}
                   size="sm"
-                  className={` ${tab.logType !== selectedLogType ? 'bg-default-200/60 dark:bg-default-300/80 text-default-500 dark:text-default-600' : 'bg-primary-500 text-white'} px-3 shrink-0 text-[10px] sm:text-xs`}
+                  className={'bg-default-200/60 dark:bg-default-300/80 text-default-500 dark:text-default-600' }
                   variant={"solid"}
                   color={"primary"}
                   // onPress={() => handleLogTypeChange(tab.logType)}

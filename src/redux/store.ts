@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import EmailSlice from './slice/EmailSlice'
 import website from './slice/websiteSlice'
-import datbaseSlice from './slice/dataBaseSlice'
+import datbaseSlice from './slice/databaseSlice'
 import SubdomainSlice from './slice/SudomainSlice'
 import CronJob from './slice/CronjobSlice'
 import appsettingsSlice from './slice/appSettingSlice'
