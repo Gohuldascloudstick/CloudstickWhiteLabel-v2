@@ -56,7 +56,14 @@ const Database = () => {
     const [databaseCreateLoader, setDatabasecreateLoader] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [deleteLoader, setDeleteLoader] = useState(false)
+
+
+
+    
     const dispatch = useAppDispatch();
+
+
+
     const [dleteLoader, setDeleLoader] = useState(false)
     const [deletePopover, setDeletePopover] = useState<number | null>(null);
     const validateDatabaseName = (name: string) => {
