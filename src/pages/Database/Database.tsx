@@ -56,7 +56,14 @@ const Database = () => {
     const [databaseCreateLoader, setDatabasecreateLoader] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [deleteLoader, setDeleteLoader] = useState(false)
+
+
+
+    
     const dispatch = useAppDispatch();
+
+
+
     const [dleteLoader, setDeleLoader] = useState(false)
     const [deletePopover, setDeletePopover] = useState<number | null>(null);
     const validateDatabaseName = (name: string) => {
@@ -293,7 +300,7 @@ const Database = () => {
                                         variant="bordered"
                                         labelPlacement="outside"
                                         onSelectionChange={(keys) => {
-                                            const value = String([...keys][0]);
+                                            const value = String(Array.from(keys)[0]);
                                             setCollation(value);
                                         }}
                                         classNames={{ popoverContent: "dark:bg-slate-900" }}
@@ -516,7 +523,7 @@ const Database = () => {
                                         disallowEmptySelection
                                         labelPlacement="outside"
                                         onSelectionChange={(keys) => {
-                                            const value = String([...keys][0]);
+                                            const value = String(Array.from(keys)[0]);
                                             setHost(value);
                                             setHostError("")
                                         }}

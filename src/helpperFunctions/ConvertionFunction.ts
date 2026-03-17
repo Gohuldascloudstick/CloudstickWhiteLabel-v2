@@ -9,10 +9,10 @@ export  function formatStorage(value: number, unit: string): string {
 
   if (index === -1) return "Invalid unit";
 
-  // Convert input to bytes
+
   let bytes = value * Math.pow(1024, index);
 
-  // Try to find best readable unit
+
   while (index > 0) {
     const converted = bytes / Math.pow(1024, index);
 

@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { CronJob, SystemUser } from "../../utils/interfaces";
 import { api } from "../eventServices";
 
-
+const getCommonParams = () => {
+  const userId = import.meta.env.VITE_userId;
+  const serverId = import.meta.env.VITE_serverId;
+  const webId = import.meta.env.VITE_webId;
+  return { userId, serverId, webId };
+};
 
 interface initialStatetype {
   loading: boolean;
@@ -31,10 +36,8 @@ export const getAppCron = createAsyncThunk(
   async (_, { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/cron/websites/${webId}/servers/${serverId}/users/${user}`;
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/cron/websites/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data;
 

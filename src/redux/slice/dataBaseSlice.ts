@@ -239,7 +239,7 @@ export const ChnageDbUserPAssword = createAsyncThunk(
 )
 
 export const DeleteDbuser = createAsyncThunk(
-  "database/ChnageDbUserPAssword",
+  "database/DeleteDbuser",
   async ({ dbuserid }: { dbuserid: number }, { rejectWithValue }) => {
     try {
       const user = JSON.parse(localStorage.getItem("userId") || "null");
