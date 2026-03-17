@@ -47,7 +47,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
   selectedLogType,
   setSelectedLogType,
   logTypeTabInfo,
-  websiteName,
+  
   fetchlogs,
 }) => {
   const terminalRef = useRef<HTMLDivElement>(null); 
@@ -150,7 +150,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
     } else {
         const parts = log.match(accessLogRegex);
         if (parts) {
-            const [fullMatch, ip, timestamp, request, statusCode, size] = parts;
+            const [ ip, timestamp, request, statusCode, size] = parts;
             const fullRequest = request.trim();
 
             let statusColor = 'text-green-300';

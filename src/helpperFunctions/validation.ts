@@ -1,10 +1,10 @@
-export const validateIPAddress = (ip) => {
-  // Regex for IPv4 address validation (simple but effective for common cases)
-  const ipv4Regex =
-    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  // You might also want to include IPv6 validation if needed
-  return ipv4Regex.test(ip);
-};
+// export const validateIPAddress = (ip) => {
+//   // Regex for IPv4 address validation (simple but effective for common cases)
+//   const ipv4Regex =
+//     /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+//   // You might also want to include IPv6 validation if needed
+//   return ipv4Regex.test(ip);
+// };
 
 
 

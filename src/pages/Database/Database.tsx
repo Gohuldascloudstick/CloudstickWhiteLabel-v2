@@ -4,7 +4,7 @@ import GrantPermissionModal from "./GrantPermissionModal"
 import EditDatabaseModal from "./editDatabaseModal";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { creatDatabase, CreateDbuser, DeleteDb, DeleteDbuser, getAppDatabaseassineduserlist, getAPPDatabaselist, getAppDatabaseUserLIst } from "../../redux/slice/databaseSlice";
+import { creatDatabase, CreateDbuser, DeleteDb, DeleteDbuser, getAppDatabaseassineduserlist, getAPPDatabaselist, getAppDatabaseUserLIst } from "../../redux/slice/dataBaseSlice";
 import type { AppDbUser } from "../../utils/interfaces";
 
 
