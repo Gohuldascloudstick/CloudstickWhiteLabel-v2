@@ -209,15 +209,7 @@ export interface FileManagerItem {
   // If it's a file, it may have content
   content?: string;
 }
-export interface SystemUser {
-  id: number;
-  created_at: string;
-  name: string;
-  sudo_permission: boolean;
-  server_id: number;
-  server_uuid: string;
-  password?: string;
-}
+
 export interface CronJob {
   id: number;
   server_id: number;
@@ -522,4 +514,20 @@ export interface wpDebug {
   log_size: number;
   recent_logs: string[];
   public_path: string;
+}
+
+
+export interface FileManagerItem {
+  path: string;
+  name: string;
+  is_dir: boolean;
+  last_modified: string;
+  permission: string;
+  size: number; // files have size, some folders too
+
+  // If it's a folder, it may contain children
+  children?: FileManagerItem[];
+
+  // If it's a file, it may have content
+  content?: string;
 }

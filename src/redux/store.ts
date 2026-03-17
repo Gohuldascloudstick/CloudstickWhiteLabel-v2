@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import EmailSlice from './slice/EmailSlice'
 import website from './slice/websiteSlice'
-import datbaseSlice from './slice/databaseSlice'
+import datbaseSlice from './slice/dataBaseSlice'
 import SubdomainSlice from './slice/SudomainSlice'
 import CronJob from './slice/CronjobSlice'
 import appsettingsSlice from './slice/appSettingSlice'
@@ -11,6 +11,7 @@ import thirdPartyIntegrationSlice from './slice/thirdpartyintergration'
 import dns from './slice/dnsSlice'
 import WSslice from './slice/WSslice'
 import worpressManager from './slice/WordPressManager'
+import fileManager from './slice/FileManagerSlice'
 export const store = configureStore({
   reducer: {
      ws: WSslice,
@@ -25,6 +26,7 @@ export const store = configureStore({
     thirdparty: thirdPartyIntegrationSlice,
     dns: dns,
     wordPressManger: worpressManager,
+    fileManager: fileManager,
   },
 });
 
