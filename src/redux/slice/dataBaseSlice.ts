@@ -239,7 +239,7 @@ export const ChnageDbUserPAssword = createAsyncThunk(
 )
 
 export const DeleteDbuser = createAsyncThunk(
-  "database/ChnageDbUserPAssword",
+  "database/DeleteDbuser",
   async ({ dbuserid }: { dbuserid: number }, { rejectWithValue }) => {
     try {
       const user = JSON.parse(localStorage.getItem("userId") || "null");
@@ -289,7 +289,7 @@ export const resetMySQLRootPassword = createAsyncThunk(
 
 
 
-const databaseSlice = createSlice({
+const dataBaseSlice = createSlice({
   name: "database",
   initialState,
   reducers: {
@@ -326,5 +326,5 @@ const databaseSlice = createSlice({
 });
 
 
-export const { EditUserPriv } = databaseSlice.actions;
-export default databaseSlice.reducer;
+export const { EditUserPriv } = dataBaseSlice.actions;
+export default dataBaseSlice.reducer;

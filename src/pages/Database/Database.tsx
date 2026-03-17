@@ -4,7 +4,7 @@ import GrantPermissionModal from "./GrantPermissionModal"
 import EditDatabaseModal from "./editDatabaseModal";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { creatDatabase, CreateDbuser, DeleteDb, DeleteDbuser, getAppDatabaseassineduserlist, getAPPDatabaselist, getAppDatabaseUserLIst } from "../../redux/slice/databaseSlice";
+import { creatDatabase, CreateDbuser, DeleteDb, DeleteDbuser, getAppDatabaseassineduserlist, getAPPDatabaselist, getAppDatabaseUserLIst } from "../../redux/slice/dataBaseSlice";
 import type { AppDbUser } from "../../utils/interfaces";
 
 
@@ -300,7 +300,7 @@ const Database = () => {
                                         variant="bordered"
                                         labelPlacement="outside"
                                         onSelectionChange={(keys) => {
-                                            const value = String([...keys][0]);
+                                            const value = String(Array.from(keys)[0]);
                                             setCollation(value);
                                         }}
                                         classNames={{ popoverContent: "dark:bg-slate-900" }}
@@ -523,7 +523,7 @@ const Database = () => {
                                         disallowEmptySelection
                                         labelPlacement="outside"
                                         onSelectionChange={(keys) => {
-                                            const value = String([...keys][0]);
+                                            const value = String(Array.from(keys)[0]);
                                             setHost(value);
                                             setHostError("")
                                         }}
