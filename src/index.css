@@ -4,6 +4,14 @@
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-primary: var(--primary-color, #1d67a6);
+}
+
+:root {
+  --primary-color: #1d67a6;
+}
+
 /* hide scrollbar but allow scroll */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
