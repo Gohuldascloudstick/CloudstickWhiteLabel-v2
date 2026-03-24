@@ -12,6 +12,7 @@ import dns from './slice/dnsSlice'
 import WSslice from './slice/WSslice'
 import worpressManager from './slice/WordPressManager'
 import fileManager from './slice/FileManagerSlice'
+import authSlice from './slice/authSlice'
 export const store = configureStore({
   reducer: {
      ws: WSslice,
@@ -27,6 +28,7 @@ export const store = configureStore({
     dns: dns,
     wordPressManger: worpressManager,
     fileManager: fileManager,
+    auth: authSlice,
   },
 });
 
