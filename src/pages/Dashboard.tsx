@@ -10,18 +10,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
-  useEffect(() => {
-    const serverId = "75";
-    const webId = "712";
-    const userId = "1"
-    const systemuserId = "1078"
-    const webappType = "customphp"
-    localStorage.setItem("serverId", serverId);
-    localStorage.setItem("webId", webId);
-    localStorage.setItem("userId", userId)
-    localStorage.setItem("systemuserId", systemuserId);
-    localStorage.setItem("webappType", webappType)
-  }, []);
+
   const getPhpAdminLoginLink = async () => {
     setPhpMyAdminLoader(true);
     try {

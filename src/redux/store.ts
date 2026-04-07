@@ -1,4 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import EmailSlice from './slice/EmailSlice'
 import website from './slice/websiteSlice'
 import dataBaseSlice from './slice/dataBaseSlice'
@@ -13,9 +15,10 @@ import WSslice from './slice/WSslice'
 import worpressManager from './slice/WordPressManager'
 import fileManager from './slice/FileManagerSlice'
 import authSlice from './slice/authSlice'
-export const store = configureStore({
-  reducer: {
-     ws: WSslice,
+
+// 1. Combine Reducers
+const rootReducer = combineReducers({
+    ws: WSslice,
     Email: EmailSlice,
     website: website,
     Database: dataBaseSlice,
@@ -29,10 +32,30 @@ export const store = configureStore({
     wordPressManger: worpressManager,
     fileManager: fileManager,
     auth: authSlice,
-  },
 });
 
+// 2. Persist Config
+const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: ['auth'], // Only persist the auth slice
+};
 
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+// 3. Create Persisted Reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// 4. Configure Store
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false, // Required for redux-persist
+        }),
+});
+
+// 5. Create Persistor
+export const persistor = persistStore(store);
+
+// Types
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppDispatch = typeof store.dispatch;

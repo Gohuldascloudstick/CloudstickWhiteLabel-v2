@@ -9,7 +9,7 @@
 }
 
 :root {
-  --primary-color: #1d67a6;
+  --primary-color: #009788 !important;
 }
 
 /* hide scrollbar but allow scroll */
@@ -18,6 +18,8 @@
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE & Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

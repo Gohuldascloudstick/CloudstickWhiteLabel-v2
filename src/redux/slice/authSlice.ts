@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../eventServices";
+import type { WebisteDetails } from "../../utils/interfaces";
 
 interface BusinessDetails {
     brand_name: string;
@@ -12,14 +13,15 @@ interface AuthState {
     user: any | null;
     businessDetails: BusinessDetails | null;
     loading: boolean;
+    WebsiteDetails: WebisteDetails | null;
     error: string | null;
 }
 
-const storedBusinessDetails = localStorage.getItem("businessDetails");
 const initialState: AuthState = {
     user: null,
-    businessDetails: storedBusinessDetails ? JSON.parse(storedBusinessDetails) : null,
+    businessDetails: null,
     loading: false,
+    WebsiteDetails: null,
     error: null,
 };
 
@@ -36,10 +38,15 @@ export const login = createAsyncThunk(
             const { userId, serverId } = getCommonParams();
             const url = `/api/v2/whitelabel/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, payload);
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
+            console.log(response.data.response);
+
+            if (response.data.response.data.token) {
+                localStorage.setItem("token", response.data.response.data.token);
+                localStorage.setItem("webId", response.data.response.data.website.id);
             }
-            return response.data;
+            console.log('whwt', response.data.response.data.website);
+
+            return response.data.response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.error || "Login failed");
         }
@@ -66,7 +73,10 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.user = null;
+            state.businessDetails = null;
+            state.WebsiteDetails = null;
             localStorage.removeItem("token");
+            localStorage.removeItem("webId");
         },
         clearError: (state) => {
             state.error = null;
@@ -78,10 +88,12 @@ const authSlice = createSlice({
             .addCase(login.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.WebsiteDetails = null;
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
+                state.WebsiteDetails = action.payload.website;
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -94,7 +106,6 @@ const authSlice = createSlice({
             .addCase(getBusinessDetails.fulfilled, (state, action: PayloadAction<BusinessDetails>) => {
                 state.loading = false;
                 state.businessDetails = action.payload;
-                localStorage.setItem("businessDetails", JSON.stringify(action.payload));
             })
             .addCase(getBusinessDetails.rejected, (state, action) => {
                 state.loading = false;

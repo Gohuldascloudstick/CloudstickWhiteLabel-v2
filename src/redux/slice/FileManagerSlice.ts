@@ -13,7 +13,7 @@ interface FileManagerState {
   isCut: boolean;
   fileContent: string | null;
   contentLoading: boolean;
-    TheCopyError: string,
+  TheCopyError: string,
 }
 
 const initialState: FileManagerState = {
@@ -27,14 +27,14 @@ const initialState: FileManagerState = {
   isCut: false,
   fileContent: null,
   contentLoading: false,
-    TheCopyError: "",
+  TheCopyError: "",
 };
 
 // Helper to get common URL parameters
 const getCommonParams = () => {
   const userId = import.meta.env.VITE_userId;
   const serverId = import.meta.env.VITE_serverId;
-  const webId = import.meta.env.VITE_webId;
+  const webId = localStorage.getItem("webId")
   return { userId, serverId, webId };
 };
 
@@ -43,7 +43,7 @@ export const getFileOrDirectory = createAsyncThunk(
   async (path: string, { rejectWithValue }) => {
     try {
       console.log('yes calling');
-      
+
       const { userId, serverId, webId } = getCommonParams();
       const url = `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.postEvents(url, { path });
@@ -127,13 +127,13 @@ export const CompressFile = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-    const { userId, serverId, webId } = getCommonParams();
+      const { userId, serverId, webId } = getCommonParams();
       const response = await api.patchEvent(
         `/api/v2/files/compress/websites/${webId}/servers/${serverId}/users/${userId}?action=${action}`,
         data
       );
       return response.data;
-    } catch (error:any) {
+    } catch (error: any) {
       return rejectWithValue(error.response?.data?.error || "Failed to compress file");
     }
   }
@@ -161,19 +161,19 @@ export const getfileforextart = createAsyncThunk(
   "FileManager/getfileforextart",
   async (
     {
-   
+
       path,
     }: { path: string },
     { rejectWithValue }
   ) => {
     try {
-      const { userId ,serverId, webId } = getCommonParams();
+      const { userId, serverId, webId } = getCommonParams();
       const res = await api.postEvents(
         `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`,
         { path }
       );
       return res.data;
-    } catch (error:any) {
+    } catch (error: any) {
       return rejectWithValue(error.response?.data?.error);
     }
   }
@@ -183,19 +183,19 @@ export const getfileFOlder = createAsyncThunk(
   "FileManager/getfileFOlder",
   async (
     {
-   
+
       path,
-    }: {  path: string },
+    }: { path: string },
     { rejectWithValue }
   ) => {
     try {
-  const { userId, serverId, webId } = getCommonParams();
+      const { userId, serverId, webId } = getCommonParams();
       const res = await api.postEvents(
         `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`,
         { path }
       );
       return res.data.message[0];
-    } catch (error:any) {
+    } catch (error: any) {
       return rejectWithValue(error.response?.data?.error);
     }
   }
@@ -272,11 +272,11 @@ const fileManagerSlice = createSlice({
     clearFileContent: (state) => {
       state.fileContent = null;
     },
-     
+
     ClearEroor: (state) => {
       state.TheCopyError = "";
-    
-  },
+
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -296,31 +296,33 @@ const fileManagerSlice = createSlice({
       .addCase(Rename.fulfilled, (state, action) => {
         const { name, new_name } = action.meta.arg;
         if (state.TheFiles && state.TheFiles.children) {
-         state.TheFiles = {
-          ...state.TheFiles,
-          children: state.TheFiles.children.map((item) =>
-            item.name == name ? { ...item, name: new_name } : item
-          ),}
+          state.TheFiles = {
+            ...state.TheFiles,
+            children: state.TheFiles.children.map((item) =>
+              item.name == name ? { ...item, name: new_name } : item
+            ),
+          }
         };
       })
-         .addCase(Copyfile.pending, (state) => {
+      .addCase(Copyfile.pending, (state) => {
         state.TheCopyError = "";
       })
- .addCase(DeleteFile.fulfilled, (state, action) => {
+      .addCase(DeleteFile.fulfilled, (state, action) => {
         const { name } = action.meta.arg;
         if (state.TheFiles && state.TheFiles.children) {
-        state.TheFiles = {
-          ...state.TheFiles,
-          children: state.TheFiles.children.filter(
-            (item) => item.name !== name
-          ),
-        };}
+          state.TheFiles = {
+            ...state.TheFiles,
+            children: state.TheFiles.children.filter(
+              (item) => item.name !== name
+            ),
+          };
+        }
       })
       .addCase(Copyfile.rejected, (state, action) => {
         state.TheCopyError = action.payload as string;
       })
       .addCase(ChangePermissions.fulfilled, (state, action) => {
-        const { name ,permissionstring } = action.meta.arg;
+        const { name, permissionstring } = action.meta.arg;
         if (state.TheFiles && state.TheFiles.children) {
           state.TheFiles = {
             ...state.TheFiles,
@@ -335,5 +337,5 @@ const fileManagerSlice = createSlice({
   },
 });
 
-export const { setDirectoryPath, setSelectedFile, setCopyItem, clearFileContent , ClearEroor } = fileManagerSlice.actions;
+export const { setDirectoryPath, setSelectedFile, setCopyItem, clearFileContent, ClearEroor } = fileManagerSlice.actions;
 export default fileManagerSlice.reducer;

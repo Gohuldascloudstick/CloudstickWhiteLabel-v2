@@ -1,4 +1,5 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
 
 interface LogoutProps {
     isOpen: boolean;
@@ -10,6 +11,12 @@ const LogoutModal: React.FC<LogoutProps> = ({
     onOpenChange,
 
 }) => {
+    const navigate = useNavigate();
+    const HandleLogout = () => {
+        localStorage.removeItem("token");
+        navigate('/login')
+        onOpenChange(false);
+    }
     return (
         <Modal
             isOpen={isOpen}
@@ -39,7 +46,7 @@ const LogoutModal: React.FC<LogoutProps> = ({
                         size="sm"
                         // isLoading={changeLoader}
                         className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white"
-                    // onPress={() => handleChangePassword()}
+                        onPress={() => HandleLogout()}
                     >
                         Yes
                     </Button>
