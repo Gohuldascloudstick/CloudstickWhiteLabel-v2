@@ -29,12 +29,7 @@ const initialState: initialStatetype = {
         dmarc: null,
     },
 }
-const getCommonParams = () => {
-    const userId = import.meta.env.VITE_userId;
-    const serverId = import.meta.env.VITE_serverId;
-    const webId = localStorage.getItem("webId");
-    return { userId, serverId, webId };
-};
+
 
 
 const getCommonParams = () => {
