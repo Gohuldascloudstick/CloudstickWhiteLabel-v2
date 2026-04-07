@@ -543,7 +543,7 @@ const FileEditorPage = () => {
                                 onClick={() => {
                                     setActivePath(tab.path);
                                 }}
-                                className={`flex items-center gap-2 px-3 h-full cursor-pointer text-xs border-r transition-all min-w-[120px] max-w-[200px] group ${
+                                className={`flex items-center gap-2 px-3 h-full cursor-pointer text-xs border-r transition-all min-w-30 max-w-50 group ${
                                     activePath === tab.path 
                                         ? (theme === 'light' ? 'bg-white font-medium border-t-2 border-t-blue-500' : 'bg-slate-950 font-medium border-t-2 border-t-blue-600') 
                                         : (theme === 'light' ? 'hover:bg-white/50 text-slate-500' : 'hover:bg-slate-800 text-slate-500')

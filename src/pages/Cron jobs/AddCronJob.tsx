@@ -16,7 +16,6 @@ const AddCronJob = () => {
     const VendorBindary = useAppSelector((state) => state.CronJob.VendorBinary);
     const [buttonSpinner, setButtonSpinner] = useState(false);
     const dispatch = useAppDispatch();
-    const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
     const [errors, setErrors] = useState<Record<keyof typeof formData, boolean>>(
         {} as any
     );
@@ -280,7 +279,7 @@ const AddCronJob = () => {
         getAppCrons();
         getvendor();
         getSystemUser();
-    }, [serverId]);
+    }, []);
     useEffect(() => {
         if (editvalue) {
             setFormData({

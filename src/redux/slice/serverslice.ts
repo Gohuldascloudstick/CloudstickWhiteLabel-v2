@@ -30,14 +30,20 @@ const initialState: initialStatetype = {
 
 
 };
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = import.meta.env.VITE_webId;
+    return { userId, serverId, webId };
+};
 
 // Async       Thunks for API calls
 export const getServer = createAsyncThunk(
   "server/getserverlist",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const url = `/api/v2/serverslist/byuser/users/${user}`;
+    const { userId } = getCommonParams();
+      const url = `/api/v2/serverslist/byuser/users/${userId}`;
       const response = await api.getEvents(url);
       const data = await response.data;
 
@@ -53,10 +59,10 @@ export const getServer = createAsyncThunk(
 
 export const getServerDetails = createAsyncThunk(
   "server/getServerDetails",
-  async (id: string, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-     const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const url = `/api/v2/details/servers/${id}/users/${user}`;
+     const { userId, serverId } = getCommonParams();
+      const url = `/api/v2/details/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       const data = await response.data;
 

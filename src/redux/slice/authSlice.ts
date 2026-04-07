@@ -36,8 +36,11 @@ export const login = createAsyncThunk(
             const { userId, serverId } = getCommonParams();
             const url = `/api/v2/whitelabel/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, payload);
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
+            if (response.data) {
+              
+                localStorage.setItem("token", response.data.response.data.token);
+                localStorage.setItem("webtype",response.data.response.data.website.website_type);
+                localStorage.setItem("systemuserid",response.data.response.data.website.system_user_id);
             }
             return response.data;
         } catch (error: any) {

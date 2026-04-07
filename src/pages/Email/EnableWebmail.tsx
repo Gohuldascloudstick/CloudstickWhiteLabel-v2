@@ -14,9 +14,7 @@ const EnableWebmail = () => {
     const reducerDispatch = useDispatch()
     const [domainname, setDomainName] = useState("");
     const [domainnnameerror, setDomainNameError] = useState("");
-    const user = JSON.parse(localStorage.getItem("userId") || "null");
-    const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-    const webId = JSON.parse(localStorage.getItem("webId") || "null")
+
     const [isTerminalVisible, setIsTerminalVisible] = useState(false);
     const logs = useAppSelector((s) => s.ws.webInstallMessage);
     const currentWebsite = useAppSelector(
@@ -30,16 +28,24 @@ const EnableWebmail = () => {
         }
     }
     const onMessageHandler = (d: string) => {
-        
+
         reducerDispatch(addWebinstallMessage(d));
         if (d === "Website created successfully") {
             getWebsiteDetails();
         }
     };
+    const getCommonParams = () => {
+        const userId = import.meta.env.VITE_userId;
+        const serverId = import.meta.env.VITE_serverId;
+        const webId = import.meta.env.VITE_webId;
+        return { userId, serverId, webId };
+    };
+    const { userId, serverId, webId } = getCommonParams();
+
     const handleAddwebmail = () => {
-        
+
         const apiUrl = import.meta.env.VITE_SERVER;
-        const url = `/api/v2/roundcubewebmail/websites/${webId}/servers/${serverId}/users/${user}`;
+        const url = `/api/v2/roundcubewebmail/websites/${webId}/servers/${serverId}/users/${userId}`;
 
         const data = {
             "domain_name": domainname

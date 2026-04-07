@@ -24,15 +24,20 @@ const initialState: initialState = {
     isCustomRenew: false
 };
 
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = import.meta.env.VITE_webId;
+    return { userId, serverId, webId };
+};
+
 export const createFreeSslHttp = createAsyncThunk(
     "sslManager/createFreeSslHttp",
     async ({ data }: { data: { authorisation: string, access: string, brotli_enabled: boolean } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/free-certificate/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/free-certificate/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -46,11 +51,9 @@ export const createFreeSslDns = createAsyncThunk(
     "sslManager/createFreeSslDns",
     async ({ data }: { data: { authorisation: string, access: string, thirdparty_provider: string, account_label: string, brotli_enabled: boolean } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/free-certificate/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/free-certificate/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -67,11 +70,9 @@ export const uploadCustomSsl = createAsyncThunk(
     "sslManager/uploadCustomSsl",
     async ({ data }: { data: { private_key: string, certificate: string, brotli_enabled: boolean, access: string } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/custom-certificate/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/custom-certificate/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -85,11 +86,9 @@ export const updateSslSettings = createAsyncThunk(
     "sslManager/updateSslSettings",
     async ({ data }: { data: { brotli_enabled?: boolean, access?: string, tls_version?: string, cipher_suite?: string } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/update-certificate-settings/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/update-certificate-settings/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -103,11 +102,9 @@ export const deleteSslCertificate = createAsyncThunk(
     "sslManager/deleteSslCertificate",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/remove-certificate/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/remove-certificate/websites/${webId}/servers/${serverId}/users/${userId}`;
             await api.deleteEvents(url);
             return webId; // Return the websiteId to identify the deleted certificate
         } catch (error: any) {
@@ -121,11 +118,9 @@ export const renewFreeSsl = createAsyncThunk(
     "sslManager/renewFreeSsl",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/free-certificate/renew/websites/${webId}/servers/${serverId}/users/${user}`;
+          const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/free-certificate/renew/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, {});
             return response.data;
         } catch (error: any) {
@@ -139,11 +134,9 @@ export const renewCustomSsl = createAsyncThunk(
     "sslManager/renewCustomSsl",
     async ({ payload }: { payload: { private_key: string, certificate: string } }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            if (!user) return rejectWithValue("User not logged in or ID missing");
-            const url = `/api/v2/ssl/custom-certificate/renew/websites/${webId}/servers/${serverId}/users/${user}`;
+          const { userId, serverId, webId } = getCommonParams();
+            if (!userId) return rejectWithValue("User not logged in or ID missing");
+            const url = `/api/v2/ssl/custom-certificate/renew/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, payload);
             return response.data;
         } catch (error: any) {
@@ -157,9 +150,8 @@ export const CreateServerFreeSslHttp = createAsyncThunk(
     "hostname/createfreeserversslhttp",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/hostname/ssl/free-certificate/servers/${serverId}/users/${user}`;
+           const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/hostname/ssl/free-certificate/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
 
@@ -172,10 +164,9 @@ export const RenewServerFreeSsl = createAsyncThunk(
     "hostname/renewserverfreessl",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+           const { userId, serverId } = getCommonParams();
 
-            const url = `/api/v2/hostname/ssl/free-certificate/renew/servers/${serverId}/users/${user}`;
+            const url = `/api/v2/hostname/ssl/free-certificate/renew/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, {});
             return response.data;
 
@@ -188,9 +179,8 @@ export const uploadServerCustomSsl = createAsyncThunk(
     "hostname/uploadservercustomssl",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/hostname/ssl/custom-certificate/servers/${serverId}/users/${user}`;
+        const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/hostname/ssl/custom-certificate/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
 
@@ -203,9 +193,8 @@ export const RenewServerCustomSsl = createAsyncThunk(
     "hostname/renewservercustomssl",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/hostname/ssl/custom-certificate/renew/servers/${serverId}/users/${user}`;
+       const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/hostname/ssl/custom-certificate/renew/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
 
@@ -218,10 +207,9 @@ export const UpdateServerSslSettings = createAsyncThunk(
     "hostname/updateserversslsettings",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+            const { userId, serverId } = getCommonParams();
 
-            const url = `/api/v2/hostname/ssl/update-certificate-settings/servers/${serverId}/users/${user}`;
+            const url = `/api/v2/hostname/ssl/update-certificate-settings/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
 
@@ -234,9 +222,8 @@ export const DeleteServerSsl = createAsyncThunk(
     "hostname/deleteserverssl",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/hostname/ssl/remove-certificate/servers/${serverId}/users/${user}`;
+          const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/hostname/ssl/remove-certificate/servers/${serverId}/users/${userId}`;
             const response = await api.deleteEvents(url);
             return response.data;
 
@@ -249,9 +236,8 @@ export const createServerFreeSslDns = createAsyncThunk(
     "hostname/createfreeserverssldns",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/hostname/ssl/free-certificate/servers/${serverId}/users/${user}`;
+         const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/hostname/ssl/free-certificate/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
 

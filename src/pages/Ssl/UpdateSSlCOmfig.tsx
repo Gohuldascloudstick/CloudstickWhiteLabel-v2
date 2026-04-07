@@ -146,8 +146,15 @@ const UpdateSSlCOmfig = ({ type }: { type: string }) => {
     initialAccess as "HTTPS" | "HTTPS+HTTP"
   );
   const [isLoading, setIsLoading] = useState(false);
-  const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-  const webId = JSON.parse(localStorage.getItem("webId") || "null")
+  const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = import.meta.env.VITE_webId;
+    return { userId, serverId, webId };
+  };
+
+  const { serverId, webId } = getCommonParams();
+
   useEffect(() => {
     if (editInitalData) {
       setBrotliEnabled(editInitalData.brotli_enabled ?? true);

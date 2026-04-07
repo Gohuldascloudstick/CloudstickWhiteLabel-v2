@@ -29,15 +29,19 @@ const initialState: initialStatetype = {
         dmarc: null,
     },
 }
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = import.meta.env.VITE_webId;
+    return { userId, serverId, webId };
+};
 
 export const createEmailAccount = createAsyncThunk(
     "email/createemail",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -52,10 +56,8 @@ export const getEmailList = createAsyncThunk(
     "email/getemails",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.getEvents(url);
             return response.data;
         } catch (error: any) {
@@ -70,10 +72,8 @@ export const deleteEmail = createAsyncThunk(
     "email/deleteemail",
     async ({ name }: { name: string }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${user}?name=${name}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/websites/${webId}/servers/${serverId}/users/${userId}?name=${name}`;
             const response = await api.deleteEvents(url);
             return response.data;
         } catch (error: any) {
@@ -90,10 +90,8 @@ export const changeEmailPassword = createAsyncThunk(
     "email/changeemailpassword",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/password/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/password/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -108,10 +106,8 @@ export const updateQuota = createAsyncThunk(
     "email/changequota",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/quota/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/quota/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -126,10 +122,8 @@ export const forwardEmail = createAsyncThunk(
     "email/forwardemail",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/forward/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/forward/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -144,10 +138,8 @@ export const getForwardEmail = createAsyncThunk(
     "email/getforwardlist",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/forward/list/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/forward/list/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {
@@ -162,10 +154,8 @@ export const DeleteForwardEmail = createAsyncThunk(
     "email/deleteforwardemail",
     async ({ forwardemail, name }: { forwardemail: string, name: string }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/forward/websites/${webId}/servers/${serverId}/users/${user}?forwardemail=${forwardemail}&name=${name}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/forward/websites/${webId}/servers/${serverId}/users/${userId}?forwardemail=${forwardemail}&name=${name}`;
             const response = await api.deleteEvents(url);
             return response.data;
         } catch (error: any) {
@@ -179,10 +169,8 @@ export const getConfig = createAsyncThunk(
     "email,getconfigforemail",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/email/configure/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/configure/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.getEvents(url);
             return response.data;
         } catch (error: any) {
@@ -195,10 +183,10 @@ export const getConfig = createAsyncThunk(
 )
 export const setConfig = createAsyncThunk(
     "email/setconfigurationforemail",
-    async ({ webId, serverId, label, data }: { webId: number, serverId: number, label: string, data: any }, { rejectWithValue }) => {
+    async ({ label, data }: { label: string, data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("user") || "null");
-            const url = `/api/v2/email/setconfig/websites/${webId}/servers/${serverId}/users/${user.id}?account_label=${label}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/email/setconfig/websites/${webId}/servers/${serverId}/users/${userId}?account_label=${label}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {

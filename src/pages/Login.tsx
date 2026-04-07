@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { login } from "../redux/slice/authSlice";
 import { useAppDispatch } from "../redux/hook";
 import type { RootState } from "../redux/store";
+import { useNavigate } from "react-router-dom";
 
 // Helper to determine text color (black or white) based on background hex
 const getContrastColor = (hexcolor?: string) => {
@@ -24,7 +25,7 @@ const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { businessDetails, loading, error } = useSelector((state: RootState) => state.auth);
 
@@ -35,6 +36,7 @@ const Login = () => {
     const resultAction = await dispatch(login({ system_user_name: username, password }));
     if (login.fulfilled.match(resultAction)) {
       // Handle navigation or success state here
+      navigate('/')
       console.log("Login successful");
     }
   };
@@ -45,8 +47,8 @@ const Login = () => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50 p-6 relative overflow-hidden">
 
       {/* Decorative Background Elements (Optional, extremely subtle) */}
-      <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-primary/5 blur-3xl pointer-events-none transition-colors duration-1000"></div>
-      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl pointer-events-none transition-colors duration-1000"></div>
+      <div className="absolute top-[-20%] right-[-10%] w-200 h-200 rounded-full bg-primary/5 blur-3xl pointer-events-none transition-colors duration-1000"></div>
+      <div className="absolute bottom-[-20%] left-[-10%] w-150 h-150 rounded-full bg-primary/5 blur-3xl pointer-events-none transition-colors duration-1000"></div>
 
       <div className="w-full max-w-md z-10">
         <Card className="w-full shadow-2xl p-2 md:p-4 bg-white border-none" radius="lg">

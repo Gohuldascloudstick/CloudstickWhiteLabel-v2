@@ -14,15 +14,19 @@ const initialState: SubdomainState = {
     error: null,
     websites: []
 }
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = import.meta.env.VITE_webId;
+    return { userId, serverId, webId };
+};
 
 export const getSubdomain = createAsyncThunk(
     "subdomain/getsubdomain",
     async (_, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/list/website-subdomains/websites/${webId}/servers/${serverId}/users/${user}`;
+        const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/list/website-subdomain/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.getEvents(url);
             return response.data;
         } catch (error: any) {
@@ -34,9 +38,8 @@ export const createSubdomainFreeSslHttp = createAsyncThunk(
     "sslManager/createFreeSslHttp",
     async ({ websiteId, data }: { websiteId: string,  data: { authorisation: string, access: string, brotli_enabled: boolean } }, { rejectWithValue }) => {
         try {
-             const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const url = `/api/v2/ssl/free-certificate/website-subdomian/${websiteId}/servers/${serverId}/users/${user}`;
+          const { userId, serverId } = getCommonParams();
+            const url = `/api/v2/ssl/free-certificate/website-subdomian/${websiteId}/servers/${serverId}/users/${userId}`;
             const response = await api.postEvents(url, data);
             return response.data;
         } catch (error: any) {

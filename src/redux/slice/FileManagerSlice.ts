@@ -42,7 +42,7 @@ export const getFileOrDirectory = createAsyncThunk(
   "fileManager/getFileOrDirectory",
   async (path: string, { rejectWithValue }) => {
     try {
-      console.log('yes calling');
+     
       
       const { userId, serverId, webId } = getCommonParams();
       const url = `/api/v2/files/details/websites/${webId}/servers/${serverId}/users/${userId}`;

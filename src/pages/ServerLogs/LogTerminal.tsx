@@ -134,7 +134,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
     const isErrorLog = selectedLogType?.includes('-error');
 
     const logPrefix = (
-      <span className="text-cyan-600 text-[11px] w-8 text-right pt-1.5 select-none font-mono flex-shrink-0">
+      <span className="text-cyan-600 text-[11px] w-8 text-right pt-1.5 select-none font-mono shrink-0">
         {logNumber.toString().padStart(4, '0')}
       </span>
     );
@@ -144,7 +144,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
         const rawLogStyle = getErrorLogStyle(log);
         logContent = (
             <div className="flex flex-row font-mono text-sm w-full lg:items-start flex-wrap">
-                <span className={`${rawLogStyle} flex-grow block py-1.5 break-words whitespace-pre-wrap`}>{log}</span>
+                <span className={`${rawLogStyle} grow block py-1.5 wrap-break-word whitespace-pre-wrap`}>{log}</span>
             </div>
         );
     } else {
@@ -165,21 +165,21 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
 
             logContent = (
                 <div className="flex flex-col lg:flex-row font-mono text-sm w-full lg:items-start flex-wrap">
-                    <span className={`${ipColor} min-w-[130px] lg:w-[130px] flex-shrink-0 py-1.5 text-left`}>{ip}</span> 
+                    <span className={`${ipColor} min-w-32.5 lg:w-32.5 shrink-0 py-1.5 text-left`}>{ip}</span> 
                     {separator}
-                    <span className={`${timestampColor} min-w-[170px] lg:w-[170px] flex-shrink-0 text-xs py-1.5 text-left`}>[{timestamp.split(' ')[0]}]</span> 
+                    <span className={`${timestampColor} min-w-42.5 lg:w-42.5 shrink-0 text-xs py-1.5 text-left`}>[{timestamp.split(' ')[0]}]</span> 
                     {separator}
-                    <span className={`${requestColor} flex-grow min-w-[150px] mr-4 block whitespace-pre-wrap break-words py-1.5`}>{fullRequest}</span>
+                    <span className={`${requestColor} grow min-w-37.5 mr-4 block whitespace-pre-wrap wrap-break-word py-1.5`}>{fullRequest}</span>
                     {separator}
-                    <span className={`${statusColor} min-w-[40px] lg:w-[40px] flex-shrink-0 text-left py-1.5`}>{statusCode}</span>
+                    <span className={`${statusColor} min-w-10 lg:w-10 shrink-0 text-left py-1.5`}>{statusCode}</span>
                     {separator}
-                    <span className="text-zinc-400 min-w-[60px] lg:w-[60px] flex-shrink-0 text-right py-1.5">{size === '-' ? '' : `${size}b`}</span>
+                    <span className="text-zinc-400 min-w-15 lg:w-15 shrink-0 text-right py-1.5">{size === '-' ? '' : `${size}b`}</span>
                 </div>
             );
         } else {
             logContent = (
                 <div className="flex flex-row font-mono text-sm w-full lg:items-start flex-wrap">
-                    <span className={`text-green-300 flex-grow block py-1.5 break-words whitespace-pre-wrap`}>{log}</span>
+                    <span className={`text-green-300 grow block py-1.5 wrap-break-word whitespace-pre-wrap`}>{log}</span>
                 </div>
             );
         }
@@ -189,7 +189,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
       <div key={index} className="flex gap-1 px-4 border-b border-white/5 hover:bg-white/5 items-start">
         {logPrefix}
         <span className="text-gray-700 hidden lg:inline pt-1.5 font-bold">│</span> 
-        <div className="flex-grow min-w-0" style={{ overflow: 'hidden' }}>
+        <div className="grow min-w-0" style={{ overflow: 'hidden' }}>
             {logContent}
         </div>
       </div>
@@ -215,7 +215,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
                     <Button
                         key={tab.logType}
                         size="sm"
-                        className={` ${tab.logType !== selectedLogType ? 'bg-default-200/60 dark:bg-default-300/80 text-default-500 dark:text-default-600' : 'bg-primary-500 text-white'} px-3 flex-shrink-0 text-[10px] sm:text-xs`}
+                        className={` ${tab.logType !== selectedLogType ? 'bg-default-200/60 dark:bg-default-300/80 text-default-500 dark:text-default-600' : 'bg-primary-500 text-white'} px-3 shrink-0 text-[10px] sm:text-xs`}
                         variant={"solid" }
                         color={ "primary" }
                         onPress={() => handleLogTypeChange(tab.logType)}
@@ -259,7 +259,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
                 <ModalBody className="p-0">
                     <div
                         ref={terminalRef}
-                        className={`relative font-mono text-sm w-full h-[70vh] md:h-[450px] overflow-y-auto custom-scrollbar`}
+                        className={`relative font-mono text-sm w-full h-[70vh] md:h-112.5 overflow-y-auto custom-scrollbar`}
                         style={{ backgroundColor: THEME.terminalBg }}
                     >
                         <div className="space-y-0">

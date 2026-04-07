@@ -52,7 +52,7 @@ const LogTypeListItem: React.FC<LogListItemProps> = ({
             color={color}
             onPress={() => onSelect(logType)}
             endContent={<Icon icon="lucide:arrow-right" width={16} />}
-            className='min-w-[100px] '
+            className='min-w-25 '
         >
             View
         </Button>

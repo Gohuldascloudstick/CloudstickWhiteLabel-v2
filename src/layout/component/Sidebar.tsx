@@ -11,7 +11,7 @@ const Sidebar = () => {
         onOpen: onLogoutModalOpen,
         onOpenChange: onLogoutModalOpenChange,
     } = useDisclosure();
-    const websitetype = localStorage.getItem("webappType")
+    const websitetype = localStorage.getItem("webtype")
     const navigate = useNavigate()
     const location = useLocation();
     const navItems = [
@@ -26,7 +26,7 @@ const Sidebar = () => {
         { name: "Web Application Settings", icon: "fluent:settings-32-regular", path: "/websettings" },
         { name: "Cron Jobs", icon: "eos-icons:cronjob", path: "/cronjobs" },
         { name: "SSL Management", icon: "fluent:shield-globe-24-regular", path: "/ssl" },
-        ...(websitetype === "wordpress"
+        ...(websitetype?.toLocaleLowerCase() === "wordpress"
             ? [{
                 name: "WordPress Manager",
                 icon: "uil:wordpress-simple",
