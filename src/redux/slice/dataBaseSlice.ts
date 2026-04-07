@@ -27,7 +27,7 @@ const initialState: initialState = {
 const getCommonParams = () => {
   const userId = import.meta.env.VITE_userId;
   const serverId = import.meta.env.VITE_serverId;
-  const webId = import.meta.env.VITE_webId;
+  const webId = localStorage.getItem("webId");
   return { userId, serverId, webId };
 };
 
