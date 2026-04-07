@@ -9,7 +9,7 @@ import { changeAppPhpversion, changeAppPublicPath, changePhpConfig, changeWebSta
 
 
 const WebSettings = () => {
-    const type = localStorage.getItem("webappType")
+    const type = localStorage.getItem("webtype")
     const phpversions = useAppSelector(state => state.website.phpversion)
     const [phpversionloader, setPhpversionLoader] = useState(false);
     const [webstackloader, setWebstackLoader] = useState(false);
@@ -141,7 +141,7 @@ const WebSettings = () => {
         // }
 
     ];
-    if (type !== "ghost" && type !== "proxyapp") {
+    if (type?.toLocaleLowerCase() !== "ghost" && type?.toLocaleLowerCase() !== "proxyapp") {
         menuItems.unshift({
             id: "phpversionref",
             name: "Change PHP Version",
@@ -149,7 +149,7 @@ const WebSettings = () => {
             ref: phpversionref,
         });
     }
-    if (type !== "ghost" && type !== "proxyapp") {
+    if (type?.toLocaleLowerCase() !== "ghost" && type?.toLowerCase() !== "proxyapp") {
         menuItems.push({
             id: "phpsettings",
             name: "PHP Settings",
@@ -391,7 +391,7 @@ const WebSettings = () => {
         dispatch(getWebDetails());
     }, [])
     return (
-        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
+        <div className="  p-2 ">
             <p className="text-3xl">Welcome to
                 <span className=" font-bold text-teal-600">
                     Web Application Settings
@@ -412,7 +412,7 @@ const WebSettings = () => {
                         <div className="flex flex-col lg:flex-row p-12 gap-4 ">
                             <div className="  w-full ">
                                 <div className="flex flex-col gap-5">
-                                    {type !== "ghost" && type !== "proxyapp" && (
+                                    {type?.toLocaleLowerCase() !== "ghost" && type?.toLowerCase() !== "proxyapp" && (
                                         <div ref={phpversionref} className="group">
                                             <Card className=" p-2 md:p-4 shadow-sm rounded-xl   transition-all duration-200 hover:shadow-md">
                                                 <div

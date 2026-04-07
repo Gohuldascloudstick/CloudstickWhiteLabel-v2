@@ -4,15 +4,18 @@ import "./index.css";
 import App from "./App.tsx";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { Provider } from "react-redux";
-import { store } from "./redux/store.ts";
+import { store, persistor } from "./redux/store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <HeroUIProvider>
-        <ToastProvider />
-        <App />
-      </HeroUIProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <HeroUIProvider>
+          <ToastProvider />
+          <App />
+        </HeroUIProvider>
+      </PersistGate>
     </Provider>
   </StrictMode>
 );

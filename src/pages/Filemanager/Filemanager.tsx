@@ -10,7 +10,7 @@ import {
     Tooltip,
 } from '@heroui/react'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { useEffect, useState,  useMemo, useRef } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -43,7 +43,13 @@ const FileManager = () => {
     const { isOpen: Uploadopen, onOpen: uploadOnOpen, onOpenChange: UploadOnOpenChange } = useDisclosure();
 
     // Assuming websitedetail has website.public_path
-    const websitedetail = useAppSelector((state: any) => state.website.selectedWebsite);
+    const websitedetail = useAppSelector((state: any) => state.auth.WebsiteDetails);
+
+    useEffect(() => {
+        console.log('the website detail', websitedetail);
+
+    }, [websitedetail])
+
     // Assuming Filemanagemnt is of type FileManagerItem | null
     const { TheFiles, copyItem, copyParentDir, isCut: isCutState } = useAppSelector((state: any) => state.fileManager);
 
@@ -51,7 +57,7 @@ const FileManager = () => {
     const [directoryPath, setDirectoryPath] = useState('');
     const [selectedItemModal, setSelectedItemModal] = useState<FileManagerItem | null>(null);
     const [viewingFile, setViewingFile] = useState<FileManagerItem | null>(null);
-    
+
     const [renamingItemNameLoader, setRenamingItemNameLoader] = useState(false)
     const [copyloader, setCopyloader] = useState(false)
     const [deleteLoader, setDeleteLoader] = useState(false)
@@ -80,19 +86,19 @@ const FileManager = () => {
     const [isNewDir, setisNewDir] = useState(false)
 
 
-    const rootPath = useMemo(() => websitedetail?.website?.public_path || '/', [websitedetail]);
-    const maxbackroot = useMemo(() => websitedetail?.website?.public_path.substring(0, directoryPath.lastIndexOf('/')) || '/', [websitedetail]);
+    const rootPath = useMemo(() => websitedetail.public_path || '/', [websitedetail]);
+    const maxbackroot = useMemo(() => websitedetail.public_path.substring(0, directoryPath.lastIndexOf('/')) || '/', [websitedetail]);
 
 
 
-const  fetchWebDetails = ()=>{
-  dispatch(getWebDetails())
-}
+    const fetchWebDetails = () => {
+        dispatch(getWebDetails())
+    }
 
 
     const fetchfiles = async (path: string) => {
         setViewingFile(null);
-       
+
         try {
             await dispatch(getFileOrDirectory(path)).unwrap();
         } catch (error) {
@@ -108,12 +114,12 @@ const  fetchWebDetails = ()=>{
     };
 
     const handleBack = () => {
-        console.log(directoryPath ,maxbackroot);
-        
+        console.log(directoryPath, maxbackroot);
+
         if (viewingFile) {
 
             const parentPath = directoryPath.substring(0, directoryPath.lastIndexOf('/')) || '/';
-            
+
             fetchfiles(parentPath);
         } else {
 
@@ -154,7 +160,7 @@ const  fetchWebDetails = ()=>{
 
         setRenamingItemNameLoader(true);
         try {
-  
+
             await dispatch(Rename({ path: directoryPath, name: renamingItemName, new_name })).unwrap()
             addToast({ description: `File/Directory renamingItemNamed to ${new_name}`, color: "success" })
 
@@ -211,7 +217,7 @@ const  fetchWebDetails = ()=>{
                 return;
             }
 
-            const res = await dispatch(Copyfile({  data: { path: copyParentDir, name: copyItem.name, new_path: directoryPath }, isCut: isCutState })).unwrap()
+            const res = await dispatch(Copyfile({ data: { path: copyParentDir, name: copyItem.name, new_path: directoryPath }, isCut: isCutState })).unwrap()
             await fetchfiles(directoryPath)
 
 
@@ -279,15 +285,17 @@ const  fetchWebDetails = ()=>{
     // 1. Initial Load: Fetch root path
     useEffect(() => {
 
-        
-            fetchfiles('/home/cpuserdpjp/apps/fileeditortest');
+        {
+            websitedetail?.public_path &&
+                fetchfiles(websitedetail?.public_path);
+        }
 
-        
-    }, [ websitedetail]);
 
-    useEffect(()=>{
-      fetchWebDetails()
-    },[])
+    }, [websitedetail]);
+
+    // useEffect(() => {
+    //     fetchWebDetails()
+    // }, [])
     // 2. Update Path/File View when Redux state changes
     useEffect(() => {
         if (TheFiles) {
@@ -343,7 +351,7 @@ const  fetchWebDetails = ()=>{
         if (IsperminionChange) {
             return 'permission'
         }
-        if( IsDownLoading){
+        if (IsDownLoading) {
             return 'download'
         }
 
@@ -359,7 +367,7 @@ const  fetchWebDetails = ()=>{
     const modalMode = getModalMode();
 
     const currentFiles = TheFiles?.children || [];
-   
+
 
 
     // if (!websitedetail) {
@@ -371,14 +379,14 @@ const  fetchWebDetails = ()=>{
     return (
         <div className="p-6  h-full flex flex-col">
 
-             <div>
-          <p className="text-xl md:text-3xl font-light">Welcome to 
-            <span className="ml-2 font-bold text-teal-600">File Manager</span>
-          </p>
-          </div>
+            <div>
+                <p className="text-xl md:text-3xl font-light">Welcome to
+                    <span className="ml-2 font-bold text-teal-600">File Manager</span>
+                </p>
+            </div>
             {/* Header and Actions */}
             <div className="flex items-center justify-end mt-6 mb-4 flex-wrap gap-2">
-            
+
                 <div className="flex items-center gap-2">
                     <Button
                         variant="flat"
@@ -389,10 +397,10 @@ const  fetchWebDetails = ()=>{
                     >
                         Upload
                     </Button>
-                      <Button
+                    <Button
                         color="primary"
                         size="sm"
-                     
+
                         startContent={<Icon icon="lucide:file-plus" width={14} />}
                         onPress={() => {
                             console.log('the log');
@@ -409,7 +417,7 @@ const  fetchWebDetails = ()=>{
                     <Button
                         color="primary"
                         size="sm"
-                        
+
                         startContent={<Icon icon="lucide:folder-plus" width={14} />}
                         onPress={() => {
                             console.log('the log');
@@ -457,15 +465,15 @@ const  fetchWebDetails = ()=>{
                         >
                             <Icon icon="lucide:arrow-left" width={14} />
                         </Button>
-                        <Tooltip content="Refresh" className='dark:bg-default-300'>   
-                        <Button
-                            isIconOnly
-                            variant="light"
-                            size="sm"
-                            onPress={() => fetchfiles(viewingFile ? viewingFile.path : directoryPath)}
-                        >
-                            <Icon icon="lucide:refresh-cw" width={14} />
-                        </Button>
+                        <Tooltip content="Refresh" className='dark:bg-default-300'>
+                            <Button
+                                isIconOnly
+                                variant="light"
+                                size="sm"
+                                onPress={() => fetchfiles(viewingFile ? viewingFile.path : directoryPath)}
+                            >
+                                <Icon icon="lucide:refresh-cw" width={14} />
+                            </Button>
                         </Tooltip>
                     </div>
 
@@ -484,68 +492,107 @@ const  fetchWebDetails = ()=>{
 
 
                 <div className="p-0 flex-1 overflow-auto bg-transparent">
-               
-                       
-                        <>
-                            {/* 1. Mobile/Small Screen Grid View (default, hidden on md and up) */}
-                            <div className="p-4 grid grid-cols-4 sm:grid-cols-5 md:hidden gap-4 bg-transparent">
-                                {currentFiles.length === 0 ? (
-                                    <div className="col-span-4 sm:col-span-5 text-center p-6 text-default-500 dark:text-default-800">
-                                        This directory is empty.
-                                    </div>
-                                ) : (
-                                    currentFiles.map((item: FileManagerItem) => (
-                                        <FileGridItem
-                                            key={item.path}
-                                            item={item}
-                                            handleFolderClick={handleFolderClick}
-                                            onOpen={HandlemodalOpen}
-                                            editmode={editnameMode}
-                                            handelRename={handelRename}
-                                            SetNew_name={SetNew_name}
-                                            new_name={new_name}
-                                            selectedItem={selectedItemModal}
-                                        />
-                                    ))
-                                )}
-                            </div>
 
-                            {/* 2. Medium/Large Screen Table View (hidden on mobile, shown on md and up) */}
-                            <div className="hidden md:block overflow-x-auto scrollbar-hide  bg-transparent pb-40">
-                                <table className="w-full min-w-175  table-fixed scrollbar-hides">
-                                    <thead>
-                                        <tr className="border-b border-default-200">
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-2/5">
-                                                NAME
-                                            </th>
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5">
-                                                SIZE
-                                            </th>
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5 hidden sm:table-cell">
-                                                PERMISSIONS
-                                            </th>
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5 hidden md:table-cell">
-                                                MODIFIED
-                                            </th>
-                                            <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-25 shrink-0">
-                                                ACTIONS
-                                            </th>
+
+                    <>
+                        {/* 1. Mobile/Small Screen Grid View (default, hidden on md and up) */}
+                        <div className="p-4 grid grid-cols-4 sm:grid-cols-5 md:hidden gap-4 bg-transparent">
+                            {currentFiles.length === 0 ? (
+                                <div className="col-span-4 sm:col-span-5 text-center p-6 text-default-500 dark:text-default-800">
+                                    This directory is empty.
+                                </div>
+                            ) : (
+                                currentFiles.map((item: FileManagerItem) => (
+                                    <FileGridItem
+                                        key={item.path}
+                                        item={item}
+                                        handleFolderClick={handleFolderClick}
+                                        onOpen={HandlemodalOpen}
+                                        editmode={editnameMode}
+                                        handelRename={handelRename}
+                                        SetNew_name={SetNew_name}
+                                        new_name={new_name}
+                                        selectedItem={selectedItemModal}
+                                    />
+                                ))
+                            )}
+                        </div>
+
+                        {/* 2. Medium/Large Screen Table View (hidden on mobile, shown on md and up) */}
+                        <div className="hidden md:block overflow-x-auto scrollbar-hide  bg-transparent pb-40">
+                            <table className="w-full min-w-175  table-fixed scrollbar-hides">
+                                <thead>
+                                    <tr className="border-b border-default-200">
+                                        <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-2/5">
+                                            NAME
+                                        </th>
+                                        <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5">
+                                            SIZE
+                                        </th>
+                                        <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5 hidden sm:table-cell">
+                                            PERMISSIONS
+                                        </th>
+                                        <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-1/5 hidden md:table-cell">
+                                            MODIFIED
+                                        </th>
+                                        <th className="text-left p-3 text-xs font-medium text-default-500 dark:text-default-800 w-25 shrink-0">
+                                            ACTIONS
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className='scrollbar-hide '>
+                                    {currentFiles.length === 0 ? (
+                                        <tr className="text-center">
+                                            <td colSpan={5} className="p-6 text-default-500 dark:text-default-800">
+                                                This directory is empty.
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody className='scrollbar-hide '>
-                                        {currentFiles.length === 0 ? (
-                                            <tr className="text-center">
-                                                <td colSpan={5} className="p-6 text-default-500 dark:text-default-800">
-                                                    This directory is empty.
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            currentFiles.map((item: FileManagerItem, index: number) => (
-                                                <tr
-                                                    key={item.path}
-                                                    className={`border-b border-default-100 cursor-pointer  transition-colors hover:bg-default-50 dark:hover:bg-content1/20`}
+                                    ) : (
+                                        currentFiles.map((item: FileManagerItem, index: number) => (
+                                            <tr
+                                                key={item.path}
+                                                className={`border-b border-default-100 cursor-pointer  transition-colors hover:bg-default-50 dark:hover:bg-content1/20`}
+                                                onDoubleClick={(e) => {
+                                                    e.preventDefault();
+                                                    if (item.is_dir) {
+                                                        //   const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
+                                                        // window.open(editorUrl, '_blank', 'noreferrer');
+
+                                                        handleFolderClick(item);
+                                                        setRenamingItemName('')
+                                                    } else {
+                                                        const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
+                                                        window.open(editorUrl, '_blank', 'noreferrer');
+                                                    }
+                                                }
+                                                }
+                                                onClick={() => {
+
+                                                    dispatch(setSelectedFile(item))
+                                                    setRenamingItemName('')
+
+
+                                                }}
+                                                onContextMenu={(e) => {
+                                                    if (e.button === 2) {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        setIsRightClick(true)
+                                                        dispatch(setSelectedFile(item));
+                                                        setSelectedItemModal(item);
+                                                        setRenamingItemName('')
+                                                        onOpen();
+                                                        setEDitnameMode(false);
+                                                    }
+                                                }}
+                                            >
+                                                {/* NAME - Clickable for navigation */}
+                                                <td className="p-3 whitespace-nowrap overflow-hidden text-ellipsis"
+
+
                                                     onDoubleClick={(e) => {
                                                         e.preventDefault();
+
                                                         if (item.is_dir) {
                                                             //   const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
                                                             // window.open(editorUrl, '_blank', 'noreferrer');
@@ -556,235 +603,198 @@ const  fetchWebDetails = ()=>{
                                                             const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
                                                             window.open(editorUrl, '_blank', 'noreferrer');
                                                         }
-                                                    }
-                                                    }
-                                                    onClick={() => {
-                                                      
-                                                            dispatch(setSelectedFile(item))
-                                                            setRenamingItemName('')
-
-                                                        
+                                                        ; setRenamingItemName(''); dispatch(setSelectedFile(null))
                                                     }}
-                                                    onContextMenu={(e) => {
-                                                        if (e.button === 2) {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                            setIsRightClick(true)
-                                                            dispatch(setSelectedFile(item));
-                                                            setSelectedItemModal(item);
-                                                            setRenamingItemName('')
-                                                            onOpen();
-                                                            setEDitnameMode(false);
-                                                        }
-                                                    }}
-                                                >
-                                                    {/* NAME - Clickable for navigation */}
-                                                    <td className="p-3 whitespace-nowrap overflow-hidden text-ellipsis"
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
 
 
-                                                        onDoubleClick={(e) => { e.preventDefault();
-                                                            
-                                                              if (item.is_dir) {
-                                                            //   const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
-                                                            // window.open(editorUrl, '_blank', 'noreferrer');
+                                                        dispatch(setSelectedFile(item))
+                                                        setRenamingItemName('')
 
-                                                            handleFolderClick(item);
-                                                            setRenamingItemName('')
-                                                        } else {
-                                                            const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
-                                                            window.open(editorUrl, '_blank', 'noreferrer');
-                                                        }
-                                                            ; setRenamingItemName('') ;dispatch(setSelectedFile(null)) }}
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
 
-                                                          
-                                                                dispatch(setSelectedFile(item))
-                                                                setRenamingItemName('')
-
-                                                            
-                                                            //  else {
-                                                            //     setRenamingItemName(item.name)
-                                                            //     SetNew_name(item.name)
-                                                            //     setSelectedfile(null)
-                                                            // }
-                                                        }}>
-                                                        {
-                                                            renamingItemName == item.name ? (
-                                                                // 1. IMPORTANT: Stop click propagation on the div wrapping the input.
-                                                                <div
-                                                                    onClick={(e) => e.stopPropagation()}
-                                                                    className='py-1'
-                                                                >
-                                                                    <input
-                                                                        ref={renamingItemNameInputRef} // Ref attached
-                                                                        placeholder="Enter new name"
-                                                                        value={new_name}
-                                                                        // 2. Add onFocus to select text immediately upon gaining focus (redundant check for visibility)
-                                                                        onFocus={(e) => e.target.select()}
-                                                                        className='ring-1 ring-primary focus:ring-1 focus:dark:ring-primary-700 focus:border-none focus:outline-none dark:bg-default-100  p-1 rounded text-sm w-full'
-                                                                        onChange={(e) => SetNew_name(e.target.value)}
-                                                                        onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') {
-                                                                                renamingItemNameInputRef.current?.blur();
-                                                                            }
-                                                                        }}
-                                                                        onBlur={handelRename} // Rename logic on blur
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <div className="flex items-center">
-                                                                    <Icon
-                                                                        icon={getFileIcon(item)}
-                                                                        className={`mr-2 ${item.is_dir ? 'text-primary-500' : 'text-default-500 dark:text-default-800'}  ${isCutState && copyItem === item ? 'opacity-10 dark:opacity-20' : 'opacity-100'} `}
-                                                                        width={20}
-                                                                    />
-                                                                    <span className="text-sm font-medium hover:underline">
-                                                                        {item.name}
-                                                                    </span>
-                                                                </div>
-
-                                                            )
-                                                        }
-                                                    </td>
-
-                                                    {/* SIZE */}
-                                                    <td className="p-3 text-sm text-default-600 dark:text-default-800">
-                                                        {formatStorage(item.size, 'B')}
-                                                    </td>
-
-                                                    {/* PERMISSIONS (Hidden on XS) */}
-                                                    <td className="p-3 text-sm text-default-600 dark:text-default-800 hidden sm:table-cell">
-                                                        {item.permission}
-                                                    </td>
-
-                                                    {/* MODIFIED (Hidden on SM) */}
-                                                    <td className="p-3 text-sm text-default-600 dark:text-default-800 hidden md:table-cell">
-                                                        {findDurationLabel(item.last_modified)}
-                                                    </td>
-
-                                                    {/* ACTIONS */}
-                                                    <td className="p-3">
-                                                        <div className="flex items-center gap-1">
-                                                            <Popover
-                                                                placement="bottom-end"
-                                                                isOpen={thepop === index + 1}
-                                                                onOpenChange={(open) => (open ? setThePop(index + 1) : setThePop(0))}
-                                                                classNames={{
-                                                                    content: 'w-[180px] dark:bg-slate-900 py-2 rounded-lg border border-default-400 shadow-xl',
-                                                                }}
+                                                        //  else {
+                                                        //     setRenamingItemName(item.name)
+                                                        //     SetNew_name(item.name)
+                                                        //     setSelectedfile(null)
+                                                        // }
+                                                    }}>
+                                                    {
+                                                        renamingItemName == item.name ? (
+                                                            // 1. IMPORTANT: Stop click propagation on the div wrapping the input.
+                                                            <div
+                                                                onClick={(e) => e.stopPropagation()}
+                                                                className='py-1'
                                                             >
-                                                                <PopoverTrigger>
-                                                                    <Button isIconOnly size="sm" variant="light">
-                                                                        <Icon icon="lucide:more-vertical" width={18} />
-                                                                    </Button>
-                                                                </PopoverTrigger>
-                                                                <PopoverContent>
-                                                                    <Listbox
-                                                                        aria-label="File Actions"
-                                                                        className="p-0"
-                                                                        disabledKeys={parentRightClick ? ['copy', 'cut',] : []}
+                                                                <input
+                                                                    ref={renamingItemNameInputRef} // Ref attached
+                                                                    placeholder="Enter new name"
+                                                                    value={new_name}
+                                                                    // 2. Add onFocus to select text immediately upon gaining focus (redundant check for visibility)
+                                                                    onFocus={(e) => e.target.select()}
+                                                                    className='ring-1 ring-primary focus:ring-1 focus:dark:ring-primary-700 focus:border-none focus:outline-none dark:bg-default-100  p-1 rounded text-sm w-full'
+                                                                    onChange={(e) => SetNew_name(e.target.value)}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') {
+                                                                            renamingItemNameInputRef.current?.blur();
+                                                                        }
+                                                                    }}
+                                                                    onBlur={handelRename} // Rename logic on blur
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex items-center">
+                                                                <Icon
+                                                                    icon={getFileIcon(item)}
+                                                                    className={`mr-2 ${item.is_dir ? 'text-primary-500' : 'text-default-500 dark:text-default-800'}  ${isCutState && copyItem === item ? 'opacity-10 dark:opacity-20' : 'opacity-100'} `}
+                                                                    width={20}
+                                                                />
+                                                                <span className="text-sm font-medium hover:underline">
+                                                                    {item.name}
+                                                                </span>
+                                                            </div>
 
-                                                                        itemClasses={{
-                                                                            base: "px-2  rounded-none h-9 text-sm data-[hover=true]:bg-default-100/70",
+                                                        )
+                                                    }
+                                                </td>
+
+                                                {/* SIZE */}
+                                                <td className="p-3 text-sm text-default-600 dark:text-default-800">
+                                                    {formatStorage(item.size, 'B')}
+                                                </td>
+
+                                                {/* PERMISSIONS (Hidden on XS) */}
+                                                <td className="p-3 text-sm text-default-600 dark:text-default-800 hidden sm:table-cell">
+                                                    {item.permission}
+                                                </td>
+
+                                                {/* MODIFIED (Hidden on SM) */}
+                                                <td className="p-3 text-sm text-default-600 dark:text-default-800 hidden md:table-cell">
+                                                    {findDurationLabel(item.last_modified)}
+                                                </td>
+
+                                                {/* ACTIONS */}
+                                                <td className="p-3">
+                                                    <div className="flex items-center gap-1">
+                                                        <Popover
+                                                            placement="bottom-end"
+                                                            isOpen={thepop === index + 1}
+                                                            onOpenChange={(open) => (open ? setThePop(index + 1) : setThePop(0))}
+                                                            classNames={{
+                                                                content: 'w-[180px] dark:bg-slate-900 py-2 rounded-lg border border-default-400 shadow-xl',
+                                                            }}
+                                                        >
+                                                            <PopoverTrigger>
+                                                                <Button isIconOnly size="sm" variant="light">
+                                                                    <Icon icon="lucide:more-vertical" width={18} />
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                            <PopoverContent>
+                                                                <Listbox
+                                                                    aria-label="File Actions"
+                                                                    className="p-0"
+                                                                    disabledKeys={parentRightClick ? ['copy', 'cut',] : []}
+
+                                                                    itemClasses={{
+                                                                        base: "px-2  rounded-none h-9 text-sm data-[hover=true]:bg-default-100/70",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        !parentRightClick &&
+
+                                                                        <ListboxItem
+                                                                            key="renamingItemName"
+                                                                            startContent={<Icon icon="lucide:folder-pen" width={14} />}
+                                                                            onPress={() => {
+                                                                                setRenamingItemName(item.name)
+                                                                                SetNew_name(item.name)
+                                                                                setThePop(0)
+                                                                            }}
+                                                                        >
+                                                                            Rename
+                                                                        </ListboxItem>
+                                                                    }
+                                                                    <ListboxItem
+                                                                        key="renamingItemName"
+                                                                        startContent={<Icon icon="lucide:external-link" width={14} />}
+                                                                        onPress={() => {
+                                                                            const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
+                                                                            window.open(editorUrl, '_blank', 'noreferrer');
                                                                         }}
                                                                     >
-                                                                        {
-                                                                            !parentRightClick &&
+                                                                        Open In File Editor
+                                                                    </ListboxItem>
 
-                                                                            <ListboxItem
-                                                                                key="renamingItemName"
-                                                                                startContent={<Icon icon="lucide:folder-pen" width={14} />}
-                                                                                onPress={() => {
-                                                                                    setRenamingItemName(item.name)
-                                                                                    SetNew_name(item.name)
-                                                                                    setThePop(0)
-                                                                                }}
-                                                                            >
-                                                                                Rename
-                                                                            </ListboxItem>
-                                                                        }
-                                                                                   <ListboxItem
-                                                                                key="renamingItemName"
-                                                                                startContent={<Icon icon="lucide:external-link" width={14} />}
-                                                                                onPress={() => {
-                                                                                      const editorUrl = `/FileEditor?path=${encodeURIComponent(item.path)}&name=${encodeURIComponent(item.name)}&webid=${webid}&serverId=${id}`;
-                                                            window.open(editorUrl, '_blank', 'noreferrer');
-                                                                                }}
-                                                                            >
-                                                                                Open In File Editor
-                                                                            </ListboxItem>
+                                                                    <ListboxItem
+                                                                        key="copy"
+                                                                        startContent={<Icon icon="lucide:copy" width={14} />}
+                                                                        onPress={() => { dispatch(setCopyItem({ item, parentDir: directoryPath, isCut: false })); setThePop(0) }}
+
+                                                                    >
+                                                                        Copy
+                                                                    </ListboxItem>
+
+                                                                    <ListboxItem
+                                                                        key="cut"
+                                                                        startContent={<Icon icon="lucide:scissors" width={14} />}
+                                                                        onPress={() => { dispatch(setCopyItem({ item, parentDir: directoryPath, isCut: true })); setThePop(0) }}
+                                                                    >
+                                                                        Cut
+                                                                    </ListboxItem>
+
+                                                                    {/* Only show paste if an item is copied */}
+                                                                    {copyItem && (
+                                                                        <ListboxItem
+                                                                            key="paste"
+                                                                            startContent={<Icon icon="lucide:clipboard-paste" width={14} />}
+                                                                            onPress={() => {
+                                                                                setSelectedItemModal(item)
+                                                                                onOpen()
+                                                                                handelPaste()
+                                                                                setThePop(0)
+                                                                            }}
+                                                                        >
+                                                                            Paste
+                                                                        </ListboxItem>
+                                                                    )}
+
+                                                                    {
+                                                                        !isArchiveFile(item.name) &&
+
 
                                                                         <ListboxItem
-                                                                            key="copy"
-                                                                            startContent={<Icon icon="lucide:copy" width={14} />}
-                                                                            onPress={() => { dispatch(setCopyItem({ item, parentDir: directoryPath, isCut: false })); setThePop(0) }}
-
+                                                                            key="compress"
+                                                                            startContent={<Icon icon="lucide:package" width={14} />}
+                                                                            onPress={() => {
+                                                                                setSelectedItemModal(item)
+                                                                                SetIscompressOn(true)
+                                                                                onOpen()
+                                                                                setThePop(0)
+                                                                            }}
                                                                         >
-                                                                            Copy
+                                                                            Compress
                                                                         </ListboxItem>
+                                                                    }
+
+                                                                    {
+                                                                        isArchiveFile(item.name) &&
+
 
                                                                         <ListboxItem
-                                                                            key="cut"
-                                                                            startContent={<Icon icon="lucide:scissors" width={14} />}
-                                                                            onPress={() => { dispatch(setCopyItem({ item, parentDir: directoryPath, isCut: true })); setThePop(0) }}
+                                                                            key="extract"
+                                                                            startContent={<Icon icon="lucide:package" width={14} />}
+                                                                            onPress={() => {
+                                                                                setSelectedItemModal(item)
+                                                                                SetIsExtarcyon(true)
+                                                                                onOpen()
+                                                                                setThePop(0)
+                                                                            }}
                                                                         >
-                                                                            Cut
+                                                                            Extract
                                                                         </ListboxItem>
-
-                                                                        {/* Only show paste if an item is copied */}
-                                                                        {copyItem && (
-                                                                            <ListboxItem
-                                                                                key="paste"
-                                                                                startContent={<Icon icon="lucide:clipboard-paste" width={14} />}
-                                                                                onPress={() => {
-                                                                                    setSelectedItemModal(item)
-                                                                                    onOpen()
-                                                                                    handelPaste()
-                                                                                    setThePop(0)
-                                                                                }}
-                                                                            >
-                                                                                Paste
-                                                                            </ListboxItem>
-                                                                        )}
-
-                                                                        {
-                                                                            !isArchiveFile(item.name) &&
-
-
-                                                                            <ListboxItem
-                                                                                key="compress"
-                                                                                startContent={<Icon icon="lucide:package" width={14} />}
-                                                                                onPress={() => {
-                                                                                    setSelectedItemModal(item)
-                                                                                    SetIscompressOn(true)
-                                                                                    onOpen()
-                                                                                    setThePop(0)
-                                                                                }}
-                                                                            >
-                                                                                Compress
-                                                                            </ListboxItem>
-                                                                        }
-
-                                                                        {
-                                                                            isArchiveFile(item.name) &&
-
-
-                                                                            <ListboxItem
-                                                                                key="extract"
-                                                                                startContent={<Icon icon="lucide:package" width={14} />}
-                                                                                onPress={() => {
-                                                                                    setSelectedItemModal(item)
-                                                                                    SetIsExtarcyon(true)
-                                                                                    onOpen()
-                                                                                    setThePop(0)
-                                                                                }}
-                                                                            >
-                                                                                Extract
-                                                                            </ListboxItem>
-                                                                        }
-{
-    !item.is_dir &&
+                                                                    }
+                                                                    {
+                                                                        !item.is_dir &&
 
                                                                         <ListboxItem
                                                                             key="download"
@@ -798,94 +808,94 @@ const  fetchWebDetails = ()=>{
                                                                         >
                                                                             Download File
                                                                         </ListboxItem>
-}
+                                                                    }
 
 
 
-                                                                        <ListboxItem
-                                                                            key="permission"
-                                                                            startContent={<Icon icon="lucide:key-round" width={14} />}
-                                                                            onPress={() => {
-                                                                                setSelectedItemModal(item)
-                                                                                SetIsperminionChange(true)
-                                                                                onOpen()
-                                                                                setThePop(0)
-                                                                            }}
-                                                                        >
-                                                                            Change Permission
-                                                                        </ListboxItem>
-                                                                    </Listbox>
-
-
-                                                                    <Divider className="my-1" />
-                                                                    <Popover
-                                                                        placement="left-start"
-                                                                        isOpen={isPopoverOpen === index + 1}
-                                                                        onOpenChange={(open) => {
-                                                                            if (open) {
-                                                                                setIsPopoverOpen(index + 1);
-                                                                                // Reset checkbox when opening
-                                                                            } else {
-                                                                                setIsPopoverOpen(0);
-                                                                            }
-                                                                        }}
-                                                                        isDismissable={false}
-                                                                        classNames={{
-                                                                            base: 'dark:bg-default-200 ',
-                                                                            content: 'rounded-md dark:bg-default-100/80 border border-default-400 shadow-lg',
+                                                                    <ListboxItem
+                                                                        key="permission"
+                                                                        startContent={<Icon icon="lucide:key-round" width={14} />}
+                                                                        onPress={() => {
+                                                                            setSelectedItemModal(item)
+                                                                            SetIsperminionChange(true)
+                                                                            onOpen()
+                                                                            setThePop(0)
                                                                         }}
                                                                     >
-                                                                        <PopoverTrigger>
-                                                                            <Button
-                                                                                variant="light"
-                                                                                size="sm"
-                                                                                className="w-full justify-start text-red-500"
-                                                                                startContent={<Icon icon="lucide:trash-2" width={16} className="text-red-500" />}
-                                                                            >
-                                                                                Delete {item.is_dir ? 'Folder' : 'File'}
+                                                                        Change Permission
+                                                                    </ListboxItem>
+                                                                </Listbox>
+
+
+                                                                <Divider className="my-1" />
+                                                                <Popover
+                                                                    placement="left-start"
+                                                                    isOpen={isPopoverOpen === index + 1}
+                                                                    onOpenChange={(open) => {
+                                                                        if (open) {
+                                                                            setIsPopoverOpen(index + 1);
+                                                                            // Reset checkbox when opening
+                                                                        } else {
+                                                                            setIsPopoverOpen(0);
+                                                                        }
+                                                                    }}
+                                                                    isDismissable={false}
+                                                                    classNames={{
+                                                                        base: 'dark:bg-default-200 ',
+                                                                        content: 'rounded-md dark:bg-default-100/80 border border-default-400 shadow-lg',
+                                                                    }}
+                                                                >
+                                                                    <PopoverTrigger>
+                                                                        <Button
+                                                                            variant="light"
+                                                                            size="sm"
+                                                                            className="w-full justify-start text-red-500"
+                                                                            startContent={<Icon icon="lucide:trash-2" width={16} className="text-red-500" />}
+                                                                        >
+                                                                            Delete {item.is_dir ? 'Folder' : 'File'}
+                                                                        </Button>
+                                                                    </PopoverTrigger>
+                                                                    <PopoverContent className="p-4 min-w-75 space-y-4 pt-4 rounded-md">
+                                                                        <div className=' text-center flex flex-col items-center'>
+                                                                            <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 shrink-0 mt-0.5" />
+                                                                            <p className="text-xs text-default-700 text-center text-wrap mt-1">
+                                                                                Are you sure you want to delete <br /> <span className='font-semibold'>{item.name}?</span>
+                                                                            </p>
+                                                                        </div>
+
+
+
+                                                                        <div className="flex justify-end gap-2 w-full">
+                                                                            <Button variant="flat" size="sm" className="w-full" onPress={() => setIsPopoverOpen(0)}>
+                                                                                Cancel
                                                                             </Button>
-                                                                        </PopoverTrigger>
-                                                                        <PopoverContent className="p-4 min-w-75 space-y-4 pt-4 rounded-md">
-                                                                            <div className=' text-center flex flex-col items-center'>
-                                                                                <Icon icon="lucide:alert-triangle" width={20} className="text-red-500 shrink-0 mt-0.5" />
-                                                                                <p className="text-xs text-default-700 text-center text-wrap mt-1">
-                                                                                    Are you sure you want to delete <br /> <span className='font-semibold'>{item.name}?</span>
-                                                                                </p>
-                                                                            </div>
+                                                                            <Button
+                                                                                color="danger"
+                                                                                size="sm"
+                                                                                className="w-full"
+                                                                                isLoading={deleteLoader}
+                                                                                isDisabled={deleteLoader}
+                                                                                onPress={() => {
+                                                                                    handeldelte(item)// Reset state
+                                                                                }}
+                                                                            >
+                                                                                Delete
+                                                                            </Button>
+                                                                        </div>
+                                                                    </PopoverContent>
+                                                                </Popover>
+                                                            </PopoverContent>
+                                                        </Popover>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
 
-
-
-                                                                            <div className="flex justify-end gap-2 w-full">
-                                                                                <Button variant="flat" size="sm" className="w-full" onPress={() => setIsPopoverOpen(0)}>
-                                                                                    Cancel
-                                                                                </Button>
-                                                                                <Button
-                                                                                    color="danger"
-                                                                                    size="sm"
-                                                                                    className="w-full"
-                                                                                    isLoading={deleteLoader}
-                                                                                    isDisabled={deleteLoader}
-                                                                                    onPress={() => {
-                                                                                        handeldelte(item)// Reset state
-                                                                                    }}
-                                                                                >
-                                                                                    Delete
-                                                                                </Button>
-                                                                            </div>
-                                                                        </PopoverContent>
-                                                                    </Popover>
-                                                                </PopoverContent>
-                                                            </Popover>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </>
-                  
                 </div>
             </Card>
 
@@ -1006,10 +1016,10 @@ const  fetchWebDetails = ()=>{
                                                     return (
                                                         <Extract item={selectedItemModal!} onClose={onOpenChange} parentPath={TheFiles?.path || ''} />
                                                     )
-                                                    case 'download':
+                                                case 'download':
                                                     return (
                                                         // <DownloadFile item={selectedItemModal} onClose={onOpenChange} setDownLoading={SetIsDownLoading} />
-                                                        <DownloadFile path={selectedItemModal.path} name={selectedItemModal.name} onClose={onOpenChange}/>
+                                                        <DownloadFile path={selectedItemModal.path} name={selectedItemModal.name} onClose={onOpenChange} />
                                                     )
 
                                                 case 'action':
@@ -1044,15 +1054,16 @@ const  fetchWebDetails = ()=>{
                                                                         Rename
                                                                     </ListboxItem>
                                                                 }
-                                                                         <ListboxItem
-                                                                                key="renamingItemName"
-                                                                                startContent={<Icon icon="lucide:external-link" width={14} />}
-                                                                                onPress={() => {
-                                                                                      const editorUrl = `/FileEditor?path=${encodeURIComponent(selectedItemModal.path)}&name=${encodeURIComponent(selectedItemModal.name)}&webid=${webid}&serverId=${id}`;
-                                                            window.open(editorUrl, '_blank', 'noreferrer');  }}
-                                                                            >
-                                                                                Open In File Editor
-                                                                            </ListboxItem>
+                                                                <ListboxItem
+                                                                    key="renamingItemName"
+                                                                    startContent={<Icon icon="lucide:external-link" width={14} />}
+                                                                    onPress={() => {
+                                                                        const editorUrl = `/FileEditor?path=${encodeURIComponent(selectedItemModal.path)}&name=${encodeURIComponent(selectedItemModal.name)}&webid=${webid}&serverId=${id}`;
+                                                                        window.open(editorUrl, '_blank', 'noreferrer');
+                                                                    }}
+                                                                >
+                                                                    Open In File Editor
+                                                                </ListboxItem>
 
                                                                 <ListboxItem
                                                                     key="copy"
@@ -1122,20 +1133,20 @@ const  fetchWebDetails = ()=>{
                                                                     </ListboxItem>
                                                                 }
                                                                 {
-    !selectedItemModal.is_dir &&
+                                                                    !selectedItemModal.is_dir &&
 
-                                                                        <ListboxItem
-                                                                            key="download"
-                                                                            startContent={<Icon icon="lucide:download" width={14} />}
-                                                                            onPress={() => {
-                                                                               
-                                                                                SetIsDownLoading(true)
-                                                                                
-                                                                            }}
-                                                                        >
-                                                                            Download File
-                                                                        </ListboxItem>
-}
+                                                                    <ListboxItem
+                                                                        key="download"
+                                                                        startContent={<Icon icon="lucide:download" width={14} />}
+                                                                        onPress={() => {
+
+                                                                            SetIsDownLoading(true)
+
+                                                                        }}
+                                                                    >
+                                                                        Download File
+                                                                    </ListboxItem>
+                                                                }
                                                                 <ListboxItem
                                                                     key="permission"
                                                                     startContent={<Icon icon="lucide:key-round" width={14} />}

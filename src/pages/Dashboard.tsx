@@ -2,26 +2,16 @@ import { addToast, Card, CardBody, Divider } from "@heroui/react"
 import { Icon } from "@iconify/react"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../redux/hook";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { getPhpMyAdminLogin } from "../redux/slice/dataBaseSlice"
+import { getWebDetails } from "../redux/slice/websiteSlice";
 
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [phpMyAdminLoader, setPhpMyAdminLoader] = useState(false);
-  useEffect(() => {
-    const serverId = "75";
-    const webId = "712";
-    const userId = "1"
-    const systemuserId = "1078"
-    const webappType = "customphp"
-    localStorage.setItem("serverId", serverId);
-    localStorage.setItem("webId", webId);
-    localStorage.setItem("userId", userId)
-    localStorage.setItem("systemuserId", systemuserId);
-    localStorage.setItem("webappType", webappType)
-  }, []);
+  const website = useAppSelector(state => state?.website?.selectedWebsite)
   const getPhpAdminLoginLink = async () => {
     setPhpMyAdminLoader(true);
     try {
@@ -33,11 +23,19 @@ const Dashboard = () => {
       setPhpMyAdminLoader(false);
     }
   };
-  const websitetype = localStorage.getItem("webappType")
-
-
+  const websitetype = localStorage.getItem("webtype")
+  const getwebsitedetails = async () => {
+    try {
+      await dispatch(getWebDetails()).unwrap();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getwebsitedetails()
+  }, [])
   return (
-    <div className="w-full max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
+    <div className="w-full ">
       <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-teal-600">
         vandanatest
       </span></p>
@@ -84,7 +82,7 @@ const Dashboard = () => {
                   File Manager
                 </span>
               </div>
-              {websitetype === "wordpress" &&
+              {websitetype?.toLowerCase() === "wordpress" &&
 
                 <div className="flex items-center gap-3  ">
                   <Icon icon="jam:wordpress" className="text-blue-900" width={32} />
@@ -205,7 +203,7 @@ const Dashboard = () => {
           </Card>
         </div>
         <div>
-          <Card className="">
+          <Card className="w-[15vw]">
             <CardBody className="p-4">
               <div>
                 <p className="font-bold">
@@ -216,14 +214,14 @@ const Dashboard = () => {
                 <p className="text-sm">
                   Primary Domain
                 </p>
-                <p className="text-blue-600 text-sm">app-qzykx.fPhYnEyHcueeKGC.vanadana.site</p>
+                <p className="text-blue-600 text-sm">{website?.website?.domains[0]}</p>
               </div>
               <Divider />
               <div className="my-4">
                 <p className="text-sm">
                   IP Address
                 </p>
-                <p className="text-sm text-blue-600">172.105.34.154</p>
+                <p className="text-sm text-blue-600">{ }</p>
               </div>
             </CardBody>
           </Card>

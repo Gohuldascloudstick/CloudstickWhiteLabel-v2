@@ -1,7 +1,7 @@
 import axios from "axios";
-import type { AxiosInstance, AxiosRequestConfig,AxiosResponse } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const apiUrl ='https://staged-api.cloudstick.io'
+const apiUrl = 'https://staged-api.cloudstick.io'
 
 const ApiClient: AxiosInstance = axios.create({
   baseURL: apiUrl,
@@ -23,7 +23,7 @@ ApiClient.interceptors.request.use((config) => {
 ApiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error) => {
-  
+
     if (error.response?.data?.message === 'token expired' && error.config && !error.config.__isRetryRequest) {
       console.log('Error: token expired');
       // You can implement token refresh logic here if needed
@@ -36,7 +36,7 @@ ApiClient.interceptors.response.use(
 
     if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
       console.error('Error: Server unreachable');
-   
+
       return Promise.reject({ isNetworkError: true, ...error });
     }
 

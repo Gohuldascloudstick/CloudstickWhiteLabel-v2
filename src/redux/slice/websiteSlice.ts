@@ -31,11 +31,12 @@ const initialState: initialStatetype = {
   apcheErrolog: { logs: [], total_count: 0 },
 };
 
+
 // Helper to get common URL parameters
 const getCommonParams = () => {
   const userId = import.meta.env.VITE_userId;
   const serverId = import.meta.env.VITE_serverId;
-  const webId = import.meta.env.VITE_webId;
+  const webId = localStorage.getItem("webId")
   return { userId, serverId, webId };
 };
 export const getWebDetails = createAsyncThunk(
@@ -43,8 +44,8 @@ export const getWebDetails = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { userId, serverId, webId } = getCommonParams();
-      const webappType = localStorage.getItem("webappType") || "null"
-      const url = `/api/v2/${webappType}/details/${webId}/servers/${serverId}/users/${userId}`;
+      const webappType = localStorage.getItem('webtype')
+      const url = `/api/v2/${webappType?.toLocaleLowerCase()}/details/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data;
     } catch (error: any) {
@@ -85,10 +86,9 @@ export const Updatepasword = createAsyncThunk(
   "systemuser/Updatepasword",
   async ({ data }: { data: { password: string, confirm_password: string } }, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const systemuserId = localStorage.getItem("systemuserId");
-      const url = `/api/v2/systemuser/${systemuserId}/servers/${serverId}/users/${user}`;
+      const { userId, serverId } = getCommonParams();
+      const systemuserId = localStorage.getItem('systemuserid')
+      const url = `/api/v2/systemuser/${systemuserId}/servers/${serverId}/users/${userId}`;
       const response = await api.patchEvent(url, data);
       return response.data
     } catch (error: any) {
@@ -101,9 +101,8 @@ export const getPhpVersions = createAsyncThunk(
   "easyphp/getphpversions",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const url = `/api/v2/php-versions/servers/${serverId}/users/${user}`;
+      const { userId, serverId } = getCommonParams();
+      const url = `/api/v2/php-versions/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data
     }
@@ -118,10 +117,8 @@ export const magicLink = createAsyncThunk(
   "website/magiclink",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverid = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/magiclink/servers/${serverid}/users/${user}?wid=${webId}`
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/magiclink/servers/${serverId}/users/${userId}?wid=${webId}`
       const response = await api.postEvents(url, {})
       return response.data.message
     } catch (error: any) {

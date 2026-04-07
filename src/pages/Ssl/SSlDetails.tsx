@@ -150,8 +150,15 @@ const ContentActionItem: React.FC<{
 
 // --- Main Component ---
 
+const getCommonParams = () => {
+  const userId = import.meta.env.VITE_userId;
+  const serverId = import.meta.env.VITE_serverId;
+  const webId = localStorage.getItem("webId");
+  return { userId, serverId, webId };
+};
 const SSlDetails = ({ ssltype }: { ssltype: string }) => {
-  const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+  const { serverId } = getCommonParams();
+
   const server = useAppSelector((state) => state.server.serverList)?.find(
     (server) => server.id.toString() == serverId
   );

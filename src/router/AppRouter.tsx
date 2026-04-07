@@ -17,14 +17,15 @@ import Git from "../pages/Git/Git"
 import Wordpress from "../pages/Wordpress/Wordpress"
 import Login from "../pages/Login"
 import FileEditor from "../pages/FileEditor"
+import Auth from "./Auth"
 
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path="login" element={<Login/>} />
-            <Route path="FileEditor" element={<FileEditor />} />
-            <Route path="/" element={<UserLayout />}>
+            <Route path="login" element={<Auth accessBY="non-authed"><Login /></Auth>} />
+            <Route path="FileEditor" element={<Auth accessBY="authed"><FileEditor /></Auth>} />
+            <Route path="/" element={<Auth accessBY="authed"><UserLayout /></Auth>}>
                 <Route index element={<Dashboard />} />
                 <Route path="database" element={< Database />} />
                 <Route path="email" element={<Email />} />
@@ -40,7 +41,6 @@ const AppRouter = () => {
                 <Route path="logs" element={<Serverlogs />} />
                 <Route path="git" element={<Git />} />
                 <Route path="wordpress" element={<Wordpress />} />
-                
             </Route>
         </Routes>
     )

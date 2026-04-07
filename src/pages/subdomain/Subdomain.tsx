@@ -19,7 +19,7 @@ const Subdomain = () => {
         getSubdomainList();
     }, [])
     return (
-        <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
+        <div className="  p-2 ">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 Sub domains
             </span>
