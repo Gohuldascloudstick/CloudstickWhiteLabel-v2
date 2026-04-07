@@ -11,15 +11,20 @@ const initialState: AppSettingState = {
     loading: false,
     error: null
 }
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = localStorage.getItem("webId");
+    return { userId, serverId, webId };
+};
+
 
 export const changeAppPhpversion = createAsyncThunk(
     "appsetting/changeappphpversion",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/changephp/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/changephp/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -34,10 +39,8 @@ export const changeWebStack = createAsyncThunk(
     "appsetting/changewebstack",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/changestack/websites/${webId}/servers/${serverId}/users/${user}`;
+            const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/changestack/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -50,10 +53,8 @@ export const changeAppPublicPath = createAsyncThunk(
     "appsetting/changepublicpath",
     async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/changepublicpath/websites/${webId}/servers/${serverId}/users/${user}`
+           const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/changepublicpath/websites/${webId}/servers/${serverId}/users/${userId}`
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -66,10 +67,8 @@ export const addNewDomain = createAsyncThunk(
     "appsetting/adddomain",
     async ({ data, ssl }: { data: any, ssl: string }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/adddomain/websites/${webId}/servers/${serverId}/users/${user}?require_ssl=${ssl}`
+           const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/adddomain/websites/${webId}/servers/${serverId}/users/${userId}?require_ssl=${ssl}`
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -83,10 +82,8 @@ export const removeDomain = createAsyncThunk(
     "appsetting/remverDomain",
     async ({ data, ssl }: { data: any, ssl: String }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/removedomain/websites/${webId}/servers/${serverId}/users/${user}?require_ssl=${ssl}`;
+         const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/removedomain/websites/${webId}/servers/${serverId}/users/${userId}?require_ssl=${ssl}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -96,12 +93,10 @@ export const removeDomain = createAsyncThunk(
 )
 export const changePhpConfig = createAsyncThunk(
     "appsetting/changephpconfig",
-    async ({ data }: {  data: any }, { rejectWithValue }) => {
+    async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/changephpconfig/websites/${webId}/servers/${serverId}/users/${user}`;
+           const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/changephpconfig/websites/${webId}/servers/${serverId}/users/${userId}`;
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {
@@ -111,12 +106,10 @@ export const changePhpConfig = createAsyncThunk(
 )
 export const changeNginxSettings = createAsyncThunk(
     "appsetting/changenginx",
-    async ({ data }: { data: any}, { rejectWithValue }) => {
+    async ({ data }: { data: any }, { rejectWithValue }) => {
         try {
-            const user = JSON.parse(localStorage.getItem("userId") || "null");
-            const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-            const webId = JSON.parse(localStorage.getItem("webId") || "null")
-            const url = `/api/v2/changesecurity/websites/${webId}/servers/${serverId}/users/${user}`
+          const { userId, serverId, webId } = getCommonParams();
+            const url = `/api/v2/changesecurity/websites/${webId}/servers/${serverId}/users/${userId}`
             const response = await api.patchEvent(url, data);
             return response.data;
         } catch (error: any) {

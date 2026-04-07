@@ -25,7 +25,7 @@ const Ssl = () => {
         dispatch(getWebDetails());
     }, [])
     return (
-        <div className="p-2 overflow-y-auto scrollbar-hide">
+        <div className="">
             <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
                 SSL Management
             </span>

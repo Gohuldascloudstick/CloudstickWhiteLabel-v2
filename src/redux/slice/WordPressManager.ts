@@ -68,6 +68,12 @@ const initialState: initialStatetype = {
   },
   wpdebug_loader: false,
 };
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = localStorage.getItem("webId");
+    return { userId, serverId, webId };
+};
 
 export const getWorpressUser = createAsyncThunk(
   "wordPressManager/getWorpressUser",
@@ -76,11 +82,9 @@ export const getWorpressUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
+      const { userId, serverId, webId } = getCommonParams();
       const queryParams = new URLSearchParams();
-      const url = `/api/v2/wordpress/wpusers/${webId}/servers/${serverId}/users/${user}`;
+      const url = `/api/v2/wordpress/wpusers/${webId}/servers/${serverId}/users/${userId}`;
       const baseurl = `${url}?${queryParams.toString()}`;
 
       const response = await api.getEvents(baseurl);
@@ -104,10 +108,8 @@ export const createWordPressUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/wpusers/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/wpusers/${webId}/servers/${serverId}/users/${userId}`;
 
       await api.postEvents(url, {
         user_name: user_name.trim().split(" ").join(""),
@@ -134,10 +136,8 @@ export const UpdateWordpressUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/wpusers/${webId}/${id}/servers/${serverId}/users/${user}`;
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/wpusers/${webId}/${id}/servers/${serverId}/users/${userId}`;
       await api.patchEvent(url, data);
       return webId;
     } catch (error: any) {
@@ -155,10 +155,8 @@ export const dleteWordpressUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/wpusers/${webId}/${id}/servers/${serverId}/users/${user}`;
+    const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/wpusers/${webId}/${id}/servers/${serverId}/users/${userId}`;
       await api.deleteEvents(url);
       return id;
     } catch (error: any) {
@@ -176,11 +174,9 @@ export const getWordPressPlugins = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
+    const { userId, serverId, webId } = getCommonParams();
       const queryParams = new URLSearchParams();
-      const url = `/api/v2/wordpress/wpusers/${webId}/plugins/servers/${serverId}/users/${user}`;
+      const url = `/api/v2/wordpress/wpusers/${webId}/plugins/servers/${serverId}/users/${userId}`;
       const baseurl = `${url}?${queryParams.toString()}`;
       const response = await api.getEvents(baseurl);
       return response.data;
@@ -205,10 +201,8 @@ export const handlePluginAction = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/wpusers/${webId}/plugins/servers/${serverId}/users/${user}?action=${action}`;
+   const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/wpusers/${webId}/plugins/servers/${serverId}/users/${userId}?action=${action}`;
       const response = await api.patchEvent(url, { plugin_name });
       return response.data;
     } catch (error: any) {
@@ -226,10 +220,8 @@ export const getWordPressManagerVersions = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/version/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/version/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data;
     } catch (error: any) {
@@ -251,11 +243,8 @@ export const handleWPversionActions = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-
-      const url = `/api/v2/wordpress/manager/version/${webId}/servers/${serverId}/users/${user}?type=${action}`;
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/version/${webId}/servers/${serverId}/users/${userId}?type=${action}`;
 
       const response = await api.patchEvent(url, {});
 
@@ -277,10 +266,8 @@ export const getWpUrls = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/urls/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/urls/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url);
       return response.data;
     } catch (error: any) {
@@ -299,10 +286,8 @@ export const UpdateWP_URls = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/urls/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/urls/${webId}/servers/${serverId}/users/${userId}`;
       await api.patchEvent(url, data);
       return webId;
     } catch (error: any) {
@@ -320,10 +305,8 @@ export const getUSerCounts = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/users/count/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/users/count/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.getEvents(url);
       return result.data;
     } catch (error: any) {
@@ -340,10 +323,8 @@ export const getWPPluginCount = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/plugins/count/${webId}/servers/${serverId}/users/${user}`;
+    const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/plugins/count/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.getEvents(url);
       return result.data;
     } catch (error: any) {
@@ -361,10 +342,8 @@ export const getWpdebug = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/debug/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/debug/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.getEvents(url);
       return result.data;
     } catch (error: any) {
@@ -382,10 +361,8 @@ export const getWpMaintance = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/maintanance/${webId}/servers/${serverId}/users/${user}`;
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/maintanance/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.getEvents(url);
       return result.data;
     } catch (error: any) {
@@ -405,10 +382,8 @@ export const updateWpMaintance = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/maintanance/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/maintanance/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.patchEvent(url, { maintanance_enabled: toggle });
       return result.data;
     } catch (error: any) {
@@ -426,10 +401,8 @@ export const getWpindex = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/searchindex/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/searchindex/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.getEvents(url);
       return result.data;
     } catch (error: any) {
@@ -449,10 +422,8 @@ export const updatesearchIndex = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/searchindex/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/searchindex/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.patchEvent(url, {
         search_index_enabled: toggle,
       });
@@ -474,10 +445,8 @@ export const updateDebug = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/wordpress/manager/debug/${webId}/servers/${serverId}/users/${user}`;
+     const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/wordpress/manager/debug/${webId}/servers/${serverId}/users/${userId}`;
       const result = await api.patchEvent(url, data);
       return result.data;
     } catch (error: any) {

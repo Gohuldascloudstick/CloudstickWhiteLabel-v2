@@ -249,7 +249,7 @@ const Email = () => {
         getemaillist();
     }, [])
     return (
-        <div className=" lg:p-2 overflow-y-auto scrollbar-hide">
+        <div className="  ">
             <p className=" text-xl md:text-2xl lg:text-3xl">Welcome to
                 <span className=" ml-1 font-bold text-teal-600">
                     Email Accounts

@@ -40,8 +40,11 @@ export const login = createAsyncThunk(
             const response = await api.postEvents(url, payload);
             console.log(response.data.response);
 
-            if (response.data.response.data.token) {
-                localStorage.setItem("token", response.data.response.data.token);
+            if (response.data.response.data) {
+
+                localStorage.setItem("token", response.data.response.data.response.data.token);
+                localStorage.setItem("webtype", response.data.response.data.website.website_type);
+                localStorage.setItem("systemuserid", response.data.response.data.website.system_user_id);
                 localStorage.setItem("webId", response.data.response.data.website.id);
             }
             console.log('whwt', response.data.response.data.website);

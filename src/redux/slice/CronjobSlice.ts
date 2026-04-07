@@ -5,7 +5,7 @@ import { api } from "../eventServices";
 const getCommonParams = () => {
   const userId = import.meta.env.VITE_userId;
   const serverId = import.meta.env.VITE_serverId;
-  const webId = import.meta.env.VITE_webId;
+  const webId = localStorage.getItem("webId");
   return { userId, serverId, webId };
 };
 
@@ -52,9 +52,8 @@ export const UpdateServerCorn = createAsyncThunk(
   async ({ data, cornid }: { cornid: number, data: { user_name: string, label: string, binary: string, path: string, schedule: string } }, { rejectWithValue }) => {
 
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const url = `/api/v2/cron/${cornid}/servers/${serverId}/users/${user}`;
+      const { userId, serverId } = getCommonParams();
+      const url = `/api/v2/cron/${cornid}/servers/${serverId}/users/${userId}`;
       const response = await api.patchEvent(url, data)
       return response.data
 
@@ -67,9 +66,8 @@ export const removeServerCron = createAsyncThunk(
   "cron-job/removeServerCron",
   async ({ CronID }: { CronID: number }, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const url = `/api/v2/cron/${CronID}/servers/${serverId}/users/${user}`;
+      const { userId, serverId } = getCommonParams();
+      const url = `/api/v2/cron/${CronID}/servers/${serverId}/users/${userId}`;
       const response = await api.deleteEvents(url);
       return response.data;
     } catch (err: any) {
@@ -82,10 +80,8 @@ export const createAppCron = createAsyncThunk(
   "cron-job/createAppCron",
   async ({ data }: { data: { user_name: string, label: string, binary: string, path: string, schedule: string } }, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
-      const webId = JSON.parse(localStorage.getItem("webId") || "null")
-      const url = `/api/v2/cron/websites/${webId}/servers/${serverId}/users/${user}`;
+      const { userId, serverId, webId } = getCommonParams();
+      const url = `/api/v2/cron/websites/${webId}/servers/${serverId}/users/${userId}`;
       const response = await api.postEvents(url, data);
       return response.data;
     } catch (error: any) {
@@ -114,10 +110,9 @@ export const getSysytemUser = createAsyncThunk(
   "cron_job/getSysytemUser",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const serverId = JSON.parse(localStorage.getItem("serverId") || "null");
+      const { userId, serverId } = getCommonParams();
 
-      const url = `/api/v2/systemuser/servers/${serverId}/users/${user}`;
+      const url = `/api/v2/systemuser/servers/${serverId}/users/${userId}`;
       const response = await api.getEvents(url)
       return response.data
     } catch (err: any) {

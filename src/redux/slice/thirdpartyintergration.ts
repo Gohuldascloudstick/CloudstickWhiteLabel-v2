@@ -16,12 +16,18 @@ const initialState: ThirdPartyIntegrationState = {
   intergrationLilst: [],
 };
 
+const getCommonParams = () => {
+    const userId = import.meta.env.VITE_userId;
+    const serverId = import.meta.env.VITE_serverId;
+    const webId = localStorage.getItem("webId");
+    return { userId, serverId, webId };
+};
 export const fetchThirdPartyData = createAsyncThunk(
   "thirdPartyIntegration/fetchData",
   async (_, { rejectWithValue }) => {
     try {
-       const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const url = `/api/v2/thirdpartyintegrations/users/${user.id}`;
+      const { userId } = getCommonParams();
+      const url = `/api/v2/thirdpartyintegrations/users/${userId}`;
       const response = await api.getEvents(url);
 
       return response.data;
@@ -43,8 +49,8 @@ export const addthirdPartyIntegration = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-       const user = JSON.parse(localStorage.getItem("userId") || "null");
-      const url = `/api/v2/thirdpartyintegrations/users/${user.id}`;
+    const { userId } = getCommonParams();
+      const url = `/api/v2/thirdpartyintegrations/users/${userId}`;
       const response = await api.postEvents(url, data);
       console.log("====================================");
       console.log("response", response.data);
@@ -60,9 +66,9 @@ export const delteIntegration = createAsyncThunk(
   "thirdpartyIntegration/deleteIntegration",
   async (id: number, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
+ const { userId } = getCommonParams();
 
-      const url = `/api/v2/thirdpartyintegrations/${id}/users/${user.id}`;
+      const url = `/api/v2/thirdpartyintegrations/${id}/users/${userId}`;
       const response = await api.deleteEvents(url);
       return response.data;
     } catch (err:any) {
@@ -75,8 +81,8 @@ export const updateIntegration = createAsyncThunk(
   "thirdpartyIntegration/updateIntegration",
   async ({id,data}:{id:number, data:any}, { rejectWithValue }) => {
     try {
-       const user = JSON.parse(localStorage.getItem("userId") || "null");
-   const url = `/api/v2/thirdpartyintegrations/${id}/users/${user.id}`;
+    const { userId } = getCommonParams();
+   const url = `/api/v2/thirdpartyintegrations/${id}/users/${userId}`;
    const response = await api.patchEvent(url,data)
    return response.data
     } catch (error:any) {

@@ -28,7 +28,12 @@ const initialState: initialStatetype = {
   TotalRecord: 0,
   temproryDomain: ''
 };
-
+const getCommonParams = () => {
+  const userId = import.meta.env.VITE_userId;
+  const serverId = import.meta.env.VITE_serverId;
+  const webId = localStorage.getItem("webId");
+  return { userId, serverId, webId };
+};
 export const createNewZone = createAsyncThunk(
   "dns/addNEwZone",
   async (
@@ -42,9 +47,9 @@ export const createNewZone = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const { userId } = getCommonParams();
 
-      const url = `/api/v2/createzone/users/${user}?account_label=${account_label}`;
+      const url = `/api/v2/createzone/users/${userId}?account_label=${account_label}`;
       const response = await api.postEvents(url, data);
       return response.data;
     } catch (error: any) {
@@ -59,11 +64,11 @@ export const getCloudflareAccounts = createAsyncThunk(
   "dns/getCloudflareAccount",
   async (search: string, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const { userId } = getCommonParams();
 
       const url = !search
-        ? `api/v2/listcloudflareproviders/users/${user}`
-        : `api/v2/listcloudflareproviders/users/${user}?search=${search}`;
+        ? `api/v2/listcloudflareproviders/users/${userId}`
+        : `api/v2/listcloudflareproviders/users/${userId}?search=${search}`;
       const response = await api.getEvents(url);
       return response.data;
     } catch (error: any) {
@@ -81,14 +86,14 @@ export const getZoneList = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("userId") || "null");
+      const { userId } = getCommonParams();
       const queryParams = new URLSearchParams();
       queryParams.append("account_label", account_label);
       queryParams.append("page", page.toString());
       queryParams.append("limit", "50");
       if (search) queryParams.append("search", search);
 
-      const baseurl = `/api/v2/listzones/users/${user}`;
+      const baseurl = `/api/v2/listzones/users/${userId}`;
       const url = `${baseurl}?${queryParams.toString()}`;
 
       const response = await api.getEvents(url);
@@ -108,9 +113,9 @@ export const DeleteZone = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const { userId } = getCommonParams();
 
-      const url = `/api/v2/deletezone/${zoneid}/users/${user.id}?account_label=${account_label}`;
+      const url = `/api/v2/deletezone/${zoneid}/users/${userId}?account_label=${account_label}`;
       const response = await api.deleteEvents(url);
       return response.data;
     } catch (error: any) {
@@ -134,7 +139,7 @@ export const listDnsRecord = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const { userId } = getCommonParams();
       const queryParams = new URLSearchParams();
       queryParams.append("account_label", account_label);
       queryParams.append("zone", zone);
@@ -144,7 +149,7 @@ export const listDnsRecord = createAsyncThunk(
       if (type) queryParams.append("type", type);
       if (search) queryParams.append("search", search);
 
-      const baseUrl = `/api/v2/listdnsrecords/users/${user.id}`;
+      const baseUrl = `/api/v2/listdnsrecords/users/${userId}`;
       const url = `${baseUrl}?${queryParams.toString()}`;
 
       const response = await api.getEvents(url);
@@ -168,8 +173,8 @@ export const createDnsrecord = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const url = `/api/v2/dnsrecords/users/${user.id}?account_label=${account_label}&zone=${zone}`;
+      const { userId } = getCommonParams();
+      const url = `/api/v2/dnsrecords/users/${userId}?account_label=${account_label}&zone=${zone}`;
       const response = await api.postEvents(url, data);
       return response.data;
     } catch (error: any) {
@@ -199,7 +204,7 @@ export const deleteDNSRecord = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const { userId } = getCommonParams();
 
       const queryParams = new URLSearchParams();
       queryParams.append("account_label", account_label);
@@ -207,7 +212,7 @@ export const deleteDNSRecord = createAsyncThunk(
 
       if (type) queryParams.append("type", type);
       if (search) queryParams.append("search", search);
-      const baseUrl = `/api/v2/deletednsrecord/${id}/users/${user.id}`;
+      const baseUrl = `/api/v2/deletednsrecord/${id}/users/${userId}`;
       const url = `${baseUrl}?${queryParams.toString()}`;
 
       console.log("====================================");
@@ -235,8 +240,8 @@ export const editDnsRecord = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const url = `/api/v2/updatednsrecord/${id}/users/${user.id}?account_label=${account_label}&zone=${zone}`;
+      const { userId } = getCommonParams();
+      const url = `/api/v2/updatednsrecord/${id}/users/${userId}?account_label=${account_label}&zone=${zone}`;
       const response = await api.putEvent(url, data);
       return response.data;
     } catch (error: any) {
@@ -251,8 +256,8 @@ export const SetTemproryDomain = createAsyncThunk(
   "dns/SEtTemproryDomain",
   async ({ account_label, zone }: { account_label: number, zone: string }, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}")
-      const url = `/api/v2/temprory/domain/users/${user.id}?account_label=${account_label}&zone=${zone}`
+      const { userId } = getCommonParams();
+      const url = `/api/v2/temprory/domain/users/${userId}?account_label=${account_label}&zone=${zone}`
       const response = await api.patchEvent(url, {})
       return response.data
 
@@ -268,8 +273,8 @@ export const getTemproryDomain = createAsyncThunk(
   "dns/getTemproryDomain",
   async (_, { rejectWithValue }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}")
-      const url = `/api/v2/temprory/domain/users/${user.id}`
+      const { userId } = getCommonParams();
+      const url = `/api/v2/temprory/domain/users/${userId}`
       const response = await api.getEvents(url)
       return response.data
     } catch (error: any) {
