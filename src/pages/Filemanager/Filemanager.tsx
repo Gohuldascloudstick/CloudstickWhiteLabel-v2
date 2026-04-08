@@ -27,7 +27,7 @@ import Extract from './Extract'
 import NewF from './NewF'
 import DownloadFile from './DownloadFile'
 import UploadModal from './UploadModal'
-import { getWebDetails } from '../../redux/slice/websiteSlice'
+
 
 const isArchiveFile = (fileName: string): boolean => {
     const archiveExtensions = ['.zip', '.rar', '.7z', '.tar', '.gz', '.tgz', '.bz2', '.tbz2', '.xz', '.txz', '.iso', '.dmg', '.jar'];
