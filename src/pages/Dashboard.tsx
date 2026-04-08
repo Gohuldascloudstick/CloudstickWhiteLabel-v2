@@ -36,9 +36,7 @@ const Dashboard = () => {
   }, [])
   return (
     <div className="w-full ">
-      <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-brand">
-        vandanatest
-      </span></p>
+      <p className="text-xl md:text-2xl lg:text-3xl">Welcome </p>
 
       <div className="  mt-3 md:mt-6 flex w-full justify-between gap-4">
         <div className=" w-full space-y-6 ">
@@ -91,12 +89,12 @@ const Dashboard = () => {
                   </span>
                 </div>
               }
-              <div className="flex items-center gap-3  ">
+              {/* <div className="flex items-center gap-3  ">
                 <Icon icon="iconoir:git" className="text-primary" width={32} />
                 <span onClick={() => navigate('/git')} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Git
                 </span>
-              </div>
+              </div> */}
             </div>
           </Card>
 
@@ -203,7 +201,7 @@ const Dashboard = () => {
           </Card>
         </div>
         <div>
-          <Card className="w-[15vw]">
+          <Card className="w-[15vw] shadow-sm border border-gray-200">
             <CardBody className="p-4">
               <div>
                 <p className="font-bold">
@@ -214,14 +212,25 @@ const Dashboard = () => {
                 <p className="text-sm">
                   Primary Domain
                 </p>
-                <p className="text-blue-600 text-sm">{website?.website?.domains[0]}</p>
+                <p className="text-blue-600 text-sm">
+                  {website?.website?.domains?.[0] && (
+                    <a
+                      href={`http${website?.website?.is_ssl_installed ? 's' : ''}://${website?.website?.domains[0]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      {website?.website?.domains[0]}
+                    </a>
+                  )}
+                </p>
               </div>
               <Divider />
               <div className="my-4">
-                <p className="text-sm">
+                {/* <p className="text-sm">
                   IP Address
                 </p>
-                <p className="text-sm text-blue-600">{ }</p>
+                <p className="text-sm text-blue-600">{ }</p> */}
               </div>
             </CardBody>
           </Card>
