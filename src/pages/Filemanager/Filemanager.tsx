@@ -91,10 +91,6 @@ const FileManager = () => {
 
 
 
-    const fetchWebDetails = () => {
-        dispatch(getWebDetails())
-    }
-
 
     const fetchfiles = async (path: string) => {
         setViewingFile(null);
