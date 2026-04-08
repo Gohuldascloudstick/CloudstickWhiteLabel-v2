@@ -232,7 +232,7 @@ const LogTerminalModal: React.FC<LogTerminalModalProps> = ({
             >
                 {/* Modal Header (Terminal Bar) */}
                 <ModalHeader 
-                    className="flex items-center justify-between p-2 py-3 relative text-white bg-linear-to-r from-[#2168a1] to-[#11999e]"
+                    className="flex items-center justify-between p-2 py-3 relative text-white bg-brand"
                 >
                     <div className='flex items-center gap-2'>
                          <div className="flex space-x-1 ml-4 items-center">

@@ -51,7 +51,7 @@ const Cronjob = () => {
 
     return (
         <div className="">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
+            <p className="text-3xl">Welcome to <span className=" font-bold text-brand">
                 Cron Jobs
             </span>
             </p>
@@ -63,7 +63,7 @@ const Cronjob = () => {
                 <Button onPress={() => {
                     reducerDispatch(clearedit())
                     navigate("addcronjobs")
-                }} className="bg-orange-600 text-white rounded-md">
+                }} className="bg-primary text-white rounded-md">
                     Create Cron Job
                 </Button>
             </div>
@@ -73,7 +73,7 @@ const Cronjob = () => {
 
 
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 bg-brand">
                             <span className="font-bold text-white text-lg">Cron Jobs</span>
                         </div>
                         <Divider />

@@ -36,7 +36,7 @@ const Dashboard = () => {
   }, [])
   return (
     <div className="w-full ">
-      <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-teal-600">
+      <p className="text-xl md:text-2xl lg:text-3xl">Welcome <span className=" font-bold text-brand">
         vandanatest
       </span></p>
 
@@ -44,24 +44,24 @@ const Dashboard = () => {
         <div className=" w-full space-y-6 ">
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4 ">
-              <span className="font-bold text-indigo-900 text-lg">Email</span>
+              <span className="font-bold text-gray-500 text-lg">Email</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="hugeicons:mail-account-01" className="text-blue-900" width={32} />
+                <Icon icon="hugeicons:mail-account-01" className="text-primary" width={32} />
                 <span onClick={() => navigate("/email")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Email Accounts
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
-                <Icon icon="cib:roundcube" className="text-blue-900" width={32} />
+                <Icon icon="cib:roundcube" className="text-primary" width={32} />
                 <span onClick={() => navigate("/email/enablewebmail")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Enable Webmail
                 </span>
               </div>
               <div className="flex items-center gap-3 ">
-                <Icon icon="hugeicons:mail-secure-01" className="text-blue-900" width={32} />
+                <Icon icon="hugeicons:mail-secure-01" className="text-primary" width={32} />
                 <span onClick={() => navigate("email/emailauthentication")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Email Authentication
                 </span>
@@ -72,12 +72,12 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Files</span>
+              <span className="font-bold text-gray-500 text-lg">Files</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="ph:folder-user" className="text-blue-900" width={32} />
+                <Icon icon="ph:folder-user" className="text-primary" width={32} />
                 <span onClick={() => navigate('/file')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   File Manager
                 </span>
@@ -85,14 +85,14 @@ const Dashboard = () => {
               {websitetype?.toLowerCase() === "wordpress" &&
 
                 <div className="flex items-center gap-3  ">
-                  <Icon icon="jam:wordpress" className="text-blue-900" width={32} />
+                  <Icon icon="jam:wordpress" className="text-primary" width={32} />
                   <span onClick={() => navigate('/wordpress')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                     WordPress Manager
                   </span>
                 </div>
               }
               <div className="flex items-center gap-3  ">
-                <Icon icon="iconoir:git" className="text-blue-900" width={32} />
+                <Icon icon="iconoir:git" className="text-primary" width={32} />
                 <span onClick={() => navigate('/git')} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Git
                 </span>
@@ -102,24 +102,24 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Databases</span>
+              <span className="font-bold text-gray-500 text-lg">Databases</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="fa7-brands:php" className="text-blue-900" width={32} />
+                <Icon icon="fa7-brands:php" className="text-primary" width={32} />
                 <span onClick={() => navigate("/websettings")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   PHP Settings
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
-                <Icon icon="simple-icons:mysql" className="text-blue-900" width={36} />
+                <Icon icon="simple-icons:mysql" className="text-primary" width={36} />
                 <span onClick={() => navigate("/database")} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   MySQL Databses
                 </span>
               </div>
               <div className="flex items-center gap-3 ">
-                {phpMyAdminLoader ? <Icon icon="codex:loader" className="text-blue-600" width={32} /> : <Icon icon="simple-icons:phpmyadmin" className="text-blue-900" width={32} />}
+                {phpMyAdminLoader ? <Icon icon="codex:loader" className="text-blue-600" width={32} /> : <Icon icon="simple-icons:phpmyadmin" className="text-primary" width={32} />}
 
                 <span className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors" onClick={getPhpAdminLoginLink}>
                   phpMyAdmin
@@ -131,12 +131,12 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Domains</span>
+              <span className="font-bold text-gray-500 text-lg">Domains</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="la:globe-americas" className="text-blue-900" width={32} />
+                <Icon icon="la:globe-americas" className="text-primary" width={32} />
                 <span onClick={() => navigate('/subdomain')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Sub Domains
                 </span>
@@ -146,12 +146,12 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Security</span>
+              <span className="font-bold text-gray-500 text-lg">Security</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="iconamoon:shield-yes-light" className="text-blue-900" width={32} />
+                <Icon icon="iconamoon:shield-yes-light" className="text-primary" width={32} />
                 <span onClick={() => navigate('/ssl')} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   SSL/TSL
                 </span>
@@ -165,18 +165,18 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Advanced</span>
+              <span className="font-bold text-gray-500 text-lg">Advanced</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="eos-icons:cronjob" className="text-blue-900" width={32} />
+                <Icon icon="eos-icons:cronjob" className="text-primary" width={32} />
                 <span onClick={() => navigate("/cronjobs")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Cron Jobs
                 </span>
               </div>
               <div className="flex items-center gap-3  ">
-                <Icon icon="fluent:clipboard-bullet-list-ltr-20-regular" className="text-blue-900" width={32} />
+                <Icon icon="fluent:clipboard-bullet-list-ltr-20-regular" className="text-primary" width={32} />
                 <span onClick={() => navigate('/logs')} className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors">
                   Web Server Log
                 </span>
@@ -189,12 +189,12 @@ const Dashboard = () => {
 
           <Card className="w-full shadow-sm border border-gray-200">
             <div className="px-6 py-4">
-              <span className="font-bold text-indigo-900 text-lg">Preferences</span>
+              <span className="font-bold text-gray-500 text-lg">Preferences</span>
             </div>
             <Divider />
             <div className="grid grid-cols-3 gap-4 px-8  py-8">
               <div className="flex items-center gap-3  ">
-                <Icon icon="material-symbols-light:settings-account-box-outline-rounded" className="text-blue-900" width={32} />
+                <Icon icon="material-symbols-light:settings-account-box-outline-rounded" className="text-primary" width={32} />
                 <span onClick={() => navigate("/password")} className="text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
                   Change Password
                 </span>

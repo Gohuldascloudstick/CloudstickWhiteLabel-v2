@@ -115,7 +115,7 @@ const EmailForwardingModal: React.FC<EmailForwardProps> = (
             hideCloseButton
             size="xl">
             <ModalContent>
-                <ModalHeader className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white ">
+                <ModalHeader className="bg-brand text-white ">
                     Add Forwarder
                 </ModalHeader>
                 <ModalBody >

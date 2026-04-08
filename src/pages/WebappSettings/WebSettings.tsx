@@ -365,7 +365,7 @@ const WebSettings = () => {
         setMaxSpareServers(currentWebsite?.php_max_spare_servers ?? 0)
     }
     useEffect(() => {
-        setWebstack(currentWebsite?.website?.stack_type ?? "" )
+        setWebstack(currentWebsite?.website?.stack_type ?? "")
         setPhpVersion(currentWebsite?.php_version?.slice(0, 1) + "." + currentWebsite?.php_version?.slice(1))
         setProcessManager(currentWebsite?.php_process_manager ?? "")
         setMaxchildren(currentWebsite?.php_max_children ?? 0)
@@ -374,7 +374,7 @@ const WebSettings = () => {
         setMinSpareServers(currentWebsite?.php_min_spare_servers ?? 0)
         setMaxSpareServers(currentWebsite?.php_max_spare_servers ?? 0)
         setOpenbasedir(currentWebsite?.php_open_base_dir ?? "")
-        setTimezone(currentWebsite?.php_timezone?? "")
+        setTimezone(currentWebsite?.php_timezone ?? "")
         setMaxExecutionTime(currentWebsite?.php_max_execution_time ?? 0)
         setMaxInputTime(currentWebsite?.php_max_input_time ?? 0)
         setMaxinputVars(currentWebsite?.php_max_input_vars ?? 0)
@@ -393,14 +393,14 @@ const WebSettings = () => {
     return (
         <div className="  p-2 ">
             <p className="text-3xl">Welcome to
-                <span className=" font-bold text-teal-600">
+                <span className=" font-bold text-brand">
                     Web Application Settings
                 </span>
             </p>
             <div className="mt-12  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border  border-gray-200">
-                        <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 flex items-center gap-2 text-white bg-brand">
                             <Icon
                                 icon="lucide:globe"
                                 className="text-white transition-transform group-hover:scale-110"
@@ -424,7 +424,7 @@ const WebSettings = () => {
                                                             <div className="shrink-0 mt-1">
                                                                 <Icon
                                                                     icon="ri:php-fill"
-                                                                    className="text-blue-600 transition-transform group-hover:scale-110"
+                                                                    className="text-primary transition-transform group-hover:scale-110"
                                                                     width={28}
                                                                 />
                                                             </div>
@@ -505,7 +505,7 @@ const WebSettings = () => {
                                                     <div className="flex gap-4">
                                                         <div className="shrink-0 mt-1">
                                                             <Icon icon={"lucide:database"}
-                                                                className="text-blue-600 transition-transform group-hover:scale-110"
+                                                                className="text-primary transition-transform group-hover:scale-110"
                                                                 width={28} />
                                                         </div>
                                                         <div className='flex flex-col space-y-1'>
@@ -574,7 +574,7 @@ const WebSettings = () => {
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex gap-4">
                                                         <div className="shrink-0 mt-1">
-                                                            <Icon icon={"raphael:globe"} className="text-blue-600 transition-transform group-hover:scale-110"
+                                                            <Icon icon={"raphael:globe"} className="text-primary transition-transform group-hover:scale-110"
                                                                 width={28} />
                                                         </div>
                                                         <div className='flex flex-col space-y-1'>
@@ -610,7 +610,7 @@ const WebSettings = () => {
                                                     <div className="flex gap-4">
                                                         <div className="shrink-0 mt-1">
                                                             <Icon icon={"mynaui:path"}
-                                                                className="text-blue-600 transition-transform group-hover:scale-110"
+                                                                className="text-primary transition-transform group-hover:scale-110"
                                                                 width={28} />
                                                         </div>
                                                         <div className='flex flex-col space-y-1'>
@@ -683,7 +683,7 @@ const WebSettings = () => {
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex gap-4">
                                                         <div className="shrink-0 mt-1">
-                                                            <Icon icon={"simple-icons:nginx"} className="text-blue-600 transition-transform group-hover:scale-110"
+                                                            <Icon icon={"simple-icons:nginx"} className="text-primary transition-transform group-hover:scale-110"
                                                                 width={28} />
                                                         </div>
                                                         <div className='flex flex-col space-y-1'>
@@ -717,7 +717,7 @@ const WebSettings = () => {
                                                     <div className="flex items-start justify-between">
                                                         <div className="flex gap-4">
                                                             <div className="shrink-0 mt-1">
-                                                                <Icon icon={"ri:php-fill"} className="text-blue-600 transition-transform group-hover:scale-110"
+                                                                <Icon icon={"ri:php-fill"} className="text-primary transition-transform group-hover:scale-110"
                                                                     width={28} />
                                                             </div>
                                                             <div className='flex flex-col space-y-1'>

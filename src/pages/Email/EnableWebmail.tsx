@@ -61,7 +61,7 @@ const EnableWebmail = () => {
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
             <p className="text-3xl">Welcome to
-                <span className="ml-1 font-bold text-teal-600">
+                <span className="ml-1 font-bold text-brand">
                     Roundcube
                 </span>
             </p>
@@ -71,7 +71,7 @@ const EnableWebmail = () => {
             <div className="mt-6  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 bg-brand">
                             <span className="font-bold text-white text-lg">Roundcube Installation</span>
                         </div>
                         <Divider />

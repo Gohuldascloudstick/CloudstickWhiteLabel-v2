@@ -59,7 +59,7 @@ const Database = () => {
 
 
 
-    
+
     const dispatch = useAppDispatch();
 
 
@@ -232,7 +232,7 @@ const Database = () => {
         }
         let hosttype = ""
         if (host === "local_host") {
-            hosttype ="localhost"
+            hosttype = "localhost"
         } else if (host === "remote_host") {
             hosttype = ip
         }
@@ -253,7 +253,7 @@ const Database = () => {
     }
     return (
         <div className="">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
+            <p className="text-3xl">Welcome to <span className=" font-bold text-brand">
                 MySQL® Databases
             </span>
             </p>
@@ -263,14 +263,14 @@ const Database = () => {
             <div className="mt-6  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 bg-brand">
                             <span className="font-bold text-white text-lg">Create Database</span>
                         </div>
                         <Divider />
                         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 px-8 py-8 ">
                             <div className="flex flex-col md:flex-row items-center grow gap-6 w-full">
                                 <div className="flex items-center gap-3 shrink-0">
-                                    <Icon icon="mdi:database-edit" className="text-blue-900" width={40} />
+                                    <Icon icon="mdi:database-edit" className="text-gray-400" width={40} />
                                     <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
                                         Create Database
                                     </span>
@@ -314,7 +314,7 @@ const Database = () => {
 
 
                             <div className="shrink-0 w-full lg:w-auto">
-                                <Button isLoading={databaseCreateLoader} isDisabled={databaseCreateLoader} onPress={handleCreateDatabase} className="w-full lg:w-auto px-2 text-white font-semibold bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                                <Button isLoading={databaseCreateLoader} isDisabled={databaseCreateLoader} onPress={handleCreateDatabase} className="w-full lg:w-auto px-4 rounded-md text-white font-semibold bg-primary">
                                     Create Database
                                 </Button>
                             </div>
@@ -323,8 +323,8 @@ const Database = () => {
 
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2 ">
-                            <Icon icon={"pepicons-pencil:database-circle"} className="text-blue-900" width={22} />
-                            <span className="font-bold text-indigo-900 text-lg">Existing Databases</span>
+                            <Icon icon={"pepicons-pencil:database-circle"} className="text-primary" width={22} />
+                            <span className="font-bold text-primary text-lg">Existing Databases</span>
                         </div>
                         <Divider />
                         <div className="flex flex-col gap-4">
@@ -451,12 +451,12 @@ const Database = () => {
 
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2">
-                            <Icon icon={"fontisto:mysql"} className="text-blue-900" width={22} />
-                            <span className="font-bold text-indigo-900 text-lg">MySQL Users</span>
+                            <Icon icon={"fontisto:mysql"} className="text-primary" width={22} />
+                            <span className="font-bold text-primary text-lg">MySQL Users</span>
                         </div>
                         <Divider />
                         <div className="flex items-start gap-2 p-6 min-w-30 ">
-                            <Icon icon={"tdesign:user-add-filled"} fontSize={28} className="text-slate-700" />
+                            <Icon icon={"tdesign:user-add-filled"} fontSize={28} className="text-gray-400" />
                             <h3 className="text-lg font-medium text-slate-700">Add User</h3>
                         </div>
                         <div className=" py-2 px-12" >
@@ -559,7 +559,7 @@ const Database = () => {
                                 <div className="flex justify-end m-4">
                                     <Button
                                         onPress={handleCreateUser}
-                                        className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white text-sm px-8 rounded-sm"
+                                        className="bg-primary text-white text-sm px-8 rounded-sm"
                                         size="sm"
                                     >
                                         Create User
@@ -571,8 +571,8 @@ const Database = () => {
 
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2">
-                            <Icon icon={"solar:user-circle-linear"} className="text-blue-900" width={22} />
-                            <span className="font-bold text-indigo-900 text-lg">Existing Users</span>
+                            <Icon icon={"solar:user-circle-linear"} className="text-primary" width={22} />
+                            <span className="font-bold text-primary text-lg">Existing Users</span>
                         </div>
                         <Divider />
                         <div>
