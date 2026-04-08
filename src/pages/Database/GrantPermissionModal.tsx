@@ -22,7 +22,7 @@ const GrantPermissionModal: React.FC<GrantUSerProps> = ({
                 size="xl">
 
                 <ModalContent>
-                    <ModalHeader className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white ">
+                    <ModalHeader className="bg-brand text-white ">
                         Grant User
                     </ModalHeader>
                     <ModalBody>

@@ -89,7 +89,7 @@ const FileTreeItem = ({
             >
                 <Icon 
                     icon={item.is_dir ? (isExpanded ? "mdi:chevron-down" : "mdi:chevron-right") : getFileIcon(item)} 
-                    className={item.is_dir ? "text-slate-500" : "text-teal-400"}
+                    className={item.is_dir ? "text-slate-500" : "text-brand"}
                     width={16}
                 />
                 <span className="truncate flex-1">{item.name}</span>
@@ -100,7 +100,7 @@ const FileTreeItem = ({
                 <div className="flex items-center py-1 px-2 gap-2" style={{ paddingLeft: `${(depth + 1) * 12 + 8}px` }}>
                     <Icon 
                         icon={isCreating ? "svg-spinners:ring-resize" : (newItemState.type === "folder" ? "mdi:folder-outline" : "mdi:file-outline")} 
-                        className={newItemState.type === "folder" ? "text-slate-500" : "text-teal-400"}
+                        className={newItemState.type === "folder" ? "text-slate-500" : "text-brand"}
                         width={16}
                     />
                     <input 
@@ -388,7 +388,7 @@ const FileEditorPage = () => {
                         <Icon icon="mdi:menu" width={20} />
                     </Button>
                     <div className="flex items-center gap-2">
-                        <Icon icon="mdi:folder-outline" className="text-teal-500" width={18} />
+                        <Icon icon="mdi:folder-outline" className="text-brand" width={18} />
                         <span className={`text-xs font-semibold tracking-wide uppercase ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}>Workspace</span>
                         <span className="text-slate-600">/</span>
                         <span className={`text-sm font-medium ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}>{initialName}</span>
@@ -549,7 +549,7 @@ const FileEditorPage = () => {
                                         : (theme === 'light' ? 'hover:bg-white/50 text-slate-500' : 'hover:bg-slate-800 text-slate-500')
                                 }`}
                             >
-                                <Icon icon={getFileIcon(tab)} className={theme === 'light' ? "text-slate-400" : "text-teal-400"} />
+                                <Icon icon={getFileIcon(tab)} className={theme === 'light' ? "text-slate-400" : "text-brand"} />
                                 <span className="truncate flex-1">{tab.name}</span>
                                 {dirtyFiles.has(tab.path) ? (
                                     <div className="w-2 h-2 rounded-full bg-blue-500 group-hover:hidden" />

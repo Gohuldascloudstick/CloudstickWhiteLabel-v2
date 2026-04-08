@@ -26,7 +26,7 @@ const Ssl = () => {
     }, [])
     return (
         <div className="">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
+            <p className="text-3xl">Welcome to <span className=" font-bold text-brand">
                 SSL Management
             </span>
             </p>
@@ -35,14 +35,14 @@ const Ssl = () => {
             </p>
             <div className="flex justify-end mt-2">
 
-                <Button onPress={() => setIsNewMode(true)} className="bg-orange-600 text-white rounded-md">
+                <Button onPress={() => setIsNewMode(true)} className="bg-primary text-white rounded-md">
                     Deploy New SSL
                 </Button>
             </div>
             <div className="mt-6  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 bg-brand">
                             <span className="font-bold text-white text-lg">SSL Management</span>
                         </div>
                         <Divider />

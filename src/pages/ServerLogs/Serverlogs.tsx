@@ -159,7 +159,7 @@ const logCardData: LogData[] = [
   return (
     <div className='max-h-[90vh] lg:p-2 overflow-y-auto scrollbar-hide'>
       <p className='text-xl md:text-2xl lg:text-3xl'>Welcome to
-        <span className='ml-1 font-bold text-teal-600'>
+        <span className='ml-1 font-bold text-brand'>
           Web Server Log
         </span>
       </p>
@@ -169,7 +169,7 @@ const logCardData: LogData[] = [
 
       <div className='mt-3 lg:mt-6 w-full'>
         <Card className='w-full shadow-sm border border-gray-200 overflow-hidden'>
-          <div className='px-3 md:px-6 py-2 md:py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]'>
+          <div className='px-3 md:px-6 py-2 md:py-4 bg-brand'>
             <span className='font-bold text-white text-sm md:text-md lg:text-lg'>Log Viewer</span>
           </div>
           

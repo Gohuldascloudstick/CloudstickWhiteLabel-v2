@@ -20,7 +20,7 @@ const Subdomain = () => {
     }, [])
     return (
         <div className="  p-2 ">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
+            <p className="text-3xl">Welcome to <span className=" font-bold text-brand">
                 Sub domains
             </span>
             </p>
@@ -30,7 +30,7 @@ const Subdomain = () => {
             <div className="mt-6  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 flex items-center gap-2 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e] text-white">
+                        <div className="px-6 flex items-center gap-2 py-4 bg-brand text-white">
                             <Icon icon={"bi:globe"} width={24} />
                             <span className="font-bold  text-lg">Sub Domains </span>
                         </div>
@@ -90,7 +90,7 @@ const Subdomain = () => {
 
                                 <div className="flex justify-end m-4">
                                     <Button
-                                        className="bg-linear-to-r bg-orange-600 text-white text-sm px-8 rounded-sm"
+                                        className="bg-linear-to-r bg-primary text-white text-sm px-8 rounded-sm"
                                         size="sm"
                                     >
                                         Create Sub Domain
@@ -102,7 +102,7 @@ const Subdomain = () => {
                     <Card className="w-full shadow-sm border border-gray-200">
                         <div className="px-6 py-4 flex items-center gap-2">
                             <Icon icon={"iconoir:www"} className="text-blue-900" width={22} />
-                            <span className="font-bold text-indigo-900 text-lg">Existing Sub Domains</span>
+                            <span className="font-bold text-primary text-lg">Existing Sub Domains</span>
                         </div>
                         <Divider />
                         <div>

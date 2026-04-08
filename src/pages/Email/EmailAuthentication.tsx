@@ -76,7 +76,7 @@ const EmailAuthentication = () => {
   return (
     <div className="max-h-[90vh]  lg:p-2 overflow-y-auto scrollbar-hide">
       <p className=" text-xl md:text-2xl lg:text-3xl">Welcome to
-        <span className=" ml-1 font-bold text-teal-600">
+        <span className=" ml-1 font-bold text-brand">
           Email Authentication
         </span>
       </p>
@@ -86,7 +86,7 @@ const EmailAuthentication = () => {
       <div className=" mt-3 lg:mt-6  w-full  ">
         <div className=" w-full space-y-6 ">
           <Card className="w-full shadow-sm border border-gray-200">
-            <div className=" px-3 md:px-6 py-2 md:py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+            <div className=" px-3 md:px-6 py-2 md:py-4 bg-brand">
               <span className="font-bold text-white text-sm md:text-md lg:text-lg">Create an Email</span>
             </div>
             <Divider />
@@ -136,7 +136,7 @@ const EmailAuthentication = () => {
               <Button
                 onPress={() => navigate("/email")}
 
-                className="bg-[#f07c33] text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                className="bg-primary text-xs md:text-sm text-white font-medium px-2 md:px-6 rounded-md hover:bg-primary/80 transition-colors"
                 size="md"
               >
                 <span className="hidden md:block">
@@ -192,7 +192,7 @@ const EmailAuthentication = () => {
                         </span>
                       </div>
 
-                       <CopyToClipboardWrapper textToCopy={String(record?.ttl)}>
+                      <CopyToClipboardWrapper textToCopy={String(record?.ttl)}>
                         <Button isIconOnly size="sm" variant="light">
                           <Copy width={12} />
                         </Button>
@@ -214,7 +214,7 @@ const EmailAuthentication = () => {
                         </span>
                       </div>
 
-                       <CopyToClipboardWrapper textToCopy={String(record?.value)}>
+                      <CopyToClipboardWrapper textToCopy={String(record?.value)}>
                         <Button isIconOnly size="sm" variant="light">
                           <Copy width={12} />
                         </Button>
@@ -258,7 +258,7 @@ const EmailAuthentication = () => {
                         </span>
                       </div>
 
-                       <CopyToClipboardWrapper textToCopy={String(record?.server)}>
+                      <CopyToClipboardWrapper textToCopy={String(record?.server)}>
                         <Button isIconOnly size="sm" variant="light">
                           <Copy width={12} />
                         </Button>

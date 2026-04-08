@@ -24,7 +24,7 @@ const LogoutModal: React.FC<LogoutProps> = ({
             hideCloseButton>
             <ModalContent>
 
-                <ModalHeader className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white">
+                <ModalHeader className="bg-brand text-white">
                     <div>
                         Logout
                     </div>
@@ -45,7 +45,7 @@ const LogoutModal: React.FC<LogoutProps> = ({
                         variant="flat"
                         size="sm"
                         // isLoading={changeLoader}
-                        className="bg-linear-to-r from-[#2168a1] to-[#11999e] text-white"
+                        className="bg-brand text-white"
                         onPress={() => HandleLogout()}
                     >
                         Yes

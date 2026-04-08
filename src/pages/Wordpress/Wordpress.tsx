@@ -314,7 +314,7 @@ const Wordpress = () => {
     <div className=" ">
 
       <p className=" text-xl md:text-2xl lg:text-3xl">Welcome to
-        <span className=" ml-1 font-bold text-teal-600">
+        <span className=" ml-1 font-bold text-brand">
           WordPress Manager
         </span>
       </p>
@@ -328,7 +328,7 @@ const Wordpress = () => {
           <Button
             size="sm"
             color="primary"
-            className=" bg-teal-600 mr-4"
+            className=" bg-brand text-white mr-4"
             data-testid='Magic Link'
             startContent={
               !magicloader && (
@@ -345,7 +345,7 @@ const Wordpress = () => {
       <div className=" mt-3 lg:mt-6  w-full  ">
         <div className=" w-full space-y-6 ">
           <Card className="w-full shadow-sm border border-gray-200">
-            <div className="flex items-center gap-2 px-3 md:px-6 py-2 md:py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+            <div className="flex items-center gap-2 px-3 md:px-6 py-2 md:py-4 bg-brand">
               <Icon icon={"uil:wordpress-simple"} width={24} className="text-white" />
               <span className="font-bold text-white text-sm md:text-md lg:text-lg">WordPress Manager</span>
             </div>

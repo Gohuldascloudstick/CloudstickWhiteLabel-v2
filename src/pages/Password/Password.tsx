@@ -108,7 +108,7 @@ const Password = () => {
     }
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
-            <p className="text-3xl">Welcome to <span className=" font-bold text-teal-600">
+            <p className="text-3xl">Welcome to <span className=" font-bold text-brand">
                 Password Management
             </span>
             </p>
@@ -118,7 +118,7 @@ const Password = () => {
             <div className="mt-6  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 bg-brand">
                             <span className="font-bold text-white text-lg">Change Password</span>
                         </div>
                         <Divider />
@@ -198,7 +198,7 @@ const Password = () => {
                             </div>
                             <div className="mt-2 flex justify-end w-full">
                                 <Button
-                                    className="bg-[#f07c33] text-white font-medium px-6 rounded-md hover:bg-[#d96b28] transition-colors"
+                                    className="bg-brand text-white font-medium px-6 rounded-md hover:bg-[#d96b28] transition-colors"
                                     size="md"
                                     onPress={handleChangePassword}
                                     isLoading={changeLoader}

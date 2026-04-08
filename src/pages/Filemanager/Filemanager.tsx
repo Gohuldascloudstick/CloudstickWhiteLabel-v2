@@ -377,7 +377,7 @@ const FileManager = () => {
 
             <div>
                 <p className="text-xl md:text-3xl font-light">Welcome to
-                    <span className="ml-2 font-bold text-teal-600">File Manager</span>
+                    <span className="ml-2 font-bold text-brand">File Manager</span>
                 </p>
             </div>
             {/* Header and Actions */}

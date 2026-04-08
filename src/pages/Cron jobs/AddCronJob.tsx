@@ -300,7 +300,7 @@ const AddCronJob = () => {
     }, [editvalue]);
     return (
         <div className="max-h-[90vh]  p-2 overflow-y-auto scrollbar-hide">
-            <p className="text-3xl">{editvalue ? "Update" : "Add New"} <span className=" font-bold text-teal-600">
+            <p className="text-3xl">{editvalue ? "Update" : "Add New"} <span className=" font-bold text-brand">
                 Cron Job
             </span>
             </p>
@@ -309,7 +309,7 @@ const AddCronJob = () => {
             <div className="mt-12  w-full  ">
                 <div className=" w-full space-y-6 ">
                     <Card className="w-full shadow-sm border border-gray-200">
-                        <div className="px-6 py-4 flex items-center gap-2 text-white bg-linear-to-r from-[#2168a1] to-[#11999e]">
+                        <div className="px-6 py-4 flex items-center gap-2 text-white bg-brand">
 
                             <span className="font-bold  text-lg">{editvalue ? "Update Cron Job" : "Add New Cron Job"}</span>
                         </div>
@@ -529,7 +529,7 @@ const AddCronJob = () => {
                                         <Button
                                             isLoading={buttonSpinner}
                                             type="submit"
-                                            className="bg-orange-600 text-white text-sm px-8 rounded-sm"
+                                            className="bg-primary/90 text-white text-sm px-8 rounded-sm"
                                             size="sm"
                                         >
                                             {editvalue ? "Update Cron Job" : "Add Cron Job"}

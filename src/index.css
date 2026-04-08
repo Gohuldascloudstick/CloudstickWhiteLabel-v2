@@ -9,7 +9,20 @@
 }
 
 :root {
-  --primary-color: #009788 !important;
+  --primary-color: #009788;
+  --brand-gradient: linear-gradient(to right, #2168a1, #11999e);
+}
+
+.text-brand {
+  background-image: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-brand {
+  background-image: var(--brand-gradient);
 }
 
 /* hide scrollbar but allow scroll */
