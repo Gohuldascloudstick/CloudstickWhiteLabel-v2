@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const apiUrl = 'https://staged-api.cloudstick.io'
+const apiUrl =  import.meta.env.VITE_URL
 
 const ApiClient: AxiosInstance = axios.create({
   baseURL: apiUrl,
